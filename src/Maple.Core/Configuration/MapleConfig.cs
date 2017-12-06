@@ -7,7 +7,7 @@ namespace Maple.Core.Configuration
     /// <summary>
     /// 定义 startup 配置参数
     /// </summary>
-    public partial class NopConfig
+    public partial class MapleConfig
     {
         /// <summary>
         /// 获取或设置值，是否在生产环境中显示完整错误。

@@ -14,6 +14,9 @@ namespace Maple.Web.App
     {
         public static void Main(string[] args)
         {
+            //注册EncodingProvider实现对中文编码的支持
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
             BuildWebHost(args).Run();
         }
 
