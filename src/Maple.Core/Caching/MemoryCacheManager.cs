@@ -64,7 +64,7 @@ namespace Maple.Core.Caching
         protected MemoryCacheEntryOptions GetMemoryCacheEntryOptions(int cacheTime)
         {
             var options = new MemoryCacheEntryOptions()
-                //添加缓存失效规则
+                //添加缓存失效规则：所有缓存均依赖_cancellationTokenSource，可以通过_cancellationTokenSource让所有缓存失效
                 .AddExpirationToken(new CancellationChangeToken(_cancellationTokenSource.Token))
                 //添加缓存失效回掉函数：在从缓存中清除缓存条目后，将触发给定的回调。
                 .RegisterPostEvictionCallback(PostEviction);
