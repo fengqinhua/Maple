@@ -309,9 +309,11 @@ namespace Maple.Core.Plugins
                     var installedPluginSystemNames = GetInstalledPluginNames(CommonHelper.MapPath(InstalledPluginsFilePath));
 
                     Debug.WriteLine("查询现有的插件，并将插件对应的DLL移至Bin目录中");
-                    //确保 /Plugins/bin 已经存在
+                    //确保 /Plugins 已经存在
                     Directory.CreateDirectory(pluginFolder.FullName);
+                    //确保 /Plugins/bin 已经存在
                     Directory.CreateDirectory(_shadowCopyFolder.FullName);
+
                     //获取 /Plugins/bin 目录中所有的文件清单（包含子目录）
                     var binFiles = _shadowCopyFolder.GetFiles("*", SearchOption.AllDirectories);
                     if (config.ClearPluginShadowDirectoryOnStartup)
@@ -342,8 +344,8 @@ namespace Maple.Core.Plugins
                     //加载查询的描述性信息
                     foreach (var dfd in GetDescriptionFilesAndDescriptors(pluginFolder))
                     {
-                        var descriptionFile = dfd.Key;
-                        var pluginDescriptor = dfd.Value;
+                        var descriptionFile = dfd.Key;      //插件描述性信息所对应的文件
+                        var pluginDescriptor = dfd.Value;   //插件描述性信息实体类
 
                         //确保插件的版本有效
                         if (!pluginDescriptor.SupportedVersions.Contains(MapleVersion.CurrentVersion, StringComparer.InvariantCultureIgnoreCase))

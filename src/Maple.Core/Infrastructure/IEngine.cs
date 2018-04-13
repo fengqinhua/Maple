@@ -14,12 +14,20 @@ namespace Maple.Core.Infrastructure
     {
         /// <summary>
         /// 初始化 Maple 引擎
+        /// <para>1、指定安全协议</para>
+        /// <para>2、设置应用程序根目录</para>
+        /// <para>3、初始化插件</para>
         /// </summary>
         /// <param name="services">Collection of service descriptors</param>
         void Initialize(IServiceCollection services);
 
         /// <summary>
         /// 在DI容器中注册服务
+        /// <para>1、查询所有实现了IMapleStartup类的实例，并确保其所在插件均已被加载</para>
+        /// <para>2、按顺序执行中间件的添加和配置</para>
+        /// <para>3、注册并配置AutoMapper</para>
+        /// <para>4、使用 Autofac 重新注册依赖关系</para>
+        /// <para>5、运行 startup 启动时的任务</para>
         /// </summary>
         /// <param name="services">Collection of service descriptors</param>
         /// <param name="configuration">Configuration root of the application</param>

@@ -5,7 +5,7 @@ using System.Text;
 namespace Maple.Core.Configuration
 {
     /// <summary>
-    /// 定义 startup 配置参数
+    /// 系统配置信息
     /// </summary>
     public partial class MapleConfig
     {

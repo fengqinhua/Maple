@@ -17,12 +17,11 @@ namespace Maple.Web.App
             //注册EncodingProvider实现对中文编码的支持
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
-            BuildWebHost(args).Run();
-        }
-
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+            var host = WebHost.CreateDefaultBuilder(args)
+                .UseKestrel(options => options.AddServerHeader = false)
                 .UseStartup<Startup>()
                 .Build();
+            host.Run();
+        }
     }
 }

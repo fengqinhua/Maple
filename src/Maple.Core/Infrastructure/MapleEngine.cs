@@ -140,14 +140,16 @@ namespace Maple.Core.Infrastructure
             //most of API providers require TLS 1.2 nowadays
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
-            //获取配置信息
+            //获取IServiceProvider实例，用于创建对象
             var provider = services.BuildServiceProvider();
-            //获得在托管应用程序的应用程序域内向托管应用程序提供应用程序管理功能和应用程序服务实例
+            //获得系统当前执行环境的描述
             var hostingEnvironment = provider.GetRequiredService<IHostingEnvironment>();
-            //获得MapleConfig实例
+            //获得系统配置信息
             var MapleConfig = provider.GetRequiredService<MapleConfig>();
+
             //设置应用程序根目录
             CommonHelper.BaseDirectory = hostingEnvironment.ContentRootPath;
+
             //初始化插件
             var mvcCoreBuilder = services.AddMvcCore();
             PluginManager.Initialize(mvcCoreBuilder.PartManager, MapleConfig);

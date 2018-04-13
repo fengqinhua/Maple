@@ -8,13 +8,13 @@ namespace Maple.Core
     public partial interface IWebHelper
     {
         /// <summary>
-        /// 获取referrer URL，如果存在
+        /// 获取前一次请求的地址（referrer URL），如果存在
         /// </summary>
         /// <returns>URL referrer</returns>
         string GetUrlReferrer();
 
         /// <summary>
-        /// 获取当前客户端用户所在IP地址
+        /// 获取发起Http请求用户的IP地址
         /// </summary>
         /// <returns>String of IP address</returns>
         string GetCurrentIpAddress();
@@ -42,7 +42,7 @@ namespace Maple.Core
         string GetStoreHost(bool useSsl);
 
         /// <summary>
-        /// 获取主机地址
+        /// 获取网页地址
         /// </summary>
         /// <param name="useSsl">Whether to get SSL secured URL; pass null to determine automatically</param>
         /// <returns>Store location</returns>
@@ -55,7 +55,7 @@ namespace Maple.Core
         bool IsStaticResource();
 
         /// <summary>
-        /// 修改查询字符串
+        /// 修改URL查询字符串
         /// </summary>
         /// <param name="url">URL to modify</param>
         /// <param name="queryStringModification">Query string modification</param>
@@ -84,9 +84,9 @@ namespace Maple.Core
         /// </summary>
         /// <param name="makeRedirect">A value indicating whether we should made redirection after restart</param>
         void RestartAppDomain(bool makeRedirect = false);
-        
+
         /// <summary>
-        /// 获取请求是否被重定向
+        /// 判断请求是否被重定向
         /// </summary>
         bool IsRequestBeingRedirected { get; }
 

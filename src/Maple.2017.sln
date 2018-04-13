@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B73832F5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Core.Tests", "Maple.Core.Tests\Maple.Core.Tests.csproj", "{CA4C2F21-7DC3-4808-B7D8-BFF8DF50ABC0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Services", "Maple.Services\Maple.Services.csproj", "{99F5B68C-A45F-462F-B4D0-D8BBF9721722}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{CA4C2F21-7DC3-4808-B7D8-BFF8DF50ABC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA4C2F21-7DC3-4808-B7D8-BFF8DF50ABC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA4C2F21-7DC3-4808-B7D8-BFF8DF50ABC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99F5B68C-A45F-462F-B4D0-D8BBF9721722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99F5B68C-A45F-462F-B4D0-D8BBF9721722}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99F5B68C-A45F-462F-B4D0-D8BBF9721722}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99F5B68C-A45F-462F-B4D0-D8BBF9721722}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
