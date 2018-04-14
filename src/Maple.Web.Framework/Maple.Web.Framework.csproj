@@ -1,12 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.0;net461</TargetFrameworks>
+    <Authors>Anthony</Authors>
+    <Company>Maple</Company>
+    <Product>Maple</Product>
+    <Copyright>Copyright © Maple</Copyright>
+    <PackageLicenseUrl>https://github.com/fengqinhua/Maple/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/fengqinhua/Maple</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/fengqinhua/Maple</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Maple.Core\Maple.Core.csproj" />

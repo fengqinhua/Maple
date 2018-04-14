@@ -2,6 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Anthony</Authors>
+    <Company>Maple</Company>
+    <Product>Maple</Product>
+    <Copyright>Copyright © Maple</Copyright>
+    <PackageLicenseUrl>https://github.com/fengqinhua/Maple/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/fengqinhua/Maple</PackageProjectUrl>
+    <PackageIconUrl></PackageIconUrl>
+    <RepositoryUrl>https://github.com/fengqinhua/Maple</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>

@@ -19,6 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.CAA", "Maple.Plugs\Ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Core.Tests", "Maple.Tests\Maple.Core.Tests\Maple.Core.Tests.csproj", "{B7ED3017-5D6A-4D4C-941E-F9415E46B007}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Maple.Tools", "Maple.Tools", "{22537C79-7283-47D4-9A00-1FE7AA9F781D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.ClearPluginAssemblies", "Maple.Tools\Maple.ClearPluginAssemblies\Maple.ClearPluginAssemblies.csproj", "{3C8DF3FE-6F25-4588-9189-DE4AD46A882A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.BuildTask", "Maple.Tools\Maple.BuildTask\Maple.BuildTask.csproj", "{375B95D7-14C4-4BD5-83A9-45BADB4DD621}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +55,14 @@ Global
 		{B7ED3017-5D6A-4D4C-941E-F9415E46B007}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7ED3017-5D6A-4D4C-941E-F9415E46B007}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7ED3017-5D6A-4D4C-941E-F9415E46B007}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C8DF3FE-6F25-4588-9189-DE4AD46A882A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C8DF3FE-6F25-4588-9189-DE4AD46A882A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C8DF3FE-6F25-4588-9189-DE4AD46A882A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C8DF3FE-6F25-4588-9189-DE4AD46A882A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{375B95D7-14C4-4BD5-83A9-45BADB4DD621}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{375B95D7-14C4-4BD5-83A9-45BADB4DD621}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{375B95D7-14C4-4BD5-83A9-45BADB4DD621}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{375B95D7-14C4-4BD5-83A9-45BADB4DD621}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +70,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D67D63F3-8F35-4636-8571-FA7812F200A5} = {C67C4E3F-EEBA-4BD9-AC8F-8A011A0282E0}
 		{B7ED3017-5D6A-4D4C-941E-F9415E46B007} = {B73832F5-887D-4AF6-8D17-4BE2F9155B2A}
+		{3C8DF3FE-6F25-4588-9189-DE4AD46A882A} = {22537C79-7283-47D4-9A00-1FE7AA9F781D}
+		{375B95D7-14C4-4BD5-83A9-45BADB4DD621} = {22537C79-7283-47D4-9A00-1FE7AA9F781D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D724DE37-FE91-4FBF-BE3C-1A11480AC63C}

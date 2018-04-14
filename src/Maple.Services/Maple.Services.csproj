@@ -1,7 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.0;net461</TargetFrameworks>
+    <Copyright>Copyright © Maple</Copyright>
+    <Company>Maple</Company>
+    <Authors>Anthony</Authors>
+    <PackageLicenseUrl>https://github.com/fengqinhua/Maple/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/fengqinhua/Maple</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/fengqinhua/Maple</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <Product>Maple</Product>
   </PropertyGroup>
 
   <ItemGroup>

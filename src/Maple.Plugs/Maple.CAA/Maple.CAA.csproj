@@ -1,7 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
+    <!--<TargetFrameworks>netstandard2.0;netcoreapp2.0;net461</TargetFrameworks>-->
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <!--定义项目bin所在目录-->
+    <OutputPath>..\..\Maple.Web.App\bin\$(Configuration)</OutputPath>
+    <!--定义项目所在目录-->
+    <MapleWebPath>..\..\Maple.Web.App</MapleWebPath>
   </PropertyGroup>
-
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.0|AnyCPU'">
+    <OutputPath>..\..\Maple.Web.App\Plugins\Maple.CAA</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.0|AnyCPU'">
+    <OutputPath>..\..\Maple.Web.App\Plugins\Maple.CAA</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Maple.Web.Framework\Maple.Web.Framework.csproj" />
+  </ItemGroup>
+  <!-- Build完成后清理重复的动态库 -->
+  <UsingTask TaskName="ClearPluginsPathTask" AssemblyFile="..\..\Maple.Tools\Dll\Maple.BuildTask.dll" /> 
+  <Target Name="MapleBuildTaskTarget" AfterTargets="Build">
+    <ClearPluginsPathTask WebHostPath="$([System.IO.Path]::GetFullPath('..\..\Maple.Web.App\bin\$(Configuration)'))" PluginPath="$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\$(OutDir)'))" SaveLocalesFolders="true" />
+  </Target> 
 </Project>
