@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Core", "Maple.Core\Ma
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Web.Framework", "Maple.Web.Framework\Maple.Web.Framework.csproj", "{8784A4BA-ECFA-49FA-A5AC-494A1106649A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{C67C4E3F-EEBA-4BD9-AC8F-8A011A0282E0}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Maple.Plugins", "Maple.Plugins", "{C67C4E3F-EEBA-4BD9-AC8F-8A011A0282E0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Web.App", "Maple.Web.App\Maple.Web.App.csproj", "{714AD53D-06AD-44BC-A97E-B78F0A916257}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B73832F5-887D-4AF6-8D17-4BE2F9155B2A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Maple.Tests", "Maple.Tests", "{B73832F5-887D-4AF6-8D17-4BE2F9155B2A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Services", "Maple.Services\Maple.Services.csproj", "{99F5B68C-A45F-462F-B4D0-D8BBF9721722}"
 EndProject
