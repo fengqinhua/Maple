@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!--<TargetFrameworks>netstandard2.0;netcoreapp2.0;net461</TargetFrameworks>-->
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Anthony</Authors>
     <Company>Maple</Company>
     <Product>Maple</Product>
@@ -11,11 +10,11 @@
     <RepositoryUrl>https://github.com/fengqinhua/Maple</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.0|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
     <OutputPath>..\..\Maple.Web.App\Plugins\Maple.CAA</OutputPath>
     <OutDir>$(OutputPath)</OutDir>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.0|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
     <OutputPath>..\..\Maple.Web.App\Plugins\Maple.CAA</OutputPath>
     <OutDir>$(OutputPath)</OutDir>
   </PropertyGroup>
