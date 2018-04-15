@@ -2,6 +2,14 @@
   <PropertyGroup>
     <!--<TargetFrameworks>netstandard2.0;netcoreapp2.0;net461</TargetFrameworks>-->
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Anthony</Authors>
+    <Company>Maple</Company>
+    <Product>Maple</Product>
+    <Copyright>Copyright © Maple</Copyright>
+    <PackageLicenseUrl>https://github.com/fengqinhua/Maple/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/fengqinhua/Maple</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/fengqinhua/Maple</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.0|AnyCPU'">
     <OutputPath>..\..\Maple.Web.App\Plugins\Maple.CAA</OutputPath>
@@ -11,6 +19,14 @@
     <OutputPath>..\..\Maple.Web.App\Plugins\Maple.CAA</OutputPath>
     <OutDir>$(OutputPath)</OutDir>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="plugin.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="plugin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Maple.Web.Framework\Maple.Web.Framework.csproj" />
   </ItemGroup>
