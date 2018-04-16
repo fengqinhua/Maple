@@ -3,12 +3,14 @@ using Maple.Core.Configuration;
 using Maple.Core.Data;
 using Maple.Core.Infrastructure;
 using Maple.Core.Plugins;
+using Maple.Web.Framework.Mvc.ModelBinding;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -213,27 +215,28 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
         //        instance.Configure(authenticationBuilder);
         //}
 
-        ///// <summary>
-        ///// 为应用程序添加和配置MVC
-        ///// </summary>
-        ///// <param name="services">Collection of service descriptors</param>
-        ///// <returns>A builder for configuring MVC services</returns>
-        //public static IMvcBuilder AddNopMvc(this IServiceCollection services)
-        //{
-        //    //add basic MVC feature
-        //    var mvcBuilder = services.AddMvc();
-        //    //use session temp data provider
-        //    mvcBuilder.AddSessionStateTempDataProvider();
-        //    //避免JSON序列化时大小写敏感的问题
-        //    mvcBuilder.AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
-        //    //添加自定义显示元数据提供程序
-        //    mvcBuilder.AddMvcOptions(options => options.ModelMetadataDetailsProviders.Add(new NopMetadataProvider()));
-        //    //添加自定义模型绑定器提供程序（到提供者列表的顶部）
-        //    mvcBuilder.AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new NopModelBinderProvider()));
-        //    //加上 fluent 验证
-        //    mvcBuilder.AddFluentValidation(configuration => configuration.ValidatorFactoryType = typeof(NopValidatorFactory));
+        /// <summary>
+        /// 为应用程序添加和配置MVC
+        /// </summary>
+        /// <param name="services">Collection of service descriptors</param>
+        /// <returns>A builder for configuring MVC services</returns>
+        public static IMvcBuilder AddMapleMvc(this IServiceCollection services)
+        {
+            //add basic MVC feature
+            var mvcBuilder = services.AddMvc();
+            //use session temp data provider
+            mvcBuilder.AddSessionStateTempDataProvider();
+            //避免JSON序列化时大小写敏感的问题
+            mvcBuilder.AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+            //添加自定义显示元数据提供程序
+            mvcBuilder.AddMvcOptions(options => options.ModelMetadataDetailsProviders.Add(new MapleMetadataProvider()));
+            //添加自定义模型绑定器提供程序（到提供者列表的顶部）
+            mvcBuilder.AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new MapleModelBinderProvider()));
 
-        //    return mvcBuilder;
-        //}
+            ////加上 fluent 验证
+            //mvcBuilder.AddFluentValidation(configuration => configuration.ValidatorFactoryType = typeof(NopValidatorFactory));
+
+            return mvcBuilder;
+        }
     }
 }

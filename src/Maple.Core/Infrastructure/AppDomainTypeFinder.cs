@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 namespace Maple.Core.Infrastructure
 {
     /// <summary>
-    /// 可从程序集中发现各种类型的工具实现类
+    /// 从AppDomain中发现各种类型的工具实现类
     /// </summary>
     public class AppDomainTypeFinder : ITypeFinder
     {

@@ -6,7 +6,7 @@ using System.Text;
 namespace Maple.Core.Infrastructure
 {
     /// <summary>
-    /// 提供当前Web应用程序中类型的信息。可选地，这个类可以查看bin文件夹中的所有程序集。
+    /// 提供当前Web应用程序中类型的信息。
     /// </summary>
     public class WebAppTypeFinder : AppDomainTypeFinder
     {
@@ -20,7 +20,7 @@ namespace Maple.Core.Infrastructure
         #region Properties
 
         /// <summary>
-        /// 是否获取Bin目录下的程序集信息
+        /// 获取或设置Web应用程序的bin文件夹中的程序集是否应特别检查以便在应用程序负载上加载
         /// </summary>
         public bool EnsureBinFolderAssembliesLoaded
         {
