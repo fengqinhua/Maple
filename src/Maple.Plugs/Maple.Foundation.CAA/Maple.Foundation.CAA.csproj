@@ -23,4 +23,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Maple.Core\Maple.Core.csproj" />
+  </ItemGroup>
 </Project>

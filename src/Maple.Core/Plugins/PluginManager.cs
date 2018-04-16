@@ -302,12 +302,14 @@ namespace Maple.Core.Plugins
                 var pluginFolder = new DirectoryInfo(CommonHelper.MapPath(PluginsPath));        //获取插件集合所在目录
                 _shadowCopyFolder = new DirectoryInfo(CommonHelper.MapPath(ShadowCopyPath));    //获取插件集合中Bin所在目录
 
+                //已加载的插件集合
                 var referencedPlugins = new List<PluginDescriptor>();
+                //不兼容或无法加载的插件集合
                 var incompatiblePlugins = new List<string>();
 
                 try
                 {
-                    //读取已加载的插件清单
+                    //从读取installedPlugins.json中读取已加载的插件清单
                     var installedPluginSystemNames = GetInstalledPluginNames(CommonHelper.MapPath(InstalledPluginsFilePath));
 
                     Debug.WriteLine("查询现有的插件，并将插件对应的DLL移至Bin目录中");
@@ -393,7 +395,7 @@ namespace Maple.Core.Plugins
 
                             //执行插件部署
                             pluginDescriptor.ReferencedAssembly = PerformFileDeploy(mainPluginFile, applicationPartManager, config);
-                            //拷贝其他插件所需的DLL
+                            //拷贝插件所需但尚未加载的DLL
                             foreach (var plugin in pluginFiles
                                 .Where(x => !x.Name.Equals(mainPluginFile.Name, StringComparison.InvariantCultureIgnoreCase))
                                 .Where(x => !IsAlreadyLoaded(x)))

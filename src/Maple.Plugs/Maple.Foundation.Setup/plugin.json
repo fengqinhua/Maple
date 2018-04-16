@@ -5,7 +5,7 @@
   "Version": "1.00",
   "SupportedVersions": [ "1.00" ],
   "Author": "Anthony",
-  "DisplayOrder": 1,
+  "DisplayOrder": 10,
   "FileName": "Maple.Foundation.Setup.dll",
   "Description": "用于系统管理的插件，包括初始化、插件管理等基础功能"
 }
