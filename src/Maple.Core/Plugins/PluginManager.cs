@@ -163,14 +163,16 @@ namespace Maple.Core.Plugins
             //在指定路径中创建所有目录和子目录，除非它们已经存在 ~/Plugins/bin/ 并返回目录对象
             var shadowCopyPlugFolder = Directory.CreateDirectory(_shadowCopyFolder.FullName);
             var shadowCopiedPlug = ShadowCopyFile(plug, shadowCopyPlugFolder);
-
-
+            
             //注册插件
-            var assemblyName = AssemblyName.GetAssemblyName(shadowCopiedPlug.FullName);
+            //修改Dll加载函数 Assembly.Load To Assembly.LoadFrom
+            //var assemblyName = AssemblyName.GetAssemblyName(shadowCopiedPlug.FullName);
             Assembly shadowCopiedAssembly;
             try
             {
-                shadowCopiedAssembly = Assembly.Load(assemblyName);
+                
+                //shadowCopiedAssembly = Assembly.Load(assemblyName);
+                shadowCopiedAssembly = Assembly.LoadFrom(shadowCopiedPlug.FullName);
             }
             catch (FileLoadException)
             {
