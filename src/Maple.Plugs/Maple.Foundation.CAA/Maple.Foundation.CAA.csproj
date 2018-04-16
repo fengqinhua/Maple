@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <OutputPath>..\..\Maple.Web\Plugins\Maple.Foundation.CAA</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <OutputPath>..\..\Maple.Web\Plugins\Maple.Foundation.CAA</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>
+  </PropertyGroup>
+  
+  <!-- Build完成后清理重复的动态库 -->
+  <UsingTask TaskName="ClearPluginsPathTask" AssemblyFile="..\..\Maple.Tools\Build\Maple.BuildTask.dll" />
+  <Target Name="MapleBuildTaskTarget" AfterTargets="Build">
+    <ClearPluginsPathTask WebHostPath="$([System.IO.Path]::GetFullPath('..\..\Maple.Web\bin\$(Configuration)'))" PluginPath="$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\$(OutDir)'))" SaveLocalesFolders="true" />
+  </Target>
+  <ItemGroup>
+    <Content Include="plugin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>
