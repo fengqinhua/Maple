@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Foundation",
+  "FriendlyName": "认证与授权",
+  "SystemName": "Maple.Foundation.CAA",
+  "Version": "1.00",
+  "SupportedVersions": [ "1.00" ],
+  "Author": "Anthony",
+  "DisplayOrder": 1,
+  "FileName": "Maple.Foundation.CAA.dll",
+  "Description": "用于认证与授权的插件，CAA即Certification and authorization首字母缩写"
+}
