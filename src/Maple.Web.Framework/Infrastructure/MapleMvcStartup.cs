@@ -18,6 +18,7 @@ namespace Maple.Web.Framework.Infrastructure
 
         public void Configure(IApplicationBuilder application)
         {
+            //???
             ////add MiniProfiler
             //application.UseMiniProfiler();
 
@@ -27,6 +28,7 @@ namespace Maple.Web.Framework.Infrastructure
 
         public void ConfigureServices(IServiceCollection services, IConfigurationRoot configuration)
         {
+            //???
             ////add MiniProfiler services
             //services.AddMiniProfiler();
 

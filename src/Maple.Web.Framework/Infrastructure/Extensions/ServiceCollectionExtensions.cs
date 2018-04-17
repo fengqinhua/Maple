@@ -233,6 +233,7 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
             //添加自定义模型绑定器提供程序（到提供者列表的顶部）
             mvcBuilder.AddMvcOptions(options => options.ModelBinderProviders.Insert(0, new MapleModelBinderProvider()));
 
+            //???
             ////加上 fluent 验证
             //mvcBuilder.AddFluentValidation(configuration => configuration.ValidatorFactoryType = typeof(NopValidatorFactory));
 
