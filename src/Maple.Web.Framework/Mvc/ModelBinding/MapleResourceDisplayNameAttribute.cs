@@ -1,65 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace Maple.Web.Framework.Mvc.ModelBinding
 {
-    ///// <summary>
-    ///// 通过多语言库显示字段对应的中文名称
-    ///// </summary>
-    //public class NopResourceDisplayNameAttribute : DisplayNameAttribute, IModelAttribute
-    //{
-    //    #region Fields
+    /// <summary>
+    /// 通过多语言库显示字段对应的中文名称
+    /// </summary>
+    public class MapleResourceDisplayNameAttribute : DisplayNameAttribute, IModelAttribute
+    {
+        #region Fields
 
-    //    private string _resourceValue = string.Empty;
+        private string _resourceValue = string.Empty;
 
-    //    #endregion
+        #endregion
 
-    //    #region Ctor
+        #region Ctor
 
-    //    /// <summary>
-    //    /// Create instance of the attribute
-    //    /// </summary>
-    //    /// <param name="resourceKey">Key of the locale resource</param>
-    //    public NopResourceDisplayNameAttribute(string resourceKey) : base(resourceKey)
-    //    {
-    //        ResourceKey = resourceKey;
-    //    }
+        /// <summary>
+        /// 通过多语言库显示字段对应的中文名称
+        /// </summary>
+        /// <param name="resourceKey">Key of the locale resource</param>
+        public MapleResourceDisplayNameAttribute(string resourceKey) : base(resourceKey)
+        {
+            ResourceKey = resourceKey;
+        }
 
-    //    #endregion
+        #endregion
 
-    //    #region Properties
+        #region Properties
 
-    //    /// <summary>
-    //    /// Gets or sets key of the locale resource 
-    //    /// </summary>
-    //    public string ResourceKey { get; set; }
+        /// <summary>
+        /// Gets or sets key of the locale resource 
+        /// </summary>
+        public string ResourceKey { get; set; }
 
-    //    /// <summary>
-    //    /// Getss the display name
-    //    /// </summary>
-    //    public override string DisplayName
-    //    {
-    //        get
-    //        {
-    //            //get working language identifier
-    //            var workingLanguageId = EngineContext.Current.Resolve<IWorkContext>().WorkingLanguage.Id;
+        /// <summary>
+        /// Getss the display name
+        /// </summary>
+        public override string DisplayName
+        {
+            get
+            {
+                return ResourceKey;
 
-    //            //get locale resource value
-    //            _resourceValue = EngineContext.Current.Resolve<ILocalizationService>().GetResource(ResourceKey, workingLanguageId, true, ResourceKey);
 
-    //            return _resourceValue;
-    //        }
-    //    }
+                ////get working language identifier
+                //var workingLanguageId = EngineContext.Current.Resolve<IWorkContext>().WorkingLanguage.Id;
 
-    //    /// <summary>
-    //    /// Gets name of the attribute
-    //    /// </summary>
-    //    public string Name
-    //    {
-    //        get { return nameof(NopResourceDisplayNameAttribute); }
-    //    }
+                ////get locale resource value
+                //_resourceValue = EngineContext.Current.Resolve<ILocalizationService>().GetResource(ResourceKey, workingLanguageId, true, ResourceKey);
 
-    //    #endregion
-    //}
+                //return _resourceValue;
+            }
+        }
+
+        /// <summary>
+        /// Gets name of the attribute
+        /// </summary>
+        public string Name
+        {
+            get { return nameof(MapleResourceDisplayNameAttribute); }
+        }
+
+        #endregion
+    }
 }
