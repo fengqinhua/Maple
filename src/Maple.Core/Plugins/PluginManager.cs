@@ -170,9 +170,11 @@ namespace Maple.Core.Plugins
             Assembly shadowCopiedAssembly;
             try
             {
-                
+
                 //shadowCopiedAssembly = Assembly.Load(assemblyName);
-                shadowCopiedAssembly = Assembly.LoadFrom(shadowCopiedPlug.FullName);
+                //shadowCopiedAssembly = Assembly.LoadFrom(shadowCopiedPlug.FullName);
+                shadowCopiedAssembly = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(shadowCopiedPlug.FullName);
+                
             }
             catch (FileLoadException)
             {
