@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -35,7 +36,7 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
             //获取MapleConfig配置参数并将其以单例形式注入至IServiceCollection
             //MapleConfig = 系统配置信息
             services.ConfigureStartupConfig<MapleConfig>(configuration.GetSection("Maple"));
-            //获取宿主程序运行环境所需的配置参数并将其以单例形式注入至IServiceCollection
+            //获取HostingConfig配置参数并将其以单例形式注入至IServiceCollection
             //HostingConfig = 宿主机的配置信息
             services.ConfigureStartupConfig<HostingConfig>(configuration.GetSection("Hosting"));
             //注册 HttpContextAccessor 单例 ，用于获取 HttpContext.Current
@@ -94,7 +95,7 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
         /// <param name="services"></param>
         public static void AddHttpContextAccessor(this IServiceCollection services)
         {
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         ///// <summary>
