@@ -91,9 +91,16 @@ namespace Maple.Core.Plugins
             if (!File.Exists(filePath))
                 throw new Exception("文件 " + filePath + " 不存在.");
             var text = File.ReadAllText(filePath);
+
+            IList<string> result = null;
+
             if (string.IsNullOrEmpty(text))
-                return new List<string>();
-            return JsonConvert.DeserializeObject<IList<string>>(text);
+                result = new List<string>();
+            else
+                result = JsonConvert.DeserializeObject<IList<string>>(text);
+            //该组件是否默认必须要加载的
+            result.Add("Maple.Foundation.Setup");
+            return result;
         }
 
         /// <summary>

@@ -57,7 +57,7 @@ namespace Maple.Web
         /// <param name="application">Builder for configuring an application's request pipeline</param>
         public void Configure(IApplicationBuilder application)
         {
-            //application.ConfigureRequestPipeline();
+            application.ConfigureRequestPipeline();
         }
     }
 }

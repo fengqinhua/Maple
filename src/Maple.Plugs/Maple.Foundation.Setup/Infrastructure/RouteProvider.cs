@@ -12,7 +12,7 @@ namespace Maple.Foundation.Setup.Infrastructure
         public void RegisterRoutes(IRouteBuilder routeBuilder)
         {
             routeBuilder.MapRoute(SetupFoundationDefaluts.InstallRoute,
-                "plugins/install", new { controller = "Install", action = "Index" });
+                "install", new { controller = "Install", action = "Index" });
         }
 
         public int Priority
