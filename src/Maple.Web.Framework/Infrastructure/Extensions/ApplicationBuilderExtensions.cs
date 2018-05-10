@@ -1,7 +1,9 @@
 ﻿using Maple.Core;
 using Maple.Core.Configuration;
 using Maple.Core.Data;
+using Maple.Core.Http;
 using Maple.Core.Infrastructure;
+using Maple.Web.Framework.Globalization;
 using Maple.Web.Framework.Mvc.Routing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -148,5 +150,50 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
                 }
             });
         }
+
+        /// <summary>
+        /// 配置中间件检查请求的页面是否保持活动页面
+        /// </summary>
+        /// <param name="application">Builder for configuring an application's request pipeline</param>
+        public static void UseKeepAlive(this IApplicationBuilder application)
+        {
+            application.UseMiddleware<KeepAliveMiddleware>();
+        }
+
+        /// <summary>
+        /// 配置中间件 检测数据是否已经完成配置
+        /// </summary>
+        /// <param name="application">Builder for configuring an application's request pipeline</param>
+        public static void UseInstallUrl(this IApplicationBuilder application)
+        {
+            application.UseMiddleware<InstallUrlMiddleware>();
+        }
+
+        /// <summary>
+        /// 添加身份验证中间件
+        /// </summary>
+        /// <param name="application">Builder for configuring an application's request pipeline</param>
+        public static void UseMapleAuthentication(this IApplicationBuilder application)
+        {
+            //check whether database is installed
+            if (!DataSettingsHelper.DatabaseIsInstalled())
+                return;
+
+            application.UseMiddleware<Services.Authentication.AuthenticationMiddleware>();
+        }
+
+        /// <summary>
+        /// 配置处理多语言的中间件
+        /// </summary>
+        /// <param name="application">Builder for configuring an application's request pipeline</param>
+        public static void UseCulture(this IApplicationBuilder application)
+        {
+            //check whether database is installed
+            if (!DataSettingsHelper.DatabaseIsInstalled())
+                return;
+            application.UseMiddleware<CultureMiddleware>();
+        }
+
+
     }
 }

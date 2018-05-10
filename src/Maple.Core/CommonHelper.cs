@@ -287,17 +287,17 @@ namespace Maple.Core
         //    return result;
         //}
 
-        ///// <summary>
-        ///// Set Telerik (Kendo UI) culture
-        ///// </summary>
-        //public static void SetTelerikCulture()
-        //{
-        //    //little hack here
-        //    //always set culture to 'en-US' (Kendo UI has a bug related to editing decimal values in other cultures)
-        //    var culture = new CultureInfo("en-US");
-        //    CultureInfo.CurrentCulture = culture;
-        //    CultureInfo.CurrentUICulture = culture;
-        //}
+        /// <summary>
+        /// 设置语言
+        /// </summary>
+        public static void SetTelerikCulture()
+        {
+            //little hack here
+            //always set culture to 'en-US' (Kendo UI has a bug related to editing decimal values in other cultures)
+            var culture = new CultureInfo("en-US");
+            CultureInfo.CurrentCulture = culture;
+            CultureInfo.CurrentUICulture = culture;
+        }
 
         /// <summary>
         /// 获取年度差异

@@ -27,7 +27,7 @@ namespace Maple.Foundation.Setup.Controllers
                 AdminName = "admin@maple.com"
             };
 
-            return View(model);
+            return View("~/Plugins/Maple.Foundation.Setup/Views/Install/Index.cshtml", model);
         }
     }
 }

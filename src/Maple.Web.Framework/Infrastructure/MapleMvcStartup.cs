@@ -22,7 +22,7 @@ namespace Maple.Web.Framework.Infrastructure
             ////add MiniProfiler
             //application.UseMiniProfiler();
 
-            //MVC routing
+            //MVC 路由配置
             application.UseMapleMvc();
         }
 
@@ -32,7 +32,7 @@ namespace Maple.Web.Framework.Infrastructure
             ////add MiniProfiler services
             //services.AddMiniProfiler();
 
-            //add and configure MVC feature
+            //为应用程序添加和配置MVC
             services.AddMapleMvc();
         }
     }

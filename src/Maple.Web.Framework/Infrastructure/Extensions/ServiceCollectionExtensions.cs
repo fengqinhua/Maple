@@ -3,7 +3,10 @@ using Maple.Core.Configuration;
 using Maple.Core.Data;
 using Maple.Core.Infrastructure;
 using Maple.Core.Plugins;
+using Maple.Services.Authentication;
+using Maple.Services.Authentication.External;
 using Maple.Web.Framework.Mvc.ModelBinding;
+using Maple.Web.Framework.Themes;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Razor;
@@ -98,123 +101,130 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
-        ///// <summary>
-        ///// 添加  anti-forgery， 支持CSRF防范
-        ///// </summary>
-        ///// <param name="services">Collection of service descriptors</param>
-        //public static void AddAntiForgery(this IServiceCollection services)
-        //{
-        //    //override cookie name
-        //    services.AddAntiforgery(options =>
-        //    {
-        //        options.Cookie.Name = "maple-csrf-c";
-        //        options.FormFieldName = "maple-csrf-f";
-        //        options.HeaderName = "maple-csrf-h";
-        //    });
-        //}
+        /// <summary>
+        /// 添加  anti-forgery， 支持CSRF防范
+        /// </summary>
+        /// <param name="services">Collection of service descriptors</param>
+        public static void AddAntiForgery(this IServiceCollection services)
+        {
+            //override cookie name
+            services.AddAntiforgery(options =>
+            {
+                options.Cookie.Name = "maple-csrf-c";
+                options.FormFieldName = "maple-csrf-f";
+                options.HeaderName = "maple-csrf-h";
+            });
+        }
 
-        ///// <summary>
-        ///// 添加应用程序 session 支持（基于cookie 且仅http）
-        ///// </summary>
-        ///// <param name="services">Collection of service descriptors</param>
-        //public static void AddHttpSession(this IServiceCollection services)
-        //{
-        //    services.AddSession(options =>
-        //    {
-        //        options.Cookie.Name = "maple.session";
-        //        options.Cookie.HttpOnly = true;
-        //    });
-        //}
+        /// <summary>
+        /// 添加应用程序 session 支持（基于cookie 且仅http）
+        /// </summary>
+        /// <param name="services">Collection of service descriptors</param>
+        public static void AddHttpSession(this IServiceCollection services)
+        {
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = "maple.session";
+                options.Cookie.HttpOnly = true;
+            });
+        }
 
-        ///// <summary>
-        ///// 添加皮肤的支持
-        ///// </summary>
-        ///// <param name="services">Collection of service descriptors</param>
-        //public static void AddThemes(this IServiceCollection services)
-        //{
-        //    if (!DataSettingsHelper.DatabaseIsInstalled())
-        //        return;
+        /// <summary>
+        /// 添加皮肤的支持
+        /// </summary>
+        /// <param name="services">Collection of service descriptors</param>
+        public static void AddThemes(this IServiceCollection services)
+        {
+            if (!DataSettingsHelper.DatabaseIsInstalled())
+                return;
 
-        //    //themes support
-        //    services.Configure<RazorViewEngineOptions>(options =>
-        //    {
-        //        options.ViewLocationExpanders.Add(new ThemeableViewLocationExpander());
-        //    });
-        //}
+            //themes support
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.ViewLocationExpanders.Add(new ThemeableViewLocationExpander());
+            });
+        }
 
-        ///// <summary>
-        ///// 配置数据保护系统以将密钥保存的位置
-        ///// </summary>
-        ///// <param name="services">Collection of service descriptors</param>
-        //public static void AddMapleDataProtection(this IServiceCollection services)
-        //{
-        //    var dataProtectionKeysPath = CommonHelper.MapPath("~/App_Data/DataProtectionKeys");
-        //    var dataProtectionKeysFolder = new DirectoryInfo(dataProtectionKeysPath);
-        //    //配置数据保护系统以将密钥保存到指定的目录
-        //    services.AddDataProtection().PersistKeysToFileSystem(dataProtectionKeysFolder);
+        /// <summary>
+        /// 配置数据保护系统以将密钥保存的位置
+        /// </summary>
+        /// <param name="services">Collection of service descriptors</param>
+        public static void AddMapleDataProtection(this IServiceCollection services)
+        {
+            //??? 此处如果是分布式系统可能会存在问题
+            //参考：http://www.cnblogs.com/savorboard/p/dotnet-core-data-protection.html
 
-        //    ////检查是否启用了Redis 并且 是否将数据保护组件中的私钥存储于Redis中
-        //    //var mapleConfig = services.BuildServiceProvider().GetRequiredService<MapleConfig>();
-        //    //if (mapleConfig.RedisCachingEnabled && mapleConfig.PersistDataProtectionKeysToRedis)
-        //    //{
-        //    //    services.AddDataProtection().PersistKeysToRedis(
-        //    //        () =>
-        //    //        {
-        //    //            var redisConnectionWrapper = EngineContext.Current.Resolve<IRedisConnectionWrapper>();
-        //    //            return redisConnectionWrapper.GetDatabase();
-        //    //        }, RedisConfiguration.DataProtectionKeysName);
-        //    //}
-        //    //else
-        //    //{
-        //    //    var dataProtectionKeysPath = CommonHelper.MapPath("~/App_Data/DataProtectionKeys");
-        //    //    var dataProtectionKeysFolder = new DirectoryInfo(dataProtectionKeysPath);
+            var dataProtectionKeysPath = CommonHelper.MapPath("~/App_Data/DataProtectionKeys");
+            var dataProtectionKeysFolder = new DirectoryInfo(dataProtectionKeysPath);
+            //配置数据保护系统以将密钥保存到指定的目录
+            services.AddDataProtection().PersistKeysToFileSystem(dataProtectionKeysFolder);
 
-        //    //    //配置数据保护系统以将密钥保存到指定的目录
-        //    //    services.AddDataProtection().PersistKeysToFileSystem(dataProtectionKeysFolder);
-        //    //}
-        //}
+            ////检查是否启用了Redis 并且 是否将数据保护组件中的私钥存储于Redis中
+            //var mapleConfig = services.BuildServiceProvider().GetRequiredService<MapleConfig>();
+            //if (mapleConfig.RedisCachingEnabled && mapleConfig.PersistDataProtectionKeysToRedis)
+            //{
+            //    services.AddDataProtection().PersistKeysToRedis(
+            //        () =>
+            //        {
+            //            var redisConnectionWrapper = EngineContext.Current.Resolve<IRedisConnectionWrapper>();
+            //            return redisConnectionWrapper.GetDatabase();
+            //        }, RedisConfiguration.DataProtectionKeysName);
+            //}
+            //else
+            //{
+            //    var dataProtectionKeysPath = CommonHelper.MapPath("~/App_Data/DataProtectionKeys");
+            //    var dataProtectionKeysFolder = new DirectoryInfo(dataProtectionKeysPath);
 
-        ///// <summary>
-        ///// 增加认证服务
-        ///// </summary>
-        ///// <param name="services">Collection of service descriptors</param>
-        //public static void AddMapleAuthentication(this IServiceCollection services)
-        //{
-        //    //设置默认身份验证方案
-        //    var authenticationBuilder = services.AddAuthentication(options =>
-        //    {
-        //        options.DefaultChallengeScheme = NopCookieAuthenticationDefaults.AuthenticationScheme;
-        //        options.DefaultSignInScheme = NopCookieAuthenticationDefaults.ExternalAuthenticationScheme;
-        //    });
+            //    //配置数据保护系统以将密钥保存到指定的目录
+            //    services.AddDataProtection().PersistKeysToFileSystem(dataProtectionKeysFolder);
+            //}
+        }
 
-        //    //添加cookie身份验证
-        //    authenticationBuilder.AddCookie(NopCookieAuthenticationDefaults.AuthenticationScheme, options =>
-        //    {
-        //        options.Cookie.Name = NopCookieAuthenticationDefaults.CookiePrefix + NopCookieAuthenticationDefaults.AuthenticationScheme;
-        //        options.Cookie.HttpOnly = true;
-        //        options.LoginPath = NopCookieAuthenticationDefaults.LoginPath;
-        //        options.AccessDeniedPath = NopCookieAuthenticationDefaults.AccessDeniedPath;
-        //    });
+        /// <summary>
+        /// 增加认证服务
+        /// </summary>
+        /// <param name="services">Collection of service descriptors</param>
+        public static void AddMapleAuthentication(this IServiceCollection services)
+        {
 
-        //    //添加外部认证
-        //    authenticationBuilder.AddCookie(NopCookieAuthenticationDefaults.ExternalAuthenticationScheme, options =>
-        //    {
-        //        options.Cookie.Name = NopCookieAuthenticationDefaults.CookiePrefix + NopCookieAuthenticationDefaults.ExternalAuthenticationScheme;
-        //        options.Cookie.HttpOnly = true;
-        //        options.LoginPath = NopCookieAuthenticationDefaults.LoginPath;
-        //        options.AccessDeniedPath = NopCookieAuthenticationDefaults.AccessDeniedPath;
-        //    });
+            //设置默认身份验证方案
+            var authenticationBuilder = services.AddAuthentication(options =>
+            {
+                //默认身份验证方案
+                //PS:ASP.NET Core 中可以支持各种各样的认证方式（如，cookie, bearer, oauth, openid 等等），而 Scheme 用来标识使用的是哪种认证方式
+                options.DefaultChallengeScheme = MapleCookieAuthenticationDefaults.AuthenticationScheme;
+                //默认的登陆方案
+                options.DefaultSignInScheme = MapleCookieAuthenticationDefaults.ExternalAuthenticationScheme;
+            });
 
-        //    //注册和配置外部身份验证插件
-        //    var typeFinder = new WebAppTypeFinder();
-        //    var externalAuthConfigurations = typeFinder.FindClassesOfType<IExternalAuthenticationRegistrar>();
-        //    var externalAuthInstances = externalAuthConfigurations
-        //        .Where(x => PluginManager.FindPlugin(x)?.Installed ?? true) //ignore not installed plugins
-        //        .Select(x => (IExternalAuthenticationRegistrar)Activator.CreateInstance(x));
+            //添加cookie身份验证
+            authenticationBuilder.AddCookie(MapleCookieAuthenticationDefaults.AuthenticationScheme, options =>
+            {
+                options.Cookie.Name = MapleCookieAuthenticationDefaults.CookiePrefix + MapleCookieAuthenticationDefaults.AuthenticationScheme;
+                options.Cookie.HttpOnly = true;
+                options.LoginPath = MapleCookieAuthenticationDefaults.LoginPath;
+                options.AccessDeniedPath = MapleCookieAuthenticationDefaults.AccessDeniedPath;
+            });
 
-        //    foreach (var instance in externalAuthInstances)
-        //        instance.Configure(authenticationBuilder);
-        //}
+            //添加外部认证
+            authenticationBuilder.AddCookie(MapleCookieAuthenticationDefaults.ExternalAuthenticationScheme, options =>
+            {
+                options.Cookie.Name = MapleCookieAuthenticationDefaults.CookiePrefix + MapleCookieAuthenticationDefaults.ExternalAuthenticationScheme;
+                options.Cookie.HttpOnly = true;
+                options.LoginPath = MapleCookieAuthenticationDefaults.LoginPath;
+                options.AccessDeniedPath = MapleCookieAuthenticationDefaults.AccessDeniedPath;
+            });
+
+            //注册和配置外部身份验证插件
+            var typeFinder = new WebAppTypeFinder();
+            var externalAuthConfigurations = typeFinder.FindClassesOfType<IExternalAuthenticationRegistrar>();
+            var externalAuthInstances = externalAuthConfigurations
+                .Where(x => PluginManager.FindPlugin(x)?.Installed ?? true) //ignore not installed plugins
+                .Select(x => (IExternalAuthenticationRegistrar)Activator.CreateInstance(x));
+
+            foreach (var instance in externalAuthInstances)
+                instance.Configure(authenticationBuilder);
+        }
 
         /// <summary>
         /// 为应用程序添加和配置MVC

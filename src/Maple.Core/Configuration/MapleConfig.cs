@@ -93,5 +93,10 @@ namespace Maple.Core.Configuration
         /// 获取或设置 是否绕过一些安全检查直接将插件加载至应用程序上下文中
         /// </summary>
         public bool UseUnsafeLoadAssembly { get; set; }
+
+        /// <summary>
+        /// 设置静态文件后缀的黑名单，多个文件用 ; 或 , 分割开
+        /// </summary>
+        public string PluginStaticFileExtensionsBlacklist { get; set; }
     }
 }

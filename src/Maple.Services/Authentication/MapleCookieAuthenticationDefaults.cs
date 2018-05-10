@@ -8,7 +8,7 @@ namespace Maple.Services.Authentication
     public static class MapleCookieAuthenticationDefaults
     {
         /// <summary>
-        /// 认证方法
+        /// 认证方案
         /// </summary>
         public const string AuthenticationScheme = "Authentication";
 
