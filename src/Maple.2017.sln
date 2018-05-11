@@ -20,6 +20,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.BuildTask", "Maple.Tools\Maple.BuildTask\Maple.BuildTask.csproj", "{375B95D7-14C4-4BD5-83A9-45BADB4DD621}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Web", "Maple.Web\Maple.Web.csproj", "{2055E2EC-123F-4B9F-95DA-2A66350D37D9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DEDCF01B-8F84-4723-90D3-DEE41A95C3C6} = {DEDCF01B-8F84-4723-90D3-DEE41A95C3C6}
+		{B2202D7B-ED4F-4D95-9F29-390742F39832} = {B2202D7B-ED4F-4D95-9F29-390742F39832}
+		{C0D0EFCA-F51D-4B55-9AEE-AE8C152457C9} = {C0D0EFCA-F51D-4B55-9AEE-AE8C152457C9}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Foundation.Setup", "Maple.Plugs\Maple.Foundation.Setup\Maple.Foundation.Setup.csproj", "{C0D0EFCA-F51D-4B55-9AEE-AE8C152457C9}"
 EndProject
