@@ -21,6 +21,12 @@ namespace Maple.Foundation.Setup.Controllers
         {
             if (DataSettingsHelper.DatabaseIsInstalled())
                 return RedirectToRoute("HomePage");
+            
+            //string host = Core.Infrastructure.EngineContext.Current
+            //    .Resolve<Microsoft.AspNetCore.Http.IHttpContextAccessor>()
+            //    .HttpContext?
+            //    .Request?
+            //    .Headers[Microsoft.Net.Http.Headers.HeaderNames.Host];
 
             var model = new InstallModel
             {

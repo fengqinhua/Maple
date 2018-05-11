@@ -99,7 +99,8 @@ namespace Maple.Core.Plugins
             else
                 result = JsonConvert.DeserializeObject<IList<string>>(text);
             //该组件是否默认必须要加载的
-            result.Add("Maple.Foundation.Setup");
+            if (!result.Contains("Maple.Foundation.Setup"))
+                result.Add("Maple.Foundation.Setup");
             return result;
         }
 
