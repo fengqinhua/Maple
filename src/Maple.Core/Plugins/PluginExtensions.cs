@@ -26,11 +26,8 @@ namespace Maple.Core.Plugins
         /// <returns>Logo URL</returns>
         public static string GetLogoUrl(this PluginDescriptor pluginDescriptor, IWebHelper webHelper)
         {
-            if (pluginDescriptor == null)
-                throw new ArgumentNullException(nameof(pluginDescriptor));
-
-            if (webHelper == null)
-                throw new ArgumentNullException(nameof(webHelper));
+            Check.NotNull(pluginDescriptor, nameof(pluginDescriptor));
+            Check.NotNull(webHelper, nameof(webHelper));
 
             if (pluginDescriptor.OriginalAssemblyFile == null || pluginDescriptor.OriginalAssemblyFile.Directory == null)
             {
@@ -43,7 +40,7 @@ namespace Maple.Core.Plugins
 
             if (string.IsNullOrWhiteSpace(logoExtension)) return null; //No logo file was found with any of the supported extensions.
 
-            var logoUrl = $"{webHelper.GetStoreLocation()}plugins/{pluginDirectory.Name}/logo.{logoExtension}";
+            var logoUrl = $"{webHelper.GetTenantLocation()}plugins/{pluginDirectory.Name}/logo.{logoExtension}";
             return logoUrl;
         }
     }

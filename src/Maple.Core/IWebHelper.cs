@@ -35,18 +35,18 @@ namespace Maple.Core
         bool IsCurrentConnectionSecured();
 
         /// <summary>
-        /// 获取主机地址
+        /// 获取当前站点Host地址
         /// </summary>
-        /// <param name="useSsl">Whether to get SSL secured URL</param>
-        /// <returns>Store host location</returns>
-        string GetStoreHost(bool useSsl);
+        /// <param name="useSsl"></param>
+        /// <returns></returns>
+        string GetTenantHost(bool useSsl);
 
         /// <summary>
         /// 获取网页地址
         /// </summary>
-        /// <param name="useSsl">Whether to get SSL secured URL; pass null to determine automatically</param>
-        /// <returns>Store location</returns>
-        string GetStoreLocation(bool? useSsl = null);
+        /// <param name="useSsl"></param>
+        /// <returns></returns>
+        string GetTenantLocation(bool? useSsl = null);
 
         /// <summary>
         /// 是否为静态资源

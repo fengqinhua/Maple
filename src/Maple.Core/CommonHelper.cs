@@ -200,8 +200,9 @@ namespace Maple.Core
         /// <param name="value"></param>
         public static void SetProperty(object instance, string propertyName, object value)
         {
-            if (instance == null) throw new ArgumentNullException(nameof(instance));
-            if (propertyName == null) throw new ArgumentNullException(nameof(propertyName));
+            Check.NotNull(instance, nameof(instance)); 
+            Check.NotNull(propertyName, nameof(propertyName));
+
 
             var instanceType = instance.GetType();
             var pi = instanceType.GetProperty(propertyName);

@@ -187,7 +187,7 @@ namespace Maple.Core
                 useSsl = IsCurrentConnectionSecured();
 
             //get the host considering using SSL
-            var url = GetStoreHost(useSsl.Value).TrimEnd('/');
+            var url = GetTenantHost(useSsl.Value).TrimEnd('/');
 
             //get full URL with or without query string
             url += includeQueryString ? GetRawUrl(_httpContextAccessor.HttpContext.Request)
@@ -222,57 +222,33 @@ namespace Maple.Core
         }
 
         /// <summary>
-        /// 获取主机地址
+        /// 获取当前站点Host地址
         /// </summary>
-        /// <param name="useSsl">Whether to get SSL secured URL</param>
-        /// <returns>Store host location</returns>
-        public virtual string GetStoreHost(bool useSsl)
+        /// <param name="useSsl">是否为HTTPS</param>
+        /// <returns></returns>
+        public virtual string GetTenantHost(bool useSsl)
         {
             var result = string.Empty;
 
-            //尝试从请求头中获取服务器信息
+            //尝试从请求头中获取Host信息
             var hostHeader = _httpContextAccessor.HttpContext.Request.Headers[HeaderNames.Host];
             if (!StringValues.IsNullOrEmpty(hostHeader))
                 result = "http://" + hostHeader.FirstOrDefault();
-
-            //判断数据库是否已安装
-            if (DataSettingsHelper.DatabaseIsInstalled())
-            {
-                //get current store (do not inject IWorkContext via constructor because it'll cause circular references)
-                var currentStore = EngineContext.Current.Resolve<IStoreContext>().CurrentStore;
-                if (currentStore == null)
-                    throw new Exception("Current store cannot be loaded");
-
-                if (string.IsNullOrEmpty(result))
-                {
-                    //HOST header is not available, it is possible only when HttpContext is not available (for example, running in a schedule task)
-                    //in this case use URL of a store entity configured in admin area
-                    result = currentStore.Url;
-                }
-
-                if (useSsl)
-                {
-                    //if secure URL specified let's use this URL, otherwise a store owner wants it to be detected automatically
-                    result = !string.IsNullOrWhiteSpace(currentStore.SecureUrl) ? currentStore.SecureUrl : result.Replace("http://", "https://");
-                }
-                else
-                {
-                    if (currentStore.SslEnabled && !string.IsNullOrWhiteSpace(currentStore.SecureUrl))
-                    {
-                        //SSL is enabled in this store and secure URL is specified, so a store owner don't want it to be detected automatically.
-                        //in this case let's use the specified non-secure URL
-                        result = currentStore.Url;
-                    }
-                }
-            }
             else
             {
-                if (!string.IsNullOrEmpty(result) && useSsl)
+                //判断数据库是否已安装
+                if (DataSettingsHelper.DatabaseIsInstalled())
                 {
-                    //use secure connection
-                    result = result.Replace("http://", "https://");
+                    //获取当前站点上下文信息
+                    var currentTenant = EngineContext.Current.Resolve<ITenantContext>().CurrentTenant;
+                    if (currentTenant == null)
+                        throw new Exception("Current tenant cannot be loaded");
+                    result = currentTenant.Url;
                 }
             }
+
+            if (!result.IsNullOrEmpty() && useSsl)
+                result = result.Replace("http://", "https://");
 
             if (!result.EndsWith("/"))
                 result += "/";
@@ -283,20 +259,21 @@ namespace Maple.Core
         /// <summary>
         /// 获取网页地址
         /// </summary>
-        /// <param name="useSsl">Whether to get SSL secured URL; pass null to determine automatically</param>
-        /// <returns>Store location</returns>
-        public virtual string GetStoreLocation(bool? useSsl = null)
+        /// <param name="useSsl">是否为HTTPS</param>
+        /// <returns></returns>
+        public virtual string GetTenantLocation(bool? useSsl = null)
         {
             //whether connection is secured
             if (!useSsl.HasValue)
                 useSsl = IsCurrentConnectionSecured();
 
             //get store host
-            var host = GetStoreHost(useSsl.Value).TrimEnd('/');
+            var host = GetTenantHost(useSsl.Value).TrimEnd('/');
 
             //add application path base if exists
             if (IsRequestAvailable())
                 host += _httpContextAccessor.HttpContext.Request.PathBase;
+
 
             if (!host.EndsWith("/"))
                 host += "/";

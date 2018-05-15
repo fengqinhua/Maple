@@ -48,7 +48,6 @@ namespace Maple.Core.Domain.Auditing
         /// 是否已删除?
         /// </summary>
         public virtual bool IsDeleted { get; set; }
-
         /// <summary>
         /// 删除用户实体.
         /// </summary>

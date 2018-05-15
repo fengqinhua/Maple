@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Maple.Core.Extensions;
 
 namespace Maple.Core.Domain
 {
@@ -26,32 +25,6 @@ namespace Maple.Core.Domain
         /// </summary>
         public virtual TPrimaryKey Id { get; set; }
 
-        /// <summary>
-        /// 判断该实体是否为临时的（未保存至数据库）
-        /// </summary>
-        /// <returns></returns>
-        public virtual bool IsTransient()
-        {
-            if (EqualityComparer<TPrimaryKey>.Default.Equals(Id, default(TPrimaryKey)))
-            {
-                return true;
-            }
-
-            //Workaround for EF Core since it sets int/long to min value when attaching to dbcontext
-            if (typeof(TPrimaryKey) == typeof(int))
-            {
-                return Convert.ToInt32(Id) <= 0;
-            }
-
-            if (typeof(TPrimaryKey) == typeof(long))
-            {
-                return Convert.ToInt64(Id) <= 0;
-            }
-
-            return false;
-        }
-
-
         public override bool Equals(object obj)
         {
             if (obj == null || !(obj is Entity<TPrimaryKey>))
@@ -65,14 +38,8 @@ namespace Maple.Core.Domain
                 return true;
             }
 
-            //Transient objects are not considered as equal
-            var other = (Entity<TPrimaryKey>)obj;
-            if (IsTransient() && other.IsTransient())
-            {
-                return false;
-            }
-
             //Must have a IS-A relation of types or must be same type
+            var other = (Entity<TPrimaryKey>)obj;
             var typeOfThis = GetType();
             var typeOfOther = other.GetType();
             if (!typeOfThis.GetTypeInfo().IsAssignableFrom(typeOfOther) && !typeOfOther.GetTypeInfo().IsAssignableFrom(typeOfThis))
@@ -80,8 +47,8 @@ namespace Maple.Core.Domain
                 return false;
             }
 
-            if (this is IMayHaveOrg && other is IMayHaveOrg &&
-                this.As<IMayHaveOrg>().OrgId != other.As<IMayHaveOrg>().OrgId)
+            if (this is IMustHaveTenant && other is IMustHaveTenant &&
+                this.As<IMustHaveTenant>().TenantId != other.As<IMustHaveTenant>().TenantId)
             {
                 return false;
             }

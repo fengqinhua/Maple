@@ -59,8 +59,7 @@ namespace Maple.Core.Plugins
         /// <returns></returns>
         private static IEnumerable<KeyValuePair<FileInfo, PluginDescriptor>> GetDescriptionFilesAndDescriptors(DirectoryInfo pluginFolder)
         {
-            if (pluginFolder == null)
-                throw new ArgumentNullException(nameof(pluginFolder));
+            Check.NotNull(pluginFolder, nameof(pluginFolder));
 
             var result = new List<KeyValuePair<FileInfo, PluginDescriptor>>();
 
@@ -99,8 +98,10 @@ namespace Maple.Core.Plugins
             else
                 result = JsonConvert.DeserializeObject<IList<string>>(text);
             //该组件是否默认必须要加载的
-            if (!result.Contains("Maple.Foundation.Setup"))
-                result.Add("Maple.Foundation.Setup");
+
+            result.AddIfNotContains("Maple.Foundation.Setup");
+            //if (!result.Contains("Maple.Foundation.Setup"))
+            //    result.Add("Maple.Foundation.Setup");
             return result;
         }
 
@@ -299,11 +300,9 @@ namespace Maple.Core.Plugins
             //因为要从这些程序集中查找 Controller，那么从这个特性我们可以延伸到， 利用此功能，我们可以从 Web 层剥离 Controller 到其他程序集中
             //
             // *********************************************************************************************************************************
-            if (applicationPartManager == null)
-                throw new ArgumentNullException(nameof(applicationPartManager));
 
-            if (config == null)
-                throw new ArgumentNullException(nameof(config));
+            Check.NotNull(applicationPartManager, nameof(applicationPartManager));
+            Check.NotNull(config, nameof(config));
 
             using (new WriteLockDisposable(Locker))
             {
@@ -463,8 +462,7 @@ namespace Maple.Core.Plugins
         /// <param name="systemName"></param>
         public static void MarkPluginAsInstalled(string systemName)
         {
-            if (string.IsNullOrEmpty(systemName))
-                throw new ArgumentNullException(nameof(systemName));
+            Check.NotNullOrEmpty(systemName, nameof(systemName));
 
             var filePath = CommonHelper.MapPath(InstalledPluginsFilePath);
             //判断文件是否存在
@@ -488,8 +486,7 @@ namespace Maple.Core.Plugins
         /// <param name="systemName"></param>
         public static void MarkPluginAsUninstalled(string systemName)
         {
-            if (string.IsNullOrEmpty(systemName))
-                throw new ArgumentNullException(nameof(systemName));
+            Check.NotNullOrEmpty(systemName, nameof(systemName));
 
             var filePath = CommonHelper.MapPath(InstalledPluginsFilePath);
 
@@ -528,8 +525,7 @@ namespace Maple.Core.Plugins
         /// <returns></returns>
         public static PluginDescriptor FindPlugin(Type typeInAssembly)
         {
-            if (typeInAssembly == null)
-                throw new ArgumentNullException(nameof(typeInAssembly));
+            Check.NotNull(typeInAssembly, nameof(typeInAssembly));
 
             if (ReferencedPlugins == null)
                 return null;

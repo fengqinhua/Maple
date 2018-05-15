@@ -1,4 +1,5 @@
-﻿using Maple.Web.Framework.Mvc.Models;
+﻿using Maple.Core;
+using Maple.Web.Framework.Mvc.Models;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
@@ -31,8 +32,7 @@ namespace Maple.Web.Framework.Mvc.ModelBinding
         /// <returns>Model</returns>
         protected override object CreateModel(ModelBindingContext bindingContext)
         {
-            if (bindingContext == null)
-                throw new ArgumentNullException(nameof(bindingContext));
+            Check.NotNull(bindingContext, nameof(bindingContext));
 
             //create base model
             var model = base.CreateModel(bindingContext);
@@ -54,8 +54,7 @@ namespace Maple.Web.Framework.Mvc.ModelBinding
         protected override void SetProperty(ModelBindingContext bindingContext, string modelName,
             ModelMetadata propertyMetadata, ModelBindingResult bindingResult)
         {
-            if (bindingContext == null)
-                throw new ArgumentNullException(nameof(bindingContext));
+            Check.NotNull(bindingContext, nameof(bindingContext));
 
             //trim property string values for Maple models
             var valueAsString = bindingResult.Model as string;

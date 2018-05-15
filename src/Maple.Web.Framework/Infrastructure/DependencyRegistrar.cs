@@ -73,8 +73,8 @@ namespace Maple.Web.Framework.Infrastructure
             ////work context
             //builder.RegisterType<WebWorkContext>().As<IWorkContext>().InstancePerLifetimeScope();
 
-            ////store context
-            //builder.RegisterType<WebStoreContext>().As<IStoreContext>().InstancePerLifetimeScope();
+            //TenantContext
+            builder.RegisterType<WebTenantContext>().As<ITenantContext>().InstancePerLifetimeScope();
 
             //services
             //builder.RegisterType<BackInStockSubscriptionService>().As<IBackInStockSubscriptionService>().InstancePerLifetimeScope();

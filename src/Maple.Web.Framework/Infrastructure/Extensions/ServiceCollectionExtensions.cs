@@ -74,11 +74,8 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
         /// <returns>Instance of configuration parameters</returns>
         public static TConfig ConfigureStartupConfig<TConfig>(this IServiceCollection services, IConfiguration configuration) where TConfig : class, new()
         {
-            if (services == null)
-                throw new ArgumentNullException(nameof(services));
-
-            if (configuration == null)
-                throw new ArgumentNullException(nameof(configuration));
+            Check.NotNull(services, nameof(services));
+            Check.NotNull(configuration, nameof(configuration));
 
             //create instance of config
             var config = new TConfig();

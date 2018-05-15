@@ -7,6 +7,5 @@ namespace Maple.Core.Domain.Customers
 {
     public partial class Customer : FullAuditedAggregateRoot
     {
-
     }
 }

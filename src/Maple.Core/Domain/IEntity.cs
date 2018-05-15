@@ -14,12 +14,6 @@ namespace Maple.Core.Domain
         /// ID ，实体的唯一标识符
         /// </summary>
         TPrimaryKey Id { get; set; }
-
-        /// <summary>
-        /// 判断该实体是否为临时的（未保存至数据库）
-        /// </summary>
-        /// <returns></returns>
-        bool IsTransient();
     }
 
 

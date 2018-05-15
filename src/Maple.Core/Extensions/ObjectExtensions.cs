@@ -4,8 +4,11 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace Maple.Core.Extensions
+namespace Maple.Core
 {
+    /// <summary>
+    /// Object的扩展方法
+    /// </summary>
     public static class ObjectExtensions
     {
         public static T As<T>(this object obj)
@@ -14,11 +17,11 @@ namespace Maple.Core.Extensions
             return (T)obj;
         }
 
-        public static T To<T>(this object obj)
-            where T : struct
-        {
-            return (T)Convert.ChangeType(obj, typeof(T), CultureInfo.InvariantCulture);
-        }
+        //public static T To<T>(this object obj)
+        //    where T : struct
+        //{
+        //    return (T)Convert.ChangeType(obj, typeof(T), CultureInfo.InvariantCulture);
+        //}
 
         public static bool IsIn<T>(this T item, params T[] list)
         {

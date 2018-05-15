@@ -27,7 +27,7 @@ namespace Maple.Services.Authentication
         /// <param name="next">Next</param>
         /// <param name="schemes">Schemes</param>
         public AuthenticationMiddleware(RequestDelegate next, IAuthenticationSchemeProvider schemes)
-        {
+        { 
             _next = next ?? throw new ArgumentNullException(nameof(next));
             Schemes = schemes ?? throw new ArgumentNullException(nameof(schemes));
         }

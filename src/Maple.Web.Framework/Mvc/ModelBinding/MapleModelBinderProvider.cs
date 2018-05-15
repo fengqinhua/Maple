@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
+using Maple.Core;
 
 namespace Maple.Web.Framework.Mvc.ModelBinding
 {
@@ -19,9 +20,7 @@ namespace Maple.Web.Framework.Mvc.ModelBinding
         /// <returns>Model binder</returns>
         public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
-            if (context == null)
-                throw new ArgumentNullException(nameof(context));
-
+            Check.NotNull(context, nameof(context));
 
             var modelType = context.Metadata.ModelType;
             if (!typeof(BaseMapleModel).IsAssignableFrom(modelType))

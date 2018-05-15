@@ -43,8 +43,7 @@ namespace Maple.Core.Plugins
         /// <returns></returns>
         protected virtual bool CheckLoadMode(PluginDescriptor pluginDescriptor, LoadPluginsMode loadMode)
         {
-            if (pluginDescriptor == null)
-                throw new ArgumentNullException(nameof(pluginDescriptor));
+            Check.NotNull(pluginDescriptor, nameof(pluginDescriptor));
 
             switch (loadMode)
             {
@@ -68,8 +67,7 @@ namespace Maple.Core.Plugins
         /// <returns>true - available; false - no</returns>
         protected virtual bool CheckGroup(PluginDescriptor pluginDescriptor, string group)
         {
-            if (pluginDescriptor == null)
-                throw new ArgumentNullException(nameof(pluginDescriptor));
+            Check.NotNull(pluginDescriptor, nameof(pluginDescriptor));
 
             if (string.IsNullOrEmpty(group))
                 return true;
@@ -89,8 +87,7 @@ namespace Maple.Core.Plugins
         /// <returns></returns>
         public virtual bool AuthenticateStore(PluginDescriptor pluginDescriptor, int storeId)
         {
-            if (pluginDescriptor == null)
-                throw new ArgumentNullException(nameof(pluginDescriptor));
+            Check.NotNull(pluginDescriptor, nameof(pluginDescriptor));
 
             //no validation required
             if (storeId == 0)
@@ -110,8 +107,7 @@ namespace Maple.Core.Plugins
         /// <returns></returns>
         public virtual bool AuthorizedForUser(PluginDescriptor pluginDescriptor, Customer customer)
         {
-            if (pluginDescriptor == null)
-                throw new ArgumentNullException(nameof(pluginDescriptor));
+            Check.NotNull(pluginDescriptor, nameof(pluginDescriptor));
 
             if (customer == null || !pluginDescriptor.LimitedToCustomerRoles.Any())
                 return true;

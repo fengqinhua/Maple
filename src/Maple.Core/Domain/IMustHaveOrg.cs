@@ -8,6 +8,6 @@
         /// <summary>
         /// 实体所在组织ID.
         /// </summary>
-        int OrgId { get; set; }
+        long OrgId { get; set; }
     }
 }

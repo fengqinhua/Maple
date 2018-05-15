@@ -1,14 +1,13 @@
-﻿using Maple.Core.Domain.Localization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Maple.Core.Domain.Stores
+namespace Maple.Core.Domain.Tenants
 {
     /// <summary>
-    /// 聚合跟：站点信息 
+    /// 站点信息
     /// </summary>
-    public partial class Store : Entity, ILocalizedEntity
+    public class Tenant : Entity
     {
         /// <summary>
         /// 站点名称

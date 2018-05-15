@@ -44,7 +44,7 @@ namespace Maple.Core.Http
             //判断数据库是否已安装和配置，如果没有，那么跳转至Install页面中
             if (!DataSettingsHelper.DatabaseIsInstalled())
             {
-                var installUrl = $"{webHelper.GetStoreLocation()}install";
+                var installUrl = $"{webHelper.GetTenantLocation()}install";
                 if (!webHelper.GetThisPageUrl(false).StartsWith(installUrl, StringComparison.InvariantCultureIgnoreCase))
                 {
                     //重定向

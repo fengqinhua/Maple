@@ -1,6 +1,5 @@
 ﻿
 using Maple.Core.Domain.Auditing;
-using Maple.Core.Extensions;
 
 namespace Maple.Core.Domain
 {
@@ -18,7 +17,7 @@ namespace Maple.Core.Domain
         }
 
         /// <summary>
-        /// 
+        /// 设置实体为不可删除的
         /// </summary>
         public static void UnDelete(this ISoftDelete entity)
         {

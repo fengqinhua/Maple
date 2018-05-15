@@ -42,7 +42,7 @@ namespace Maple.Core.Http
             if (DataSettingsHelper.DatabaseIsInstalled())
             {
                 //未完成则继续等待
-                var keepAliveUrl = $"{webHelper.GetStoreLocation()}keepalive/index";
+                var keepAliveUrl = $"{webHelper.GetTenantLocation()}keepalive/index";
                 if (webHelper.GetThisPageUrl(false).StartsWith(keepAliveUrl, StringComparison.InvariantCultureIgnoreCase))
                     return;
             }
