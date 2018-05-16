@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Transactions;
 
 namespace Maple.Core.Domain.Uow
 {
@@ -10,46 +11,70 @@ namespace Maple.Core.Domain.Uow
     /// </summary>
     public interface IUnitOfWork
     {
-
-        void RegisterAmended<TEntity, TPrimaryKey>(IEntity<TPrimaryKey> entity, IUnitOfWorkRepository<TEntity, TPrimaryKey> unitofWorkRepository) where TEntity : class, IEntity<TPrimaryKey>;
-        void RegisterNew<TEntity, TPrimaryKey>(IEntity<TPrimaryKey> entity, IUnitOfWorkRepository<TEntity, TPrimaryKey> unitofWorkRepository) where TEntity : class, IEntity<TPrimaryKey>;
-        void RegisterRemoved<TEntity, TPrimaryKey>(IEntity<TPrimaryKey> entity, IUnitOfWorkRepository<TEntity, TPrimaryKey> unitofWorkRepository) where TEntity : class, IEntity<TPrimaryKey>;
-
+        void RegisterAmended(IAggregateRoot entity, IUnitOfWorkRepository unitofWorkRepository);
+        void RegisterNew(IAggregateRoot entity, IUnitOfWorkRepository unitofWorkRepository);
+        void RegisterRemoved(IAggregateRoot entity, IUnitOfWorkRepository unitofWorkRepository);
+        
         void Commit();
     }
 
     public class UnitOfWork : IUnitOfWork
     {
-        private Dictionary<object, Action<object>> addedEntities;
-        private Dictionary<object, Action<object>> changedEntities;
-        private Dictionary<object, Action<object>> deletedEntities;
+        private Dictionary<IAggregateRoot, IUnitOfWorkRepository> addedEntities;
+        private Dictionary<IAggregateRoot, IUnitOfWorkRepository> changedEntities;
+        private Dictionary<IAggregateRoot, IUnitOfWorkRepository> deletedEntities;
 
-
-        public void Commit()
+        public UnitOfWork()
         {
-            throw new NotImplementedException();
+            addedEntities = new Dictionary<IAggregateRoot, IUnitOfWorkRepository>();
+            changedEntities = new Dictionary<IAggregateRoot, IUnitOfWorkRepository>();
+            deletedEntities = new Dictionary<IAggregateRoot, IUnitOfWorkRepository>();
         }
 
-        void IUnitOfWork.RegisterAmended<TEntity, TPrimaryKey>(IEntity<TPrimaryKey> entity, IUnitOfWorkRepository<TEntity, TPrimaryKey> unitofWorkRepository)
+        public void RegisterAmended(IAggregateRoot entity, IUnitOfWorkRepository unitofWorkRepository)
         {
             if (!changedEntities.ContainsKey(entity))
             {
-                changedEntities.Add(entity, (obj) =>
-                {
-                    IEntity<TPrimaryKey> temp = obj.As<IEntity<TPrimaryKey>>();
-                    unitofWorkRepository.PersistUpdateOf(temp);
-                });
+                changedEntities.Add(entity, unitofWorkRepository);
             }
         }
 
-        void IUnitOfWork.RegisterNew<TEntity, TPrimaryKey>(IEntity<TPrimaryKey> entity, IUnitOfWorkRepository<TEntity, TPrimaryKey> unitofWorkRepository)
+        public void RegisterNew(IAggregateRoot entity, IUnitOfWorkRepository unitofWorkRepository)
         {
-            throw new NotImplementedException();
+            if (!addedEntities.ContainsKey(entity))
+            {
+                addedEntities.Add(entity, unitofWorkRepository);
+            };
         }
 
-        void IUnitOfWork.RegisterRemoved<TEntity, TPrimaryKey>(IEntity<TPrimaryKey> entity, IUnitOfWorkRepository<TEntity, TPrimaryKey> unitofWorkRepository)
+        public void RegisterRemoved(IAggregateRoot entity, IUnitOfWorkRepository unitofWorkRepository)
         {
-            throw new NotImplementedException();
+            if (!deletedEntities.ContainsKey(entity))
+            {
+                deletedEntities.Add(entity, unitofWorkRepository);
+            }
+        }
+
+        public void Commit()
+        {
+            using (TransactionScope scope = new TransactionScope())
+            {
+                foreach (IAggregateRoot entity in this.addedEntities.Keys)
+                {
+                    this.addedEntities[entity].PersistCreationOf(entity);
+                }
+
+                foreach (IAggregateRoot entity in this.changedEntities.Keys)
+                {
+                    this.changedEntities[entity].PersistUpdateOf(entity);
+                }
+
+                foreach (IAggregateRoot entity in this.deletedEntities.Keys)
+                {
+                    this.deletedEntities[entity].PersistDeletionOf(entity);
+                }
+                scope.Complete();
+            }
         }
     }
 }

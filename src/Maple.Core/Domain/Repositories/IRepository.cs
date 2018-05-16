@@ -9,9 +9,13 @@ namespace Maple.Core.Domain.Repositories
     /// 仓储接口
     /// <para>协调领域和数据映射层，利用类似于集合的接口来访问领域对象</para>
     /// </summary>
-    public interface IRepository
-    {
-    }
+    public interface IRepository { }
+
+    /// <summary>
+    /// 仓储接口
+    /// <para>协调领域和数据映射层，利用类似于集合的接口来访问领域对象</para>
+    /// </summary>
+    public interface IRepository<TEntity> : IRepository<TEntity, long> where TEntity : class, IEntity<long>, IAggregateRoot { }
 
     /// <summary>
     /// 仓储接口
@@ -19,7 +23,7 @@ namespace Maple.Core.Domain.Repositories
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
     /// <typeparam name="TPrimaryKey"></typeparam>
-    public interface IRepository<TEntity, TPrimaryKey> : IRepository where TEntity : class, IEntity<TPrimaryKey>
+    public interface IRepository<TEntity, TPrimaryKey> : IRepository where TEntity : class, IEntity<TPrimaryKey>, IAggregateRoot
     {
         #region Insert
 
@@ -51,13 +55,6 @@ namespace Maple.Core.Domain.Repositories
         #endregion
     }
 
-    /// <summary>
-    /// 仓储接口
-    /// <para>协调领域和数据映射层，利用类似于集合的接口来访问领域对象</para>
-    /// </summary>
-    public interface IRepository<TEntity> : IRepository<TEntity, long> where TEntity : class, IEntity<long>
-    {
 
-    }
 
 }

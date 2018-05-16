@@ -4,14 +4,8 @@ using System.Text;
 
 namespace Maple.Core.Domain
 {
-    public interface IAggregateRoot : IAggregateRoot<long>, IEntity
+    public interface IAggregateRoot 
     {
 
     }
-
-    public interface IAggregateRoot<TPrimaryKey> : IEntity<TPrimaryKey>
-    {
-
-    }
-
 }

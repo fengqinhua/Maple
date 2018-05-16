@@ -8,10 +8,10 @@ namespace Maple.Core.Domain.Uow
     /// 工作单元中仓储接口CRUD操作
     /// 需要使用工作单元的仓储，需要实现本接口
     /// </summary>
-    public interface IUnitOfWorkRepository<TEntity, TPrimaryKey> where TEntity : class, IEntity<TPrimaryKey>
+    public interface IUnitOfWorkRepository
     {
-        void PersistCreationOf(IEntity<TPrimaryKey> entity);
-        void PersistUpdateOf(IEntity<TPrimaryKey> entity);
-        void PersistDeletionOf(IEntity<TPrimaryKey> entity);
+        void PersistCreationOf(IAggregateRoot entity);
+        void PersistUpdateOf(IAggregateRoot entity);
+        void PersistDeletionOf(IAggregateRoot entity);
     }
 }
