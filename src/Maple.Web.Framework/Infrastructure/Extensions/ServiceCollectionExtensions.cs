@@ -1,6 +1,6 @@
 ﻿using Maple.Core;
 using Maple.Core.Configuration;
-using Maple.Core.Data;
+using Maple.Core.Data.DataSettings;
 using Maple.Core.Infrastructure;
 using Maple.Core.Plugins;
 using Maple.Services.Authentication;
@@ -53,7 +53,7 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
             //                     注册并配置AutoMapper \ 使用 Autofac 重新注册依赖关系 \ 运行 startup 启动时的任务 ]
             var serviceProvider = engine.ConfigureServices(services, configuration);
 
-            if (DataSettingsHelper.DatabaseIsInstalled())
+            if (MainDataSettingsHelper.DatabaseIsInstalled())
             {
                 ////如果数据库已完成配置和安装，那么开始执行计划任务
                 //TaskManager.Instance.Initialize();
@@ -132,7 +132,7 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
         /// <param name="services">Collection of service descriptors</param>
         public static void AddThemes(this IServiceCollection services)
         {
-            if (!DataSettingsHelper.DatabaseIsInstalled())
+            if (!MainDataSettingsHelper.DatabaseIsInstalled())
                 return;
 
             //themes support

@@ -98,5 +98,9 @@ namespace Maple.Core.Configuration
         /// 设置静态文件后缀的黑名单，多个文件用 ; 或 , 分割开
         /// </summary>
         public string PluginStaticFileExtensionsBlacklist { get; set; }
+        /// <summary>
+        /// 获取或设置 是否需要记录SQL运行日志
+        /// </summary>
+        public bool NeedLog { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Maple.Core;
 using Maple.Core.Configuration;
-using Maple.Core.Data;
+using Maple.Core.Data.DataSettings;
 using Maple.Core.Infrastructure;
 using Maple.Web.Framework.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -98,7 +98,7 @@ namespace Maple.Web.Framework.Infrastructure
                         ctx.Context.Response.Headers.Append(HeaderNames.CacheControl, mapleConfig.StaticFilesCacheControl);
                 }
             };
-            if (DataSettingsHelper.DatabaseIsInstalled())
+            if (MainDataSettingsHelper.DatabaseIsInstalled())
             {
                 //此处重写，将该配置直接写入MapleConfig中
                 if (!string.IsNullOrEmpty(mapleConfig.PluginStaticFileExtensionsBlacklist))

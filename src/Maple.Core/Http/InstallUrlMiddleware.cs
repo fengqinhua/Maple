@@ -1,4 +1,4 @@
-﻿using Maple.Core.Data;
+﻿using Maple.Core.Data.DataSettings;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -42,7 +42,7 @@ namespace Maple.Core.Http
         public async Task Invoke(Microsoft.AspNetCore.Http.HttpContext context, IWebHelper webHelper)
         {
             //判断数据库是否已安装和配置，如果没有，那么跳转至Install页面中
-            if (!DataSettingsHelper.DatabaseIsInstalled())
+            if (!MainDataSettingsHelper.DatabaseIsInstalled())
             {
                 var installUrl = $"{webHelper.GetTenantLocation()}install";
                 if (!webHelper.GetThisPageUrl(false).StartsWith(installUrl, StringComparison.InvariantCultureIgnoreCase))

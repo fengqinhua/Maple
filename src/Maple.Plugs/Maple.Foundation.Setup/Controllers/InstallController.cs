@@ -1,5 +1,5 @@
 ﻿using Maple.Core.Configuration;
-using Maple.Core.Data;
+using Maple.Core.Data.DataSettings;
 using Maple.Foundation.Setup.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -19,7 +19,7 @@ namespace Maple.Foundation.Setup.Controllers
 
         public virtual IActionResult Index()
         {
-            if (DataSettingsHelper.DatabaseIsInstalled())
+            if (MainDataSettingsHelper.DatabaseIsInstalled())
                 return RedirectToRoute("HomePage");
             
             //string host = Core.Infrastructure.EngineContext.Current

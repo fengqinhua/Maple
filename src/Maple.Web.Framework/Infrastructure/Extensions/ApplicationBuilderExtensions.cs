@@ -1,6 +1,6 @@
 ﻿using Maple.Core;
 using Maple.Core.Configuration;
-using Maple.Core.Data;
+using Maple.Core.Data.DataSettings;
 using Maple.Core.Http;
 using Maple.Core.Infrastructure;
 using Maple.Web.Framework.Globalization;
@@ -75,7 +75,7 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
                     try
                     {
                         //检查数据库是否已经安装配置
-                        if (DataSettingsHelper.DatabaseIsInstalled())
+                        if (MainDataSettingsHelper.DatabaseIsInstalled())
                         {
                             //???
                             ////get current customer
@@ -186,7 +186,7 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
         public static void UseMapleAuthentication(this IApplicationBuilder application)
         {
             //check whether database is installed
-            if (!DataSettingsHelper.DatabaseIsInstalled())
+            if (!MainDataSettingsHelper.DatabaseIsInstalled())
                 return;
 
             application.UseMiddleware<Services.Authentication.AuthenticationMiddleware>();
@@ -199,7 +199,7 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
         public static void UseCulture(this IApplicationBuilder application)
         {
             //check whether database is installed
-            if (!DataSettingsHelper.DatabaseIsInstalled())
+            if (!MainDataSettingsHelper.DatabaseIsInstalled())
                 return;
             application.UseMiddleware<CultureMiddleware>();
         }

@@ -1,5 +1,5 @@
 ﻿using Maple.Core.Configuration;
-using Maple.Core.Data;
+using Maple.Core.Data.DataSettings;
 using Maple.Core.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
@@ -237,7 +237,7 @@ namespace Maple.Core
             else
             {
                 //判断数据库是否已安装
-                if (DataSettingsHelper.DatabaseIsInstalled())
+                if (MainDataSettingsHelper.DatabaseIsInstalled())
                 {
                     //获取当前站点上下文信息
                     var currentTenant = EngineContext.Current.Resolve<ITenantContext>().CurrentTenant;

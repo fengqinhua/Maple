@@ -1,4 +1,5 @@
-﻿using Maple.Core.Domain.Auditing;
+﻿using Maple.Core.Domain.Entities;
+using Maple.Core.Domain.Entities.Auditing;
 using System;
 using System.Collections.Generic;
 using System.Text;

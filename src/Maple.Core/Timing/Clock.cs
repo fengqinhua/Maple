@@ -35,6 +35,10 @@ namespace Maple.Core.Timing
         /// 获取当前时间.
         /// </summary>
         public static DateTime Now => Provider.Now;
+        /// <summary>
+        /// 获取当前时间.
+        /// </summary>
+        public static DateTime INVALID_DATETIME = new DateTime(1900, 1, 1);
 
         public static DateTimeKind Kind => Provider.Kind;
 

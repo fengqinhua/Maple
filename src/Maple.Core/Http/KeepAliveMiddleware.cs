@@ -1,4 +1,4 @@
-﻿using Maple.Core.Data;
+﻿using Maple.Core.Data.DataSettings;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -39,7 +39,7 @@ namespace Maple.Core.Http
             //TODO test. ensure that no guest record is created
 
             //判断数据库是否已经完成安装与配置
-            if (DataSettingsHelper.DatabaseIsInstalled())
+            if (MainDataSettingsHelper.DatabaseIsInstalled())
             {
                 //未完成则继续等待
                 var keepAliveUrl = $"{webHelper.GetTenantLocation()}keepalive/index";
