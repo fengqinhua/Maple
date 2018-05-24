@@ -5,20 +5,24 @@ namespace Maple.Core.Data.DataSettings
     /// <summary>
     /// 数据库配置信息
     /// </summary>
-    public partial class MainDataSettings
+    public partial class DataSetting
     {
         /// <summary>
         /// 构造函数
         /// </summary>
-        public MainDataSettings()
+        public DataSetting()
         {
-            RawDataSettings=new Dictionary<string, string>();
+            RawDataSettings = new Dictionary<string, string>();
         }
+        /// <summary>
+        /// 数据库配置名称
+        /// </summary>
+        public string Name { get; set; }
 
         /// <summary>
         /// 数据库类型
         /// </summary>
-        public string DataProvider { get; set; }
+        public DataSouceType DataSouceType { get; set; }
 
         /// <summary>
         /// 数据库连接字符串
@@ -36,7 +40,7 @@ namespace Maple.Core.Data.DataSettings
         /// <returns></returns>
         public bool IsValid()
         {
-            return !string.IsNullOrEmpty(this.DataProvider) && !string.IsNullOrEmpty(this.DataConnectionString);
+            return DataSouceType != DataSouceType.Unknown && !string.IsNullOrEmpty(this.Name) && !string.IsNullOrEmpty(this.DataConnectionString);
         }
     }
 }

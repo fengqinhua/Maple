@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Maple.Core.Data.DbMappers;
+using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Text;
 
 namespace Maple.Core.Data.DbTranslators
@@ -9,15 +11,6 @@ namespace Maple.Core.Data.DbTranslators
     /// </summary>
     public interface IDbTranslator
     {
-        /// <summary>
-        /// 数据库类型
-        /// </summary>
-        DataSouceType DataSouceType { get; }
-        /// <summary>
-        /// 获取数据库对象工厂名称
-        /// </summary>
-        /// <returns></returns>
-        string ProviderFactoryName { get; }
         /// <summary>
         /// 获取参数连接符
         /// </summary>
@@ -31,5 +24,9 @@ namespace Maple.Core.Data.DbTranslators
         /// 引用结束
         /// </summary>
         string CloseQuote { get; }
+        /// <summary>
+        /// 表示一组方法，这些方法用于创建提供程序对数据源类的实现的实例。
+        /// </summary>
+        DbProviderFactory GetDbProviderFactory();
     }
 }

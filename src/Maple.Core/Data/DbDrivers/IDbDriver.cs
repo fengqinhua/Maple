@@ -13,7 +13,5 @@ namespace Maple.Core.Data.DbDrivers
         void Commit();
         void Rollback();
         void Rollback(Exception RollBackException);
-
-
     }
 }

@@ -7,13 +7,12 @@ namespace Maple.Core.Data.DataProviders
     /// <summary>
     /// IDataProvider 数据库访问驱动
     /// </summary>
-    public interface IDataProvider
+    public interface IDataProvider : IDisposable
     {
-        ///// <summary>
-        ///// 数据库驱动
-        ///// </summary>
-        //IDbDriver DbDriver { get; }
-        
+        /// <summary>
+        /// 数据库上下文
+        /// </summary>
+        IDatabaseContext DatabaseContext { get; }
 
         /// <summary>
         /// 执行数据CUD命令，返回影响的行数 (立即执行)

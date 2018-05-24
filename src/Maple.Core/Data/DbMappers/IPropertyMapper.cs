@@ -8,7 +8,7 @@ namespace Maple.Core.Data.DbMappers
     public interface IPropertyMapper
     {
         /// <summary>
-        /// 获取熟悉信息
+        /// 获取属性信息
         /// </summary>
         /// <returns></returns>
         PropertyInfo PropertyInfo { get; }
@@ -24,5 +24,27 @@ namespace Maple.Core.Data.DbMappers
         /// 是否可空
         /// </summary>
         bool AllowsNulls { get; }
+        /// <summary>
+        /// 数据库字段类型
+        /// </summary>
+        System.Data.DbType DbType { get; }
+        /// <summary>
+        /// 长度
+        /// </summary>
+        int Size { get; }
+
+        /// <summary>
+        /// 读取属性值
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        object FastGetValue(object entity);
+        /// <summary>
+        /// 设置属性值
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="value"></param>
+        void FastSetValue(object entity, object value);
+
     }
 }

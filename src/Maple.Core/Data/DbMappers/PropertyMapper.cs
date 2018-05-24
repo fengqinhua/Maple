@@ -1,19 +1,29 @@
 ﻿using System;
 using System.Reflection;
+using Maple.Core.Reflection;
 using Maple.Core.Timing;
 namespace Maple.Core.Data.DbMappers
 {
-    public class PropertyMapper: IPropertyMapper
+    public class PropertyMapper : IPropertyMapper
     {
+        private readonly GetValueDelegate getter;
+        private readonly SetValueDelegate setter;
+
         public PropertyMapper(PropertyInfo propertyInfo)
         {
             this.PropertyInfo = propertyInfo;
+            this.getter = DynamicMethodFactory.CreatePropertyGetter(propertyInfo);
+            this.setter = DynamicMethodFactory.CreatePropertySetter(propertyInfo);
             this.ColumnName = propertyInfo.Name;
             this.IsPrimaryKey = propertyInfo.Name.Equals("Id", StringComparison.InvariantCultureIgnoreCase);
             this.AllowsNulls = propertyInfo.IsIncludingNullable();
+            this.DbType = PropertyTypeToDbTypeTranslator.Translation(propertyInfo.PropertyType);
+            //设置缺省长度
+            if (this.DbType == System.Data.DbType.String)
+                this.Size = 200;
+            else
+                this.Size = 0;
         }
-
-
 
         //private void setDefalutValue(Type type)
         //{
@@ -58,13 +68,53 @@ namespace Maple.Core.Data.DbMappers
         public bool AllowsNulls { get; private set; }
 
         /// <summary>
+        /// 数据库字段类型
+        /// </summary>
+        public System.Data.DbType DbType { get; private set; }
+        /// <summary>
+        /// 长度
+        /// </summary>
+        public int Size { get; private set; }
+
+        /// <summary>
+        /// 读取属性值
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public object FastGetValue(object entity)
+        {
+            return this.getter(entity);
+        }
+        /// <summary>
+        /// 设置属性值
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="value"></param>
+        public void FastSetValue(object entity, object value)
+        {
+            this.setter(entity, value);
+        }
+
+
+        /// <summary>
         /// 设置数据库字段名称
         /// </summary>
         /// <param name="columnName"></param>
         /// <returns></returns>
-        public PropertyMapper Column(string columnName)
+        public PropertyMapper DbColumn(string columnName)
         {
             ColumnName = columnName;
+            return this;
+        }
+
+        /// <summary>
+        /// 设置数据库字段长度
+        /// </summary>
+        /// <param name="columnName"></param>
+        /// <returns></returns>
+        public PropertyMapper DbSize(int size)
+        {
+            Size = size;
             return this;
         }
     }

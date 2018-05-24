@@ -22,6 +22,8 @@ namespace Maple.Web
                 .UseStartup<Startup>()
                 .Build();
             host.Run();
+
+            ILoggerFactory
         }
 
     }

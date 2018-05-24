@@ -57,7 +57,7 @@ namespace Maple.Core.Data
         /// <param name="commandParameters">参数集合</param>
         /// <param name="sqlTimeOut">命令超时时间</param>
         /// <param name="needLog">是否需要写日志</param>
-        public SqlStatement(CommandType sqlCommandType, string sqlCommandText, DataParameterCollection commandParameters, int sqlTimeOut, bool needLog)
+        public SqlStatement(CommandType sqlCommandType, string sqlCommandText, DataParameterCollection commandParameters, int sqlTimeOut = 10, bool needLog = false)
         {
             SqlCommandType = sqlCommandType;
             SqlCommandText = sqlCommandText;

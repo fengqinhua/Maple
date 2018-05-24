@@ -19,11 +19,11 @@ namespace Maple.Core.Data.DbMappers
         /// <summary>
         /// 标识列对应属性集合（主键）
         /// </summary>
-        public IList<IPropertyMapper> PKeyProperties { get; private set; }
+        public IReadOnlyList<IPropertyMapper> PKeyProperties { get; private set; }
         /// <summary>
         /// 除标识列以外的属性集合
         /// </summary>
-        public IList<IPropertyMapper> OtherProperties { get; private set; }
+        public IReadOnlyList<IPropertyMapper> OtherProperties { get; private set; }
         /// <summary>
         /// 实体类的类型
         /// </summary>
@@ -33,10 +33,7 @@ namespace Maple.Core.Data.DbMappers
         }
 
         public AutoEntityMapper()
-        {
-            PKeyProperties = new List<IPropertyMapper>();
-            OtherProperties = new List<IPropertyMapper>();
-
+        { 
             Schema(string.Empty);
             Table(this.EntityType.Name);
             AutoMap();
@@ -56,6 +53,10 @@ namespace Maple.Core.Data.DbMappers
         {
             Type type = this.EntityType;
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
+
+            List<IPropertyMapper> pkeyProperties = new List<IPropertyMapper>();
+            List<IPropertyMapper> otherProperties = new List<IPropertyMapper>();
+
             foreach (var propertyInfo in properties)
             {
                 //暂时只支持值类型映射
@@ -73,10 +74,13 @@ namespace Maple.Core.Data.DbMappers
 
                 IPropertyMapper pMap = new PropertyMapper(propertyInfo);
                 if (pMap.IsPrimaryKey)
-                    PKeyProperties.Add(pMap);
+                    pkeyProperties.Add(pMap);
                 else
-                    OtherProperties.Add(pMap);
+                    otherProperties.Add(pMap);
             }
+
+            this.PKeyProperties = pkeyProperties.AsReadOnly();
+            this.OtherProperties = otherProperties.AsReadOnly();
         }
     }
 }

@@ -20,16 +20,18 @@ namespace Maple.Core.Data.DbMappers
         /// <summary>
         /// 标识列对应属性集合（主键）
         /// </summary>
-        IList<IPropertyMapper> PKeyProperties { get; }
+        IReadOnlyList<IPropertyMapper> PKeyProperties { get; }
 
         /// <summary>
         /// 除标识列以外的属性集合
         /// </summary>
-        IList<IPropertyMapper> OtherProperties { get; }
+        IReadOnlyList<IPropertyMapper> OtherProperties { get; }
         /// <summary>
         /// 实体类的类型
         /// </summary>
         Type EntityType { get; }
+
+
     }
 
     public interface IEntityMapper<TEntity, TPrimaryKey> : IEntityMapper where TEntity : class, IEntity<TPrimaryKey> {

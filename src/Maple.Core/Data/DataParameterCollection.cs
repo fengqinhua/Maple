@@ -20,11 +20,6 @@ namespace Maple.Core.Data
 
         public DataParameterCollection() { }
 
-        public DataParameterCollection(params object[] values)
-        {
-            Add(values);
-        }
-
         public DataParameterCollection(params DataParameter[] dps)
         {
             Add(dps);
@@ -42,14 +37,6 @@ namespace Maple.Core.Data
             foreach (DataParameter dp in dps)
             {
                 Add(dp);
-            }
-        }
-
-        public void Add(params object[] values)
-        {
-            foreach (object o in values)
-            {
-                Add(new DataParameter(o));
             }
         }
 
