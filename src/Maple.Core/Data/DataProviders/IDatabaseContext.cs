@@ -25,5 +25,21 @@ namespace Maple.Core.Data.DataProviders
         /// </summary>
         /// <param name="releaseConnection"></param>
         void ReleaseConnection(bool releaseConnection = true);
+        /// <summary>
+        /// 获取IDbCommand 接口
+        /// </summary>
+        /// <param name="commandType"></param>
+        /// <param name="commandText"></param>
+        /// <param name="dps"></param>
+        /// <param name="sqlTimeOut"></param>
+        /// <param name="needLog"></param>
+        /// <returns></returns>
+        IDbCommand GetDbCommand(CommandType commandType, string commandText, DataParameterCollection dps, int sqlTimeOut = 10, bool needLog = false);
+        /// <summary>
+        /// 获取IDbDataAdapter接口
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        IDbDataAdapter GetDbAdapter(IDbCommand command);
     }
 }

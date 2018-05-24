@@ -38,6 +38,9 @@ namespace Maple.Core.Data.DataProviders
 
         public IDataProvider CreateProvider(string dataSettingName)
         {
+            if (this.CheckDisposed())
+                throw new ObjectDisposedException("DataProviderFactory");
+
             if (!_dataProvider.ContainsKey(dataSettingName))
                 throw new Exception(string.Format("未知的数据源“{0}”", dataSettingName));
             else
@@ -80,7 +83,11 @@ namespace Maple.Core.Data.DataProviders
             if (this._disposed)
             {
                 this._disposed = true;
-                _dataSettings.Clear();
+                foreach(var item in this._dataProvider)
+                {
+                    item.Value.Dispose();
+                }
+                this._dataProvider.Clear();
             }
         }
 
