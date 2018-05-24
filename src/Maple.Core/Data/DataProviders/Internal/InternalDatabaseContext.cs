@@ -16,39 +16,39 @@ namespace Maple.Core.Data.DataProviders.Internal
         private volatile bool _openedConnection;
         //标识数据库连接的请求次数 the number of active requests for an open connection
         private volatile int _connectionRequestCount;
+        //数据库连接
+        private IDbConnection _dbConnection;
 
-        public InternalDatabaseContext(DataSetting dataSetting)
+        public InternalDatabaseContext(DataSetting dataSetting, IDbTranslator dbTranslator)
         {
             this._dataSetting = dataSetting;
+            this.DbTranslator = dbTranslator;
         }
 
         /// <summary>
         /// 数据库信息翻译器
         /// </summary>
         public IDbTranslator DbTranslator { get; private set; }
-        /// <summary>
-        /// 数据库连接
-        /// </summary>
-        public IDbConnection DbConnection { get; private set; }
+
 
         /// <summary>
         /// 确保数据库连接被打开
         /// </summary>
-        internal void EnsureConnection()
+        public void EnsureConnection()
         {
             if (this._disposed)
                 throw new Exception("IDatabaseContext is Disposed!");
 
-            if (this.DbConnection == null)
-                this.DbConnection = creatConnection();
+            if (this._dbConnection == null)
+                this._dbConnection = creatConnection();
 
             //与数据源连接断开。只有在连接打开后才有可能发生这种情况。可以关闭处于这种状态下的连接，然后重新打开
-            if (this.DbConnection.State == ConnectionState.Broken)
-                this.DbConnection.Close();
+            if (this._dbConnection.State == ConnectionState.Broken)
+                this._dbConnection.Close();
 
-            if (this.DbConnection.State == ConnectionState.Closed)
+            if (this._dbConnection.State == ConnectionState.Closed)
             {
-                this.DbConnection.Open();
+                this._dbConnection.Open();
                 this._openedConnection = true;
             }
 
@@ -59,7 +59,7 @@ namespace Maple.Core.Data.DataProviders.Internal
         /// 释放数据库连接
         /// </summary>
         /// <param name="releaseConnection"></param>
-        internal void ReleaseConnection(bool releaseConnection = true)
+        public void ReleaseConnection(bool releaseConnection = true)
         {
             if (this._disposed)
                 throw new Exception("IDatabaseContext is Disposed!");
@@ -71,7 +71,7 @@ namespace Maple.Core.Data.DataProviders.Internal
 
                 if (releaseConnection && this._connectionRequestCount == 0)
                 {
-                    this.DbConnection.Close();
+                    this._dbConnection.Close();
                     this._openedConnection = false;
                 }
             }
@@ -98,13 +98,13 @@ namespace Maple.Core.Data.DataProviders.Internal
                 this._disposed = true;
                 if (disposing)
                 {
-                    if (this.DbConnection != null)
+                    if (this._dbConnection != null)
                     {
-                        if (this.DbConnection.State != ConnectionState.Closed)
-                            this.DbConnection.Close();
-                        this.DbConnection.Dispose();
+                        if (this._dbConnection.State != ConnectionState.Closed)
+                            this._dbConnection.Close();
+                        this._dbConnection.Dispose();
                     }
-                    this.DbConnection = null;
+                    this._dbConnection = null;
                 }
             }
         }

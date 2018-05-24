@@ -1,6 +1,10 @@
-﻿using Maple.Core.Data.DataSettings;
+﻿using Maple.Core.Data.DataProviders.Internal;
+using Maple.Core.Data.DataSettings;
+using Maple.Core.Data.DbTranslators;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,10 +14,8 @@ namespace Maple.Core.Data.DataProviders
     {
         private volatile bool _disposed = false;
         private readonly object _sync = new object();
-        private readonly Dictionary<string, DataSetting> _dataSettings = new Dictionary<string, DataSetting>();
+        protected readonly Dictionary<string, IDataProvider> _dataProvider = new Dictionary<string, IDataProvider>();
 
-
-        public DataProviderFactory() { }
 
         public void AddDataSettings(DataSetting dataSetting)
         {
@@ -23,16 +25,54 @@ namespace Maple.Core.Data.DataProviders
             object sync = this._sync;
             lock (sync)
             {
-                if (_dataSettings.ContainsKey(dataSetting.Name))
-                    _dataSettings[dataSetting.Name] = dataSetting;
-                else
-                    _dataSettings.Add(dataSetting.Name, dataSetting);
+                if (!_dataProvider.ContainsKey(dataSetting.Name))
+                {
+                    IDbTranslator dbTranslator = getDbTranslator(dataSetting);
+                    IDatabaseContext databaseContext = new InternalDatabaseContext(dataSetting, dbTranslator);
+                    IDataProvider dataProvider = new InternalDataProvider(databaseContext);
+
+                    _dataProvider.Add(dataSetting.Name, dataProvider);
+                }
             }
         }
 
         public IDataProvider CreateProvider(string dataSettingName)
         {
-            throw new NotImplementedException();
+            if (!_dataProvider.ContainsKey(dataSettingName))
+                throw new Exception(string.Format("未知的数据源“{0}”", dataSettingName));
+            else
+                return _dataProvider[dataSettingName];
+        }
+
+
+        private IDbTranslator getDbTranslator(DataSetting dataSetting)
+        {
+            IDbTranslator dbTranslator;
+            switch (dataSetting.DataSouceType)
+            {
+                case DataSouceType.MySQL:
+                    dbTranslator = new MySQLTranslator();
+                    break;
+                case DataSouceType.Oracle:
+                    dbTranslator = new OracleTranslator();
+                    break;
+                case DataSouceType.Sql2000:
+                    dbTranslator = new Sql2000Translator();
+                    break;
+                case DataSouceType.Sql2005:
+                    dbTranslator = new Sql2005Translator();
+                    break;
+                case DataSouceType.Sql2008:
+                    dbTranslator = new Sql2008Translator();
+                    break;
+                case DataSouceType.Sqlite:
+                    dbTranslator = new SqliteTranslator();
+                    break;
+                default:
+                    throw new Exception(string.Format("未知的数据源类型“{0}”。请核实数据源类型配置是否正确。", dataSetting.DataSouceType));
+            }
+
+            return dbTranslator;
         }
 
         public void Dispose()

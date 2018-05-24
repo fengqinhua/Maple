@@ -8,12 +8,12 @@ namespace Maple.Core.Data.DataProviders.Internal
 {
     internal class InternalDataProvider : IDataProvider
     {
-        public InternalDataProvider(DataSetting dataSetting)
+        public InternalDataProvider(IDatabaseContext databaseContext)
         {
-            
+            this.DatabaseContext = databaseContext;
         }
 
-        public IDatabaseContext DatabaseContext => throw new NotImplementedException();
+        public IDatabaseContext DatabaseContext { get; private set; }
 
         public void Dispose()
         {
