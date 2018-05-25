@@ -47,6 +47,8 @@ namespace Maple.Core.Data.DataProviders
             if (this.CheckDisposed())
                 throw new ObjectDisposedException("DataProviderFactory");
 
+
+
             if (!_dataProviders.ContainsKey(dataSettingName))
                 throw new Exception(string.Format("未知的数据源“{0}”", dataSettingName));
             else

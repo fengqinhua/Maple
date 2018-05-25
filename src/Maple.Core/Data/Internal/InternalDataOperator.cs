@@ -13,9 +13,9 @@ namespace Maple.Core.Data.Internal
     /// </summary>
     internal class InternalDataOperator<TEntity, TPrimaryKey> where TEntity : class, IEntity<TPrimaryKey>
     {
-        private string insertSQL = "";
-        private string updateSQL = "";
-        private string deleteSQL = "";
+        private string _insertSQL = "";
+        private string _updateSQL = "";
+        private string _deleteSQL = "";
         private readonly IDbTranslator dbTranslator;
 
         public IEntityMapper EntityInfo { get; protected set; }
@@ -30,8 +30,8 @@ namespace Maple.Core.Data.Internal
             if (entity == null)
                 return false;
             //插入的SQL语句
-            if (insertSQL.IsNullOrEmpty())
-                insertSQL = buildInsertSQL();
+            if (this._insertSQL.IsNullOrEmpty())
+                this._insertSQL = buildInsertSQL();
 
 
 

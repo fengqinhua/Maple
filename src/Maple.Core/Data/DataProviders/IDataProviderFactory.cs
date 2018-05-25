@@ -16,7 +16,7 @@ namespace Maple.Core.Data.DataProviders
         /// <param name="driver"></param>
         void AddDataSettings(DataSetting driver);
         /// <summary>
-        /// 
+        /// 创建数据库访问驱动
         /// </summary>
         /// <param name="dataSettingName"></param>
         /// <returns></returns>

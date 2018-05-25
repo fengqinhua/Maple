@@ -7,6 +7,8 @@ namespace Maple.Core.Data.DataSettings
     /// </summary>
     public partial class DataSetting
     {
+        public const string DefalutDataSettingName = "Maple.Defalut";
+
         /// <summary>
         /// 构造函数
         /// </summary>

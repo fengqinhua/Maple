@@ -16,23 +16,23 @@ namespace Maple.Core.Domain.Repositories
     {
         #region Insert
 
-        TEntity Insert(TEntity entity);
-        TEntity InsertOrUpdate(TEntity entity);
+        bool Insert(TEntity entity);
+        bool InsertOrUpdate(TEntity entity);
 
         #endregion
 
         #region Update
 
-        TEntity Update(TEntity entity);
-        TEntity Update(TPrimaryKey id, Action<TEntity> updateAction);
+        bool Update(TEntity entity);
+        bool Update(TPrimaryKey id, Action<TEntity> updateAction);
 
         #endregion
 
         #region Delete
 
-        void Delete(TEntity entity);
-        void Delete(TPrimaryKey id);
-        void Delete(Expression<Func<TEntity, bool>> predicate);
+        bool Delete(TEntity entity);
+        bool Delete(TPrimaryKey id);
+        int Delete(Expression<Func<TEntity, bool>> predicate);
 
         #endregion
 
@@ -40,6 +40,13 @@ namespace Maple.Core.Domain.Repositories
 
         TEntity Single(TPrimaryKey id);
         IEnumerable<TEntity> GetAll();
+
+        #endregion
+
+        #region Aggregates
+
+        long Count();
+        long Count(Expression<Func<TEntity, bool>> predicate);
 
         #endregion
     }
