@@ -92,9 +92,11 @@ namespace Maple.Core.Data.DbMappers
         /// <param name="value"></param>
         public void FastSetValue(object entity, object value)
         {
-            this.setter(entity, value);
+            if (DBNull.Value != value)
+            {
+                this.setter(entity, value);
+            }
         }
-
 
         /// <summary>
         /// 设置数据库字段名称

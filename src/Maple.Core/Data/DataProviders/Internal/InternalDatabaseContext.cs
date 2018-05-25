@@ -30,7 +30,6 @@ namespace Maple.Core.Data.DataProviders.Internal
         {
             this._dataSetting = dataSetting;
             this.DbTranslator = dbTranslator;
-            this._dbConnection = creatConnection();
         }
 
         /// <summary>
@@ -44,6 +43,9 @@ namespace Maple.Core.Data.DataProviders.Internal
         {
             if (this._disposed)
                 throw new Exception("IDatabaseContext is Disposed!");
+
+            if (this._dbConnection == null)
+                this._dbConnection = creatConnection();
 
             //与数据源连接断开。只有在连接打开后才有可能发生这种情况。可以关闭处于这种状态下的连接，然后重新打开
             if (this._dbConnection.State == ConnectionState.Broken)

@@ -29,7 +29,7 @@ namespace Maple.Core.Data.Internal
         {
             if (entity == null)
                 return false;
-            //插件插入的SQL语句
+            //插入的SQL语句
             if (insertSQL.IsNullOrEmpty())
                 insertSQL = buildInsertSQL();
 

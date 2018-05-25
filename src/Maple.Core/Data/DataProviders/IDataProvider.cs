@@ -13,7 +13,11 @@ namespace Maple.Core.Data.DataProviders
         /// 数据库上下文
         /// </summary>
         IDatabaseContext DatabaseContext { get; }
-
+        /// <summary>
+        /// 检测是否可以连接
+        /// </summary>
+        /// <returns></returns>
+        bool IsCanConnection();
         /// <summary>
         /// 执行数据CUD命令，返回影响的行数 (立即执行)
         /// </summary>

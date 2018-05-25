@@ -36,6 +36,26 @@ namespace Maple.Core.Data.DataProviders.Internal
         }
 
         #endregion
+
+        /// <summary>
+        /// 检测是否可以连接
+        /// </summary>
+        /// <returns></returns>
+        public bool IsCanConnection()
+        {
+            bool result = false;
+            try
+            {
+                this.DatabaseContext.EnsureConnection();
+                result = true;
+            }
+            finally
+            {
+                this.DatabaseContext.ReleaseConnection();
+            }
+            return result;
+        }
+
         /// <summary>
         /// 执行数据查询的R命令，返回数据集DataTable
         /// </summary>
@@ -107,7 +127,7 @@ namespace Maple.Core.Data.DataProviders.Internal
         }
         protected virtual bool InternalExecuteReader(SqlStatement sqlStatement, CallbackObjectHandler<IDataReader> callback)
         {
-            using (IDbCommand cmd = this.DatabaseContext.GetDbCommand(sqlStatement.SqlCommandType, sqlStatement.SqlCommandText, sqlStatement.CommandParameters))
+            using (IDbCommand cmd = this.DatabaseContext.GetDbCommand(sqlStatement.SqlCommandType, sqlStatement.SqlCommandText, sqlStatement.CommandParameters, sqlStatement.SqlTimeOut, sqlStatement.NeedLog))
             {
                 //IDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
                 //using (IDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection))
@@ -121,7 +141,7 @@ namespace Maple.Core.Data.DataProviders.Internal
         }
         protected virtual int InternalExecuteNonQuery(SqlStatement sqlStatement)
         {
-            using (IDbCommand cmd = this.DatabaseContext.GetDbCommand(sqlStatement.SqlCommandType, sqlStatement.SqlCommandText, sqlStatement.CommandParameters))
+            using (IDbCommand cmd = this.DatabaseContext.GetDbCommand(sqlStatement.SqlCommandType, sqlStatement.SqlCommandText, sqlStatement.CommandParameters, sqlStatement.SqlTimeOut, sqlStatement.NeedLog))
             {
                 int result = cmd.ExecuteNonQuery();
                 //处理返回值
@@ -132,7 +152,7 @@ namespace Maple.Core.Data.DataProviders.Internal
         }
         protected virtual object InternalExecuteScalar(SqlStatement sqlStatement)
         {
-            using (IDbCommand cmd = this.DatabaseContext.GetDbCommand(sqlStatement.SqlCommandType, sqlStatement.SqlCommandText, sqlStatement.CommandParameters))
+            using (IDbCommand cmd = this.DatabaseContext.GetDbCommand(sqlStatement.SqlCommandType, sqlStatement.SqlCommandText, sqlStatement.CommandParameters, sqlStatement.SqlTimeOut, sqlStatement.NeedLog))
             {
                 object obj = cmd.ExecuteScalar();
                 cmd.Parameters.Clear();
@@ -142,7 +162,7 @@ namespace Maple.Core.Data.DataProviders.Internal
         protected virtual DataTable InternalExecuteDataTable(SqlStatement sqlStatement)
         {
             DataTable dt = null;
-            using (IDbCommand cmd = this.DatabaseContext.GetDbCommand(sqlStatement.SqlCommandType, sqlStatement.SqlCommandText, sqlStatement.CommandParameters))
+            using (IDbCommand cmd = this.DatabaseContext.GetDbCommand(sqlStatement.SqlCommandType, sqlStatement.SqlCommandText, sqlStatement.CommandParameters, sqlStatement.SqlTimeOut, sqlStatement.NeedLog))
             {
                 IDbDataAdapter da = this.DatabaseContext.GetDbAdapter(cmd);
                 DataSet ds = new DataSet();

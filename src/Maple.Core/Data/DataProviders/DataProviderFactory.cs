@@ -1,6 +1,7 @@
 ﻿using Maple.Core.Data.DataProviders.Internal;
 using Maple.Core.Data.DataSettings;
 using Maple.Core.Data.DbTranslators;
+using Maple.Core.Infrastructure;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections;
@@ -14,8 +15,13 @@ namespace Maple.Core.Data.DataProviders
     {
         private volatile bool _disposed = false;
         private readonly object _sync = new object();
-        protected readonly Dictionary<string, IDataProvider> _dataProvider = new Dictionary<string, IDataProvider>();
+        protected readonly Dictionary<string, IDataProvider> _dataProviders = new Dictionary<string, IDataProvider>();
 
+        public DataProviderFactory()
+        {
+            if (MainDataSettingsHelper.DatabaseIsInstalled())
+                AddDataSettings(Singleton<DataSetting>.Instance);
+        }
 
         public void AddDataSettings(DataSetting dataSetting)
         {
@@ -25,13 +31,13 @@ namespace Maple.Core.Data.DataProviders
             object sync = this._sync;
             lock (sync)
             {
-                if (!_dataProvider.ContainsKey(dataSetting.Name))
+                if (!_dataProviders.ContainsKey(dataSetting.Name))
                 {
                     IDbTranslator dbTranslator = getDbTranslator(dataSetting);
                     IDatabaseContext databaseContext = new InternalDatabaseContext(dataSetting, dbTranslator);
                     IDataProvider dataProvider = new InternalDataProvider(databaseContext);
 
-                    _dataProvider.Add(dataSetting.Name, dataProvider);
+                    _dataProviders.Add(dataSetting.Name, dataProvider);
                 }
             }
         }
@@ -41,10 +47,10 @@ namespace Maple.Core.Data.DataProviders
             if (this.CheckDisposed())
                 throw new ObjectDisposedException("DataProviderFactory");
 
-            if (!_dataProvider.ContainsKey(dataSettingName))
+            if (!_dataProviders.ContainsKey(dataSettingName))
                 throw new Exception(string.Format("未知的数据源“{0}”", dataSettingName));
             else
-                return _dataProvider[dataSettingName];
+                return _dataProviders[dataSettingName];
         }
 
 
@@ -83,11 +89,11 @@ namespace Maple.Core.Data.DataProviders
             if (this._disposed)
             {
                 this._disposed = true;
-                foreach(var item in this._dataProvider)
+                foreach(var item in this._dataProviders)
                 {
                     item.Value.Dispose();
                 }
-                this._dataProvider.Clear();
+                this._dataProviders.Clear();
             }
         }
 
