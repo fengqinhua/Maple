@@ -4,8 +4,7 @@ using System.Text;
 
 namespace Maple.Core.Data.DbTranslators
 {
-    public class Sql2005Translator : DbTranslatorBase
+    public class Sql2005Translator : Sql2000Translator
     {
-        public override char Connector => throw new NotImplementedException();
     }
 }

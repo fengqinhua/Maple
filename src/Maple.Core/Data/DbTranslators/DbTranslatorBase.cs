@@ -9,13 +9,14 @@ namespace Maple.Core.Data.DbTranslators
 {
     public abstract class DbTranslatorBase : IDbTranslator
     {
+        public abstract string ProviderInvariantName { get; }
         public abstract char Connector { get; }
         public virtual string OpenQuote { get { return string.Empty; } }
         public virtual string CloseQuote { get { return string.Empty; } }
 
-        public DbProviderFactory GetDbProviderFactory()
+        public virtual DbProviderFactory GetDbProviderFactory()
         {
-            throw new NotImplementedException();
+            return DbProviderFactories.GetFactory(this.ProviderInvariantName);
         }
     }
 }

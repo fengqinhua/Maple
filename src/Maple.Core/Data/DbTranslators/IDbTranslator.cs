@@ -12,6 +12,10 @@ namespace Maple.Core.Data.DbTranslators
     public interface IDbTranslator
     {
         /// <summary>
+        /// 提供程序的固定名称
+        /// </summary>
+        string ProviderInvariantName { get; }
+        /// <summary>
         /// 获取参数连接符
         /// </summary>
         /// <returns></returns>
