@@ -9,6 +9,8 @@ namespace Maple.Core.Data.DbTranslators
 {
     public abstract class DbTranslatorBase : IDbTranslator
     {
+        private DbProviderFactory dbProviderFactory = null;
+
         public abstract string ProviderInvariantName { get; }
         public abstract char Connector { get; }
         public virtual string OpenQuote { get { return string.Empty; } }
@@ -16,7 +18,9 @@ namespace Maple.Core.Data.DbTranslators
 
         public virtual DbProviderFactory GetDbProviderFactory()
         {
-            return DbProviderFactories.GetFactory(this.ProviderInvariantName);
+            if(dbProviderFactory == null)
+                dbProviderFactory = DbProviderFactories.GetFactory(this.ProviderInvariantName);
+            return dbProviderFactory;
         }
     }
 }
