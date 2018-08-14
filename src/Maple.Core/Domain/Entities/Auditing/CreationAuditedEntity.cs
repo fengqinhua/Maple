@@ -38,20 +38,4 @@ namespace Maple.Core.Domain.Entities.Auditing
             CreationTime = Clock.Now;
         }
     }
-
-    /// <summary>
-    /// 实体的基类，包括创建该实体的用户ID、用户实体及创建时间信息
-    /// </summary>
-    /// <typeparam name="TPrimaryKey"></typeparam>
-    /// <typeparam name="TUser"></typeparam>
-    [Serializable]
-    public abstract class CreationAuditedEntity<TPrimaryKey, TUser> : CreationAuditedEntity<TPrimaryKey>, ICreationAudited<TUser>
-        where TUser : IEntity<long>
-    {
-        /// <summary>
-        /// 创建该实体的用户实体
-        /// </summary>
-        [ForeignKey("CreatorUserId")]
-        public virtual TUser CreatorUser { get; set; }
-    }
 }
