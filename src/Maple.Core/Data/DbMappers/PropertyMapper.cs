@@ -9,11 +9,13 @@ namespace Maple.Core.Data.DbMappers
         private readonly GetValueDelegate getter;
         private readonly SetValueDelegate setter;
 
+        /// <summary>
+        /// 实体类的属性
+        /// </summary>
+        /// <param name="propertyInfo"></param>
         public PropertyMapper(PropertyInfo propertyInfo)
         {
             this.PropertyInfo = propertyInfo;
-            this.getter = DynamicMethodFactory.CreatePropertyGetter(propertyInfo);
-            this.setter = DynamicMethodFactory.CreatePropertySetter(propertyInfo);
             this.ColumnName = propertyInfo.Name;
             this.IsPrimaryKey = propertyInfo.Name.Equals("Id", StringComparison.InvariantCultureIgnoreCase);
             this.AllowsNulls = propertyInfo.IsIncludingNullable();
@@ -23,31 +25,34 @@ namespace Maple.Core.Data.DbMappers
                 this.Size = 200;
             else
                 this.Size = 0;
+            this.IsDataObjectProperty = false;
+
+            this.getter = DynamicMethodFactory.CreatePropertyGetter(propertyInfo);
+            this.setter = DynamicMethodFactory.CreatePropertySetter(propertyInfo);
         }
 
-        //private void setDefalutValue(Type type)
-        //{
-        //    if (type.IsEnum)
-        //        this.Default = 0;
-        //    if (type == typeof(string))
-        //        this.Default = "";
-        //    if (type == typeof(bool))
-        //        this.Default = false;
-        //    if (type == typeof(byte))
-        //        this.Default = (byte)0;
-        //    if (type == typeof(int))
-        //        this.Default = (int)0;
-        //    if (type == typeof(double))
-        //        this.Default = (double)0;
-        //    if (type == typeof(decimal))
-        //        this.Default = (decimal)0m;
-        //    if (type == typeof(float))
-        //        this.Default = (float)0f;
-        //    if (type == typeof(Guid))
-        //        this.Default = Guid.NewGuid();
-        //    if (type == typeof(DateTime))
-        //        this.Default = Clock.INVALID_DATETIME;
-        //}
+        /// <summary>
+        /// 实体类对应ValueObject值对象的属性
+        /// </summary>
+        /// <param name="valueObjectInfo"></param>
+        /// <param name="propertyInfo"></param>
+        public PropertyMapper(PropertyInfo valueObjectInfo, PropertyInfo propertyInfo)
+        {
+            this.PropertyInfo = propertyInfo;
+            this.ColumnName = valueObjectInfo.Name + "_" + propertyInfo.Name;
+            this.IsPrimaryKey = false;
+            this.AllowsNulls = propertyInfo.IsIncludingNullable();
+            this.DbType = PropertyTypeToDbTypeTranslator.Translation(propertyInfo.PropertyType);
+            //设置缺省长度
+            if (this.DbType == System.Data.DbType.String)
+                this.Size = 200;
+            else
+                this.Size = 0;
+            this.IsDataObjectProperty = true;
+
+            this.getter = DynamicMethodFactory.CreatePropertyGetter(valueObjectInfo, propertyInfo);
+            this.setter = (target,  arg) => { throw new Exception("valueObject enable edit"); };
+        }
 
         /// <summary>
         /// 获取熟悉信息
@@ -75,7 +80,10 @@ namespace Maple.Core.Data.DbMappers
         /// 长度
         /// </summary>
         public int Size { get; private set; }
-
+        /// <summary>
+        /// 是否为值对象中的属性
+        /// </summary>
+        public bool IsDataObjectProperty { get; private set; }
         /// <summary>
         /// 读取属性值
         /// </summary>

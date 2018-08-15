@@ -32,7 +32,10 @@ namespace Maple.Core.Data.DbMappers
         /// 长度
         /// </summary>
         int Size { get; }
-
+        /// <summary>
+        /// 是否为值对象中的属性
+        /// </summary>
+        bool IsDataObjectProperty { get; }
         /// <summary>
         /// 读取属性值
         /// </summary>

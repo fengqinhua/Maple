@@ -24,19 +24,18 @@ namespace Maple.Core.Data.DbMappers
             internal static readonly EntityMapperFactory instance = new EntityMapperFactory();
         }
 
-        public IEntityMapper GetEntityMapper<TEntity, TPrimaryKey>() where TEntity : class, IEntity<TPrimaryKey>
+        public IEntityMapper GetEntityMapper(Type entityType)
         {
-            IEntityMapper map;
-            Type entityType = typeof(IEntity<TPrimaryKey>);
-
-            if (!_classMaps.TryGetValue(entityType, out map))
-            {
-                map = new AutoEntityMapper<TEntity, TPrimaryKey>();
-                _classMaps[entityType] = map;
-            }
-
-            return map;
+            return this._classMaps.GetOrAdd(entityType, x =>
+                        {
+                            return creatEntityMapper(x);
+                        });
         }
 
-    } 
+        private IEntityMapper creatEntityMapper(Type entityType)
+        {
+            IEntityMapper map = new AutoEntityMapper(entityType);
+            return map;
+        }
+    }
 }

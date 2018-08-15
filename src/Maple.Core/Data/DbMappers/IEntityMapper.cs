@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Maple.Core.Domain.Entities;
 
 namespace Maple.Core.Data.DbMappers
@@ -21,21 +22,17 @@ namespace Maple.Core.Data.DbMappers
         /// 标识列对应属性集合（主键）
         /// </summary>
         IReadOnlyList<IPropertyMapper> PKeyProperties { get; }
-
         /// <summary>
         /// 除标识列以外的属性集合
         /// </summary>
         IReadOnlyList<IPropertyMapper> OtherProperties { get; }
         /// <summary>
+        /// 值类型DataObject的属性集合
+        /// </summary>
+        IReadOnlyList<IDataObjectMapper> DataObjectProperties { get; }
+        /// <summary>
         /// 实体类的类型
         /// </summary>
         Type EntityType { get; }
-
-
     }
-
-    public interface IEntityMapper<TEntity, TPrimaryKey> : IEntityMapper where TEntity : class, IEntity<TPrimaryKey> {
-
-    }
-
 }
