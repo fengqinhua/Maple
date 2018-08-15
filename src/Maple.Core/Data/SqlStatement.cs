@@ -43,7 +43,7 @@ namespace Maple.Core.Data
         /// <param name="sqlCommandText">执行文本（SQL语句或者存储过程名称）(默认是SQL语句)</param>
         /// <param name="commandParameters">参数集合</param>
         public SqlStatement(CommandType sqlCommandType, string sqlCommandText, DataParameterCollection commandParameters)
-            : this(sqlCommandType, sqlCommandText, commandParameters, DatabaseCommon.DbCommandTimeOut, DatabaseCommon.SqlNeedLog)
+            : this(sqlCommandType, sqlCommandText, commandParameters, DatabaseCommon.DbCommandTimeOut, DatabaseCommon.DbSqlNeedLog)
         {
         }
 

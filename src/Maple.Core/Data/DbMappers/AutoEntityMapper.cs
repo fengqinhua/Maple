@@ -39,7 +39,6 @@ namespace Maple.Core.Data.DbMappers
             this.EntityType = entityType;
             this.SchemaName = string.Empty;
             this.TableName = this.EntityType.Name;
-
             AutoMap();
         }
 
