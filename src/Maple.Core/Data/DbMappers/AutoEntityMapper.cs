@@ -109,47 +109,6 @@ namespace Maple.Core.Data.DbMappers
             this.PKeyProperties = pkeyProperties.AsReadOnly();
             this.OtherProperties = otherProperties.AsReadOnly();
             this.DataObjectProperties = dataObjectProperties.AsReadOnly();
-        }
-
-        /// <summary>
-        /// 深度查找基类是否派生自某个泛型类
-        /// </summary>
-        /// <param name="typeToCheck"></param>
-        /// <param name="genericType"></param>
-        /// <returns></returns>
-        public  bool IsTypeDerivedFromGenericType(Type typeToCheck, Type genericType)
-        {
-            if (typeToCheck == typeof(object))
-            {
-                return false;
-            }
-            else if (typeToCheck == null)
-            {
-                return false;
-            }
-            else if (typeToCheck.IsGenericType && typeToCheck.GetGenericTypeDefinition() == genericType)
-            {
-                return true;
-            }
-            else
-            {
-                return IsTypeDerivedFromGenericType(typeToCheck.BaseType, genericType);
-            }
-        }
-        /// <summary>
-        /// 检查一个对象是从一个特定的类型派生创造
-        /// </summary>
-        /// <param name="t"></param>
-        /// <param name="typeToCompare"></param>
-        /// <returns></returns>
-        internal bool IsDerivativeOf(Type t, Type typeToCompare)
-        {
-            if (t == null) throw new NullReferenceException();
-            if (t.BaseType == null) return false;
-            if (t.BaseType == typeToCompare) return true;
-            else return IsDerivativeOf(t.BaseType, typeToCompare);
-        }
-
-
+        } 
     }
 }
