@@ -99,8 +99,12 @@ namespace Maple.Core.Configuration
         /// </summary>
         public string PluginStaticFileExtensionsBlacklist { get; set; }
         /// <summary>
+        /// 获取或设置 执行DbCommand超时时间（秒）
+        /// </summary>
+        public int DbCommandTimeOut { get; set; }
+        /// <summary>
         /// 获取或设置 是否需要记录SQL运行日志
         /// </summary>
-        public bool NeedLog { get; set; }
+        public bool DbSqlNeedLog { get; set; }
     }
 }
