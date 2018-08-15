@@ -32,22 +32,20 @@ namespace Maple.Core.Data
         /// </summary>
         public bool NeedLog { get; set; }
 
-        //public SqlStatement(CommandType sqlCommandType, string sqlCommandText)
-        //    : this(sqlCommandType, sqlCommandText, new DataParameterCollection())
-        //{ }
-        ///// <summary>
-        ///// SQL语句
-        ///// </summary>
-        ///// <param name="sqlCommandText">CommandType</param>
-        ///// <param name="sqlCommandText">执行文本（SQL语句或者存储过程名称）(默认是SQL语句)</param>
-        ///// <param name="commandParameters">参数集合</param>
-        //public SqlStatement(CommandType sqlCommandType, string sqlCommandText, DataParameterCollection commandParameters)
-        //    : this(sqlCommandType, sqlCommandText, commandParameters,
-        //    Mapleleaf.Intelligence.ConfigurationReader.Instance.SqlTimeOut,
-        //    Mapleleaf.Intelligence.ConfigurationReader.Instance.NeedLog)
-        //{
+        public SqlStatement(CommandType sqlCommandType, string sqlCommandText)
+            : this(sqlCommandType, sqlCommandText, new DataParameterCollection())
+        { }
 
-        //}
+        /// <summary>
+        /// SQL语句
+        /// </summary>
+        /// <param name="sqlCommandText">CommandType</param>
+        /// <param name="sqlCommandText">执行文本（SQL语句或者存储过程名称）(默认是SQL语句)</param>
+        /// <param name="commandParameters">参数集合</param>
+        public SqlStatement(CommandType sqlCommandType, string sqlCommandText, DataParameterCollection commandParameters)
+            : this(sqlCommandType, sqlCommandText, commandParameters, DatabaseCommon.DbCommandTimeOut, DatabaseCommon.SqlNeedLog)
+        {
+        }
 
         /// <summary>
         /// SQL语句
@@ -57,7 +55,7 @@ namespace Maple.Core.Data
         /// <param name="commandParameters">参数集合</param>
         /// <param name="sqlTimeOut">命令超时时间</param>
         /// <param name="needLog">是否需要写日志</param>
-        public SqlStatement(CommandType sqlCommandType, string sqlCommandText, DataParameterCollection commandParameters, int sqlTimeOut = 10, bool needLog = false)
+        public SqlStatement(CommandType sqlCommandType, string sqlCommandText, DataParameterCollection commandParameters, int sqlTimeOut , bool needLog)
         {
             SqlCommandType = sqlCommandType;
             SqlCommandText = sqlCommandText;
