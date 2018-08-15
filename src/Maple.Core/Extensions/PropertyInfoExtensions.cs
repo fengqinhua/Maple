@@ -44,9 +44,9 @@ namespace Maple.Core
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        public static bool IsPrimitiveExtendedIncludingNullable(this PropertyInfo info) 
+        public static bool IsPrimitiveExtendedIncludingNullableOrEnum(this PropertyInfo info) 
         {
-            return info.PropertyType.IsPrimitiveExtendedIncludingNullable();
+            return info.PropertyType.IsEnum || info.PropertyType.IsPrimitiveExtendedIncludingNullable();
         }
 
     }
