@@ -15,7 +15,7 @@ namespace Maple.Core.Data.DataProviders
     {
         private volatile bool _disposed = false;
         private readonly object _sync = new object();
-        protected readonly Dictionary<string, IDataProvider> _dataProviders = new Dictionary<string, IDataProvider>();
+        private readonly Dictionary<string, IDataProvider> _dataProviders = new Dictionary<string, IDataProvider>();
 
         public DataProviderFactory()
         {

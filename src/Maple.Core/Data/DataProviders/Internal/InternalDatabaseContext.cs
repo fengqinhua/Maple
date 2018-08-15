@@ -150,6 +150,9 @@ namespace Maple.Core.Data.DataProviders.Internal
         /// <param name="dps"></param>
         protected virtual void fillDbParameters(IDbCommand command, DataParameterCollection dps)
         {
+            if (dps == null)
+                return;
+
             foreach (DataParameter dp in dps)
             {
                 command.Parameters.Add(this.getDbParameter(dp));
