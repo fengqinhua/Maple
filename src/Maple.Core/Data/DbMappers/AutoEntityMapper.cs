@@ -12,11 +12,11 @@ namespace Maple.Core.Data.DbMappers
         /// <summary>
         /// 数据库架构名称
         /// </summary>
-        public string SchemaName { get; protected set; }
+        public string SchemaName { get; set; }
         /// <summary>
         /// 表名称
         /// </summary>
-        public string TableName { get; protected set; }
+        public string TableName { get; set; }
         /// <summary>
         /// 标识列对应属性集合（主键）
         /// </summary>
@@ -37,20 +37,10 @@ namespace Maple.Core.Data.DbMappers
         public AutoEntityMapper(Type entityType)
         {
             this.EntityType = entityType;
+            this.SchemaName = string.Empty;
+            this.TableName = this.EntityType.Name;
 
-            Schema(string.Empty);
-            Table(this.EntityType.Name);
             AutoMap();
-        }
-
-        public virtual void Schema(string schemaName)
-        {
-            SchemaName = schemaName;
-        }
-
-        public virtual void Table(string tableName)
-        {
-            TableName = tableName;
         }
 
         protected virtual void AutoMapDataObject(PropertyInfo dataObjectPropertyInfo,  List<IPropertyMapper> otherProperties)
@@ -153,12 +143,14 @@ namespace Maple.Core.Data.DbMappers
         /// <param name="t"></param>
         /// <param name="typeToCompare"></param>
         /// <returns></returns>
-        internal  bool IsDerivativeOf( Type t, Type typeToCompare)
+        internal bool IsDerivativeOf(Type t, Type typeToCompare)
         {
             if (t == null) throw new NullReferenceException();
             if (t.BaseType == null) return false;
             if (t.BaseType == typeToCompare) return true;
-            else return  IsDerivativeOf(t.BaseType,typeToCompare);
+            else return IsDerivativeOf(t.BaseType, typeToCompare);
         }
+
+
     }
 }

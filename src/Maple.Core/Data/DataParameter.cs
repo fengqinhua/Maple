@@ -6,8 +6,25 @@ namespace Maple.Core.Data
     /// <summary>
     /// 
     /// </summary>
-    public class DataParameter : KeyValue
+    public class DataParameter
     {
+        /// <summary>
+        /// 键（字段名称）
+        /// </summary>
+        public string Key { get; set; }
+        /// <summary>
+        /// 值（字段值）
+        /// </summary>
+        public object Value { get; set; }
+
+        public object NullableValue
+        {
+            get
+            {
+                return Value ?? DBNull.Value;
+            }
+        }
+
         /// <summary>
         /// 如果该项为字符型，则一定要指定Size大小。
         /// 如果未指定大小对性能会有影响
@@ -17,9 +34,11 @@ namespace Maple.Core.Data
         public DbType Type { get; set; }
         public ParameterDirection Direction { get; set; } = ParameterDirection.Input;
 
-        public DataParameter(string key, object value, Type valueType, DbType type, int size, ParameterDirection direction)
-            : base(key, value, valueType)
+        public DataParameter(string key, object value, DbType type, int size, ParameterDirection direction)
         {
+            this.Key = Key;
+            this.Value = Value;
+
             this.Type = type;
             this.Direction = direction;
             this.Size = size;

@@ -1,4 +1,5 @@
-﻿using Maple.Core.Domain.Entities;
+﻿using Maple.Core.Data.ModelConfiguration;
+using Maple.Core.Domain.Entities;
 using System;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -35,6 +36,11 @@ namespace Maple.Core.Data.DbMappers
         private IEntityMapper creatEntityMapper(Type entityType)
         {
             IEntityMapper map = new AutoEntityMapper(entityType);
+            //按照用户自定义配置执行
+            IEntityConfiguration entityConfiguration = EntityConfigurationFactory.GetEntityConfiguration(entityType);
+            if (entityConfiguration != null)
+                entityConfiguration.ExceConfiguration(map);
+
             return map;
         }
     }

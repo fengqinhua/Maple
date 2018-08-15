@@ -8,14 +8,13 @@ namespace Maple.Core.Data.DbMappers
     public interface IPropertyMapper
     {
         /// <summary>
-        /// 获取属性信息
+        /// IPropertyMapper标识
         /// </summary>
-        /// <returns></returns>
-        PropertyInfo PropertyInfo { get; }
+        string Code { get; }
         /// <summary>
         /// 数据库字段名称
         /// </summary>
-        string ColumnName { get; }
+        string ColumnName { get; set; }
         /// <summary>
         /// 是否主键标识
         /// </summary>
@@ -23,15 +22,15 @@ namespace Maple.Core.Data.DbMappers
         /// <summary>
         /// 是否可空
         /// </summary>
-        bool AllowsNulls { get; }
+        bool AllowsNulls { get; set; }
         /// <summary>
         /// 数据库字段类型
         /// </summary>
-        System.Data.DbType DbType { get; }
+        System.Data.DbType DbType { get; set; }
         /// <summary>
         /// 长度
         /// </summary>
-        int Size { get; }
+        int Size { get; set; }
         /// <summary>
         /// 是否为值对象中的属性
         /// </summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Reflection;
 using Maple.Core.Reflection;
 using Maple.Core.Timing;
@@ -15,7 +16,7 @@ namespace Maple.Core.Data.DbMappers
         /// <param name="propertyInfo"></param>
         public PropertyMapper(PropertyInfo propertyInfo)
         {
-            this.PropertyInfo = propertyInfo;
+            this.Code = propertyInfo.Name;
             this.ColumnName = propertyInfo.Name;
             this.IsPrimaryKey = propertyInfo.Name.Equals("Id", StringComparison.InvariantCultureIgnoreCase);
             this.AllowsNulls = propertyInfo.IsIncludingNullable();
@@ -38,8 +39,8 @@ namespace Maple.Core.Data.DbMappers
         /// <param name="propertyInfo"></param>
         public PropertyMapper(PropertyInfo valueObjectInfo, PropertyInfo propertyInfo)
         {
-            this.PropertyInfo = propertyInfo;
-            this.ColumnName = valueObjectInfo.Name + "_" + propertyInfo.Name;
+            this.Code = valueObjectInfo.Name + "_" + propertyInfo.Name;
+            this.ColumnName = this.Code;
             this.IsPrimaryKey = false;
             this.AllowsNulls = propertyInfo.IsIncludingNullable();
             this.DbType = PropertyTypeToDbTypeTranslator.Translation(propertyInfo.PropertyType);
@@ -55,14 +56,13 @@ namespace Maple.Core.Data.DbMappers
         }
 
         /// <summary>
-        /// 获取熟悉信息
+        /// IPropertyMapper标识
         /// </summary>
-        /// <returns></returns>
-        public PropertyInfo PropertyInfo { get; private set; }
+        public string Code { get; private set; }
         /// <summary>
         /// 数据库字段名称
         /// </summary>
-        public string ColumnName { get; private set; }
+        public string ColumnName { get;  set; }
         /// <summary>
         /// 是否主键标识
         /// </summary>
@@ -70,16 +70,15 @@ namespace Maple.Core.Data.DbMappers
         /// <summary>
         /// 是否可空
         /// </summary>
-        public bool AllowsNulls { get; private set; }
-
+        public bool AllowsNulls { get;  set; }
         /// <summary>
         /// 数据库字段类型
         /// </summary>
-        public System.Data.DbType DbType { get; private set; }
+        public DbType DbType { get;  set; }
         /// <summary>
         /// 长度
         /// </summary>
-        public int Size { get; private set; }
+        public int Size { get;  set; }
         /// <summary>
         /// 是否为值对象中的属性
         /// </summary>
@@ -104,28 +103,6 @@ namespace Maple.Core.Data.DbMappers
             {
                 this.setter(entity, value);
             }
-        }
-
-        /// <summary>
-        /// 设置数据库字段名称
-        /// </summary>
-        /// <param name="columnName"></param>
-        /// <returns></returns>
-        public PropertyMapper DbColumn(string columnName)
-        {
-            ColumnName = columnName;
-            return this;
-        }
-
-        /// <summary>
-        /// 设置数据库字段长度
-        /// </summary>
-        /// <param name="columnName"></param>
-        /// <returns></returns>
-        public PropertyMapper DbSize(int size)
-        {
-            Size = size;
-            return this;
         }
     }
 }

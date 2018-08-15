@@ -37,6 +37,29 @@ namespace Maple.Core.Data.Conditions
             return sBuilder.ToString();
         }
 
+        /// <summary>
+        /// 获取IPropertyMapper（用于排序等场景）
+        /// </summary>
+        /// <param name="expr"></param>
+        /// <returns></returns>
+        public IPropertyMapper GetPropertyMapper(System.Linq.Expressions.Expression expr)
+        {
+            if(expr is LambdaExpression)
+            {
+                LambdaExpression lamb = expr as LambdaExpression;
+                if (lamb.Body is MemberExpression)
+                {
+                    return getPropertyMapper(lamb.Body as MemberExpression);
+                }
+            }
+
+            if (expr is MemberExpression)
+            {
+                return getPropertyMapper(expr as MemberExpression);
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// 执行翻译工作
@@ -48,11 +71,14 @@ namespace Maple.Core.Data.Conditions
         private void parse(Expression expr, IDbTranslator dbTranslator, StringBuilder sBuilder, DataParameterCollection dpc)
         {
             if (expr is BinaryExpression)
+                //翻译二元运算符表达式
                 this.parseBinaryExpression((BinaryExpression)expr, dbTranslator, sBuilder, dpc);
-            else if (expr is MethodCallExpression)
-                this.parseMethodCallExpression((MethodCallExpression)expr, dbTranslator, sBuilder, dpc);
             else if (expr is UnaryExpression)
+                //翻译一元运算符的表达式
                 this.parseUnaryExpression((UnaryExpression)expr, dbTranslator, sBuilder, dpc);
+            else if (expr is MethodCallExpression)
+                //翻译对静态方法或实例方法的调用
+                this.parseMethodCallExpression((MethodCallExpression)expr, dbTranslator, sBuilder, dpc);
             else if (expr is System.Linq.Expressions.ConstantExpression)
             {
                 System.Linq.Expressions.ConstantExpression cExp = expr as System.Linq.Expressions.ConstantExpression;
@@ -164,21 +190,27 @@ namespace Maple.Core.Data.Conditions
             switch (e.Method.Name)
             {
                 case "StartsWith":
-                     this.parseLikeCall(e, CompareOpration.StartsWith, dbTranslator, sBuilder, dpc);
+                    this.parseLikeCall(e, CompareOpration.StartsWith, dbTranslator, sBuilder, dpc);
                     break;
                 case "EndsWith":
                     this.parseLikeCall(e, CompareOpration.EndsWith, dbTranslator, sBuilder, dpc);
                     break;
                 case "Contains":
-                    this.parseLikeCall(e, CompareOpration.Like, dbTranslator, sBuilder, dpc);
+                    if (e.Object == null)
+                        this.parseInCall(e.Arguments[1], e.Arguments[0], false, dbTranslator, sBuilder, dpc);
+                    else
+                        this.parseLikeCall(e, CompareOpration.Like, dbTranslator, sBuilder, dpc);
+
+                    //e.Method.ReflectedType
+
                     break;
                 case "In":
                 case "InStatement":
-                    this.parseInCall(e, false, dbTranslator, sBuilder, dpc);
+                    this.parseInCall(e.Arguments[0], e.Arguments[1], false, dbTranslator, sBuilder, dpc);
                     break;
                 case "NotIn":
                 case "NotInStatement":
-                    this.parseInCall(e, true, dbTranslator, sBuilder, dpc);
+                    this.parseInCall(e.Arguments[0], e.Arguments[1], true, dbTranslator, sBuilder, dpc);
                     break;
                 case "IsNull":
                     this.parseNull(e, true, dbTranslator, sBuilder, dpc);
@@ -200,84 +232,100 @@ namespace Maple.Core.Data.Conditions
 
             this.buildSqlAndDataParameter(propertyMapper, ColumnFunction.None, co, null, dbTranslator, sBuilder, dpc);
         }
-        private void parseInCall(MethodCallExpression e, bool notIn , IDbTranslator dbTranslator, StringBuilder sBuilder, DataParameterCollection dpc)
+        private void parseInCall(Expression eProperty, Expression eList, bool notIn, IDbTranslator dbTranslator, StringBuilder sBuilder, DataParameterCollection dpc)
         {
             ColumnFunction function;
             MemberExpression member;
-            IPropertyMapper propertyMapper = this.getPropertyMapper(e.Arguments[0], out function, out member);
-            
-            var ie = this.getRightValue(e.Arguments[1]);
-            if (ie is IEnumerable)
+            IPropertyMapper propertyMapper = this.getPropertyMapper(eProperty, out function, out member);
+
+            var list = this.getValue(eList);
+
+
+            if (list is IEnumerable)
             {
                 sBuilder.Append(propertyMapper.ColumnName);
                 if (notIn)
                     sBuilder.Append(" NOT");
                 sBuilder.Append(" IN (");
 
-                IEnumerable list = (IEnumerable)ie;
+                IEnumerable items = (IEnumerable)list;
                 string prefix = "";
-                foreach (var obj in (IEnumerable)ie)
+                bool? isVarChar = null;
+                bool? isEumn = null;
+
+                foreach (var obj in (IEnumerable)items)
                 {
                     if (prefix.Length == 0)
                         prefix = ",";
                     else
                         sBuilder.Append(prefix);
-                    sBuilder.Append(obj);
+
+                    if (!isVarChar.HasValue || !isEumn.HasValue)
+                    {
+                        Type type = obj.GetType();
+                        isEumn = type.IsEnum;
+                        isVarChar = !isEumn.Value && !type.IsNumeric();
+                    }
+
+                    if (isVarChar.Value)
+                        sBuilder.Append("'");
+
+                    if (isEumn.Value)
+                        sBuilder.Append((int)obj);
+                    else
+                        sBuilder.Append(obj);
+
+                    if (isVarChar.Value)
+                        sBuilder.Append("'");
                 }
                 sBuilder.Append(")");
             }
             else
             {
                 CompareOpration co = notIn ? CompareOpration.NotEqual : CompareOpration.Equal;
-                this.buildSqlAndDataParameter(propertyMapper, ColumnFunction.None, co, ie, dbTranslator, sBuilder, dpc);
+                this.buildSqlAndDataParameter(propertyMapper, ColumnFunction.None, co, list, dbTranslator, sBuilder, dpc);
             }
-
-            //foreach (var o in _args)
-            //{
-            //    var v = GetValueString(dpc, dd, new KeyValue("in", o));
-            //    sb.Append(v);
-            //    sb.Append(",");
-            //}
-            //if (_args.Length > 0)
-            //{
-            //    sb.Length--;
-            //}
-
-
-     
-
-            //var list = new List<object>();
-            
-   
-            //return new InClause(key, list.ToArray(), notIn);
         }
+
         private void parseLikeCall(MethodCallExpression e, CompareOpration co, IDbTranslator dbTranslator, StringBuilder sBuilder, DataParameterCollection dpc)
         {
             ColumnFunction function;
             MemberExpression member;
-            IPropertyMapper propertyMapper = this.getPropertyMapper(e.Object, out function, out member);
 
             if (e.Arguments.Count == 1)
             {
-                object value = this.getRightValue(e.Arguments[0]);
+                IPropertyMapper propertyMapper = this.getPropertyMapper(e.Object, out function, out member);
+
+                object value = this.getValue(e.Arguments[0]);
                 if (value != null && value is string)
                 {
                     this.buildSqlAndDataParameter(propertyMapper, function, co, value, dbTranslator, sBuilder, dpc);
                 }
+                else
+                    throw new Exception("'Like' clause only supported one Parameter and the Parameter should be string and not allow NULL.！");
             }
-            throw new Exception("'Like' clause only supported one Parameter and the Parameter should be string and not allow NULL.！");
+            //else if (e.Arguments.Count == 2)
+            //{
+            //    throw new Exception("'Like' clause only supported one Parameter and the Parameter should be string and not allow NULL.！");
+            //}
+            else
+                throw new Exception("'Like' clause only supported one Parameter and the Parameter should be string and not allow NULL.！");
         }
         private void parseClause(BinaryExpression e, CompareOpration co, IDbTranslator dbTranslator, StringBuilder sBuilder, DataParameterCollection dpc)
         {
-            if (e.Right.NodeType == ExpressionType.MemberAccess)
-                throw new Exception("该操作不支持！Right.NodeType == ExpressionType.MemberAccess");
-
             ColumnFunction function;
             MemberExpression left;
             //获得左侧的属性字段信息
             IPropertyMapper propertyMapper = this.getPropertyMapper(e.Left, out function, out left);
-             //获取右侧的值
-            object value = this.getRightValue(e.Right);
+            //if (e.Right.NodeType == ExpressionType.MemberAccess)
+            //{
+            //    var right = (MemberExpression)e.Right;
+            //    if (right.Expression != null && right.Expression.ToString() == left.Expression.ToString())
+            //        throw new Exception("该操作不支持！Right.NodeType == ExpressionType.MemberAccess");
+            //}
+
+            //获取右侧的值
+            object value = this.getValue(e.Right);
             //生成SQL片段和参数
             this.buildSqlAndDataParameter(propertyMapper, function, co, value, dbTranslator, sBuilder, dpc);
         }
@@ -326,50 +374,49 @@ namespace Maple.Core.Data.Conditions
                 {
                     case CompareOpration.Equal:
                         sBuilder.Append(" = ");
-                        sBuilder.Append(strKey);
+                        sBuilder.Append(dbTranslator.QuoteParameter(strKey));
                         break;
                     case CompareOpration.GreatOrEqual:
                         sBuilder.Append(" >= ");
-                        sBuilder.Append(strKey);
+                        sBuilder.Append(dbTranslator.QuoteParameter(strKey));
                         break;
                     case CompareOpration.GreatThan:
                         sBuilder.Append(" > ");
-                        sBuilder.Append(strKey);
+                        sBuilder.Append(dbTranslator.QuoteParameter(strKey));
                         break;
                     case CompareOpration.LessOrEqual:
                         sBuilder.Append(" <= ");
-                        sBuilder.Append(strKey);
+                        sBuilder.Append(dbTranslator.QuoteParameter(strKey));
                         break;
                     case CompareOpration.LessThan:
                         sBuilder.Append(" < ");
-                        sBuilder.Append(strKey);
+                        sBuilder.Append(dbTranslator.QuoteParameter(strKey));
                         break;
                     case CompareOpration.Like:
                         sBuilder.Append(" LIKE ");
-                        sBuilder.Append(strKey);
+                        sBuilder.Append(dbTranslator.QuoteParameter(strKey));
+                        value = string.Format("%{0}%", value);
                         break;
                     case CompareOpration.StartsWith:
                         sBuilder.Append(" LIKE ");
-                        sBuilder.Append(strKey);
+                        sBuilder.Append(dbTranslator.QuoteParameter(strKey));
                         value = string.Format("{0}%", value);
                         break;
                     case CompareOpration.EndsWith:
                         sBuilder.Append(" LIKE ");
-                        sBuilder.Append(strKey);
+                        sBuilder.Append(dbTranslator.QuoteParameter(strKey));
                         value = string.Format("%{0}", value);
                         break;
                     case CompareOpration.NotEqual:
                         sBuilder.Append(" <> ");
-                        sBuilder.Append(strKey);
-                        value = string.Format("%{0}%", value);
+                        sBuilder.Append(dbTranslator.QuoteParameter(strKey));
                         break;
                     default:
                         throw new Exception("该操作不支持！CompareOpration = " + co);
                 }
 
                 //添加查询参数
-                dpc.Add(new DataParameter(propertyMapper.ColumnName, value, propertyMapper.PropertyInfo.PropertyType,
-                    propertyMapper.DbType, propertyMapper.Size, ParameterDirection.Input));
+                dpc.Add(new DataParameter(propertyMapper.ColumnName, value, propertyMapper.DbType, propertyMapper.Size, ParameterDirection.Input));
             }
 
         }
@@ -403,25 +450,36 @@ namespace Maple.Core.Data.Conditions
             }
             throw new Exception("The expression must be 'Column op const' or 'Column op Column'");
         }
+
         private IPropertyMapper getPropertyMapper(MemberExpression expr)
         {
-            string mn = expr.Member.Name;
-            if (expr.Expression is MemberExpression && mn == "Id")
-                mn = ((MemberExpression)expr.Expression).Member.Name;
+            string mn = "";
+            if (expr.Expression is MemberExpression)
+            {
+                mn = ((MemberExpression)expr.Expression).Member.Name + "_" + expr.Member.Name;
+            }
+            else
+                mn = expr.Member.Name;
+
             return getPropertyMapper(mn);
+
+            //System.Linq.Expressions
+            //PropertyExpression
+            //
         }
-        private IPropertyMapper getPropertyMapper(string columnName)
+        private IPropertyMapper getPropertyMapper(string code)
         {
-            IPropertyMapper propertyMapper = this._entityInfo.OtherProperties.FirstOrDefault(f => f.PropertyInfo.Name == columnName);
+            IPropertyMapper propertyMapper = this._entityInfo.OtherProperties.FirstOrDefault(f => f.Code == code);
             if (propertyMapper == null)
-                propertyMapper = this._entityInfo.PKeyProperties.FirstOrDefault(f => f.PropertyInfo.Name == columnName);
+                propertyMapper = this._entityInfo.PKeyProperties.FirstOrDefault(f => f.Code == code);
             if (propertyMapper == null)
-                throw new Exception(string.Format("对象{0}中字段{1}未查找到数据库映射的字段！", this._entityInfo.TableName, columnName));
+                throw new Exception(string.Format("对象{0}中字段{1}未查找到数据库映射的字段！", this._entityInfo.TableName, code));
             else
                 return propertyMapper;
 
         }
-        private object getRightValue(Expression right)
+
+        private object getValue(Expression right)
         {
             object value
                 = right.NodeType == ExpressionType.Constant
@@ -453,6 +511,5 @@ namespace Maple.Core.Data.Conditions
             }
             return false;
         }
-
     }
 }

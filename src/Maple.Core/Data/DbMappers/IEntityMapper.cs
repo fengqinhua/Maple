@@ -13,11 +13,11 @@ namespace Maple.Core.Data.DbMappers
         /// <summary>
         /// 数据库架构名称
         /// </summary>
-        string SchemaName { get; }
+        string SchemaName { get; set; }
         /// <summary>
         /// 表名称
         /// </summary>
-        string TableName { get; }
+        string TableName { get; set; }
         /// <summary>
         /// 标识列对应属性集合（主键）
         /// </summary>
