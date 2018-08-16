@@ -20,7 +20,6 @@ namespace Maple.Core.Data.ModelConfiguration
 
         public EntityConfiguration() { }
 
-
         /// <summary>
         /// 执行映射配置
         /// </summary>
@@ -28,7 +27,6 @@ namespace Maple.Core.Data.ModelConfiguration
         {
             this.entityMapper = entityMapper;
             this.expressionParser = new ExpressionParser(entityMapper);
-
             this.Configuration();
         }
 

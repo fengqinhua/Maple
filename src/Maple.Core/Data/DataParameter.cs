@@ -36,8 +36,8 @@ namespace Maple.Core.Data
 
         public DataParameter(string key, object value, DbType type, int size, ParameterDirection direction)
         {
-            this.Key = Key;
-            this.Value = Value;
+            this.Key = key;
+            this.Value = value;
 
             this.Type = type;
             this.Direction = direction;

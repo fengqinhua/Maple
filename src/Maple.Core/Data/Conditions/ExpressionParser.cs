@@ -104,7 +104,6 @@ namespace Maple.Core.Data.Conditions
                     throw new Exception("该操作不支持！" + expr.Type.FullName);
             }
         }
-
         /// <summary>
         /// 翻译一元运算符的表达式
         /// </summary>
@@ -222,8 +221,6 @@ namespace Maple.Core.Data.Conditions
                     throw new Exception("无法处理的函数：" + e.Method.Name);
             }
         }
-
-
         private void parseNull(MethodCallExpression e, bool isNull, IDbTranslator dbTranslator, StringBuilder sBuilder, DataParameterCollection dpc)
         {
             IPropertyMapper propertyMapper = this.getPropertyMapper(e.Arguments[0], out _, out _);
@@ -286,7 +283,6 @@ namespace Maple.Core.Data.Conditions
                 this.buildSqlAndDataParameter(propertyMapper, ColumnFunction.None, co, list, dbTranslator, sBuilder, dpc);
             }
         }
-
         private void parseLikeCall(MethodCallExpression e, CompareOpration co, IDbTranslator dbTranslator, StringBuilder sBuilder, DataParameterCollection dpc)
         {
             ColumnFunction function;
