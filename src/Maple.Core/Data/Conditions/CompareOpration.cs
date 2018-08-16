@@ -16,27 +16,27 @@ namespace Maple.Core.Data.Conditions
     [Serializable]
     public enum CompareOpration
     {
-        [ShowString(">")]
+        //[ShowString(">")]
         GreatThan,
-        [ShowString("<")]
+        //[ShowString("<")]
         LessThan,
-        [ShowString("=")]
+        //[ShowString("=")]
         Equal,
-        [ShowString(">=")]
+        //[ShowString(">=")]
         GreatOrEqual,
-        [ShowString("<=")]
+        //[ShowString("<=")]
         LessOrEqual,
-        [ShowString("<>")]
+        //[ShowString("<>")]
         NotEqual,
-        [ShowString("LIKE")]
+        //[ShowString("LIKE")]
         Like,
-        [ShowString("IS")]
+        //[ShowString("IS")]
         Is,
-        [ShowString("IS NOT")]
+        //[ShowString("IS NOT")]
         IsNot,
-        [ShowString("StartsWith")]
+        //[ShowString("StartsWith")]
         StartsWith,
-        [ShowString("EndsWith")]
+        //[ShowString("EndsWith")]
         EndsWith
     }
 }
