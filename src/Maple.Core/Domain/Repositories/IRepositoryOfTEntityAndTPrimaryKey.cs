@@ -1,4 +1,5 @@
-﻿using Maple.Core.Domain.Entities;
+﻿using Maple.Core.Data.DataQuery;
+using Maple.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -14,41 +15,21 @@ namespace Maple.Core.Domain.Repositories
     /// <typeparam name="TPrimaryKey"></typeparam>
     public interface IRepository<TEntity, TPrimaryKey> : IRepository where TEntity : class, IEntity<TPrimaryKey>, IAggregateRoot
     {
-        #region Insert
-
         bool Insert(TEntity entity);
-        bool InsertOrUpdate(TEntity entity);
-
-        #endregion
-
-        #region Update
-
         bool Update(TEntity entity);
-        bool Update(TPrimaryKey id, Action<TEntity> updateAction);
-
-        #endregion
-
-        #region Delete
+        bool InsertOrUpdate(TEntity entity);
 
         bool Delete(TEntity entity);
         bool Delete(TPrimaryKey id);
         int Delete(Expression<Func<TEntity, bool>> predicate);
 
-        #endregion
-
-        #region Query
-
-        TEntity Single(TPrimaryKey id);
-        IEnumerable<TEntity> GetAll();
-
-        #endregion
-
-        #region Aggregates
-
         long Count();
         long Count(Expression<Func<TEntity, bool>> predicate);
 
-        #endregion
+        TEntity Single(TPrimaryKey id);
+        IEnumerable<TEntity> GetAllList();
+
+        IMapperQuery<TEntity, TPrimaryKey> GetAll();
     }
 
 }
