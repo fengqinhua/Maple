@@ -8,6 +8,16 @@ namespace Maple.Core.Data.DbMappers
     public interface IPropertyMapper
     {
         /// <summary>
+        /// 获取属性信息
+        /// </summary>
+        /// <returns></returns>
+        PropertyInfo PropertyInfo { get; }
+        /// <summary>
+        /// 获取DataObject属性信息
+        /// </summary>
+        /// <returns></returns>
+        PropertyInfo DataObjectPropertyInfo { get; }
+        /// <summary>
         /// IPropertyMapper标识
         /// </summary>
         string Code { get; }

@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using Maple.Core.Domain.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 using Maple.Core.Domain.Values;
+using Maple.Core.Reflection;
 
 namespace Maple.Core.Data.DbMappers
 {
     public class AutoEntityMapper : IEntityMapper
     {
+        private DataReaderDeserializer deserializer = null;
+
         /// <summary>
         /// 数据库架构名称
         /// </summary>
@@ -42,7 +45,7 @@ namespace Maple.Core.Data.DbMappers
             AutoMap();
         }
 
-        protected virtual void AutoMapDataObject(PropertyInfo dataObjectPropertyInfo,  List<IPropertyMapper> otherProperties)
+        protected virtual void AutoMapDataObject(PropertyInfo dataObjectPropertyInfo, List<IPropertyMapper> otherProperties)
         {
             var properties = dataObjectPropertyInfo.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
             foreach (var propertyInfo in properties)
@@ -57,7 +60,7 @@ namespace Maple.Core.Data.DbMappers
                 if (propertyInfo.IsPrimitiveExtendedIncludingNullableOrEnum())
                 {
                     //基元对象
-                    IPropertyMapper pMap = new PropertyMapper(dataObjectPropertyInfo,propertyInfo);
+                    IPropertyMapper pMap = new PropertyMapper(dataObjectPropertyInfo, propertyInfo);
                     otherProperties.Add(pMap);
                 }
             }
@@ -71,9 +74,9 @@ namespace Maple.Core.Data.DbMappers
             List<IPropertyMapper> pkeyProperties = new List<IPropertyMapper>();
             List<IPropertyMapper> otherProperties = new List<IPropertyMapper>();
             List<IDataObjectMapper> dataObjectProperties = new List<IDataObjectMapper>();
-            
+
             foreach (var propertyInfo in properties)
-            {                    
+            {
                 //如果属性无法读写则忽略
                 if (!propertyInfo.CanRead || !propertyInfo.CanWrite)
                     continue;
@@ -109,6 +112,18 @@ namespace Maple.Core.Data.DbMappers
             this.PKeyProperties = pkeyProperties.AsReadOnly();
             this.OtherProperties = otherProperties.AsReadOnly();
             this.DataObjectProperties = dataObjectProperties.AsReadOnly();
-        } 
+        }
+
+        /// <summary>
+        /// 获取IDataReader转Entity委托方法
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public DataReaderDeserializer GetDataReaderDeserializer(System.Data.IDataReader reader)
+        {
+            if (deserializer == null)
+                deserializer = TypeDeserializerEmit.CreateDataReaderDeserializer(this, reader);
+            return deserializer;
+        }
     }
 }

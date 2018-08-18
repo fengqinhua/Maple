@@ -101,7 +101,7 @@ namespace Maple.Core.Data.Conditions
                     this.buildSqlAndDataParameter(propertyMapper, ColumnFunction.None, CompareOpration.Equal, true, dbTranslator, sBuilder, dpc);
                 }
                 else
-                    throw new Exception("该操作不支持！" + expr.Type.FullName);
+                    throw new MapleException("该操作不支持！" + expr.Type.FullName);
             }
         }
         /// <summary>
@@ -123,7 +123,7 @@ namespace Maple.Core.Data.Conditions
                         break;
                     }
                 default:
-                    throw new Exception("该操作不支持！" + expr.Type.FullName);
+                    throw new MapleException("该操作不支持！" + expr.Type.FullName);
             }
         }
         /// <summary>
@@ -174,7 +174,7 @@ namespace Maple.Core.Data.Conditions
                         break;
                     }
                 default:
-                    throw new Exception("该操作不支持！" + e.NodeType);
+                    throw new MapleException("该操作不支持！" + e.NodeType);
             }
         }
         /// <summary>
@@ -218,7 +218,7 @@ namespace Maple.Core.Data.Conditions
                     this.parseNull(e, false, dbTranslator, sBuilder, dpc);
                     break;
                 default:
-                    throw new Exception("无法处理的函数：" + e.Method.Name);
+                    throw new MapleException("无法处理的函数：" + e.Method.Name);
             }
         }
         private void parseNull(MethodCallExpression e, bool isNull, IDbTranslator dbTranslator, StringBuilder sBuilder, DataParameterCollection dpc)
@@ -298,14 +298,14 @@ namespace Maple.Core.Data.Conditions
                     this.buildSqlAndDataParameter(propertyMapper, function, co, value, dbTranslator, sBuilder, dpc);
                 }
                 else
-                    throw new Exception("'Like' clause only supported one Parameter and the Parameter should be string and not allow NULL.！");
+                    throw new MapleException("'Like' clause only supported one Parameter and the Parameter should be string and not allow NULL.！");
             }
             //else if (e.Arguments.Count == 2)
             //{
-            //    throw new Exception("'Like' clause only supported one Parameter and the Parameter should be string and not allow NULL.！");
+            //    throw new MapleException("'Like' clause only supported one Parameter and the Parameter should be string and not allow NULL.！");
             //}
             else
-                throw new Exception("'Like' clause only supported one Parameter and the Parameter should be string and not allow NULL.！");
+                throw new MapleException("'Like' clause only supported one Parameter and the Parameter should be string and not allow NULL.！");
         }
         private void parseClause(BinaryExpression e, CompareOpration co, IDbTranslator dbTranslator, StringBuilder sBuilder, DataParameterCollection dpc)
         {
@@ -317,7 +317,7 @@ namespace Maple.Core.Data.Conditions
             //{
             //    var right = (MemberExpression)e.Right;
             //    if (right.Expression != null && right.Expression.ToString() == left.Expression.ToString())
-            //        throw new Exception("该操作不支持！Right.NodeType == ExpressionType.MemberAccess");
+            //        throw new MapleException("该操作不支持！Right.NodeType == ExpressionType.MemberAccess");
             //}
 
             //获取右侧的值
@@ -362,7 +362,7 @@ namespace Maple.Core.Data.Conditions
                 else if (co == CompareOpration.NotEqual)
                     sBuilder.Append(" IS NOT NULL ");
                 else
-                    throw new Exception("该操作不支持！NULL value only supported Equal and NotEqual!");
+                    throw new MapleException("该操作不支持！NULL value only supported Equal and NotEqual!");
             }
             else
             {
@@ -408,7 +408,7 @@ namespace Maple.Core.Data.Conditions
                         sBuilder.Append(dbTranslator.QuoteParameter(strKey));
                         break;
                     default:
-                        throw new Exception("该操作不支持！CompareOpration = " + co);
+                        throw new MapleException("该操作不支持！CompareOpration = " + co);
                 }
 
                 //添加查询参数
@@ -444,7 +444,7 @@ namespace Maple.Core.Data.Conditions
                     return getPropertyMapper(obj);
                 }
             }
-            throw new Exception("The expression must be 'Column op const' or 'Column op Column'");
+            throw new MapleException("The expression must be 'Column op const' or 'Column op Column'");
         }
 
         private IPropertyMapper getPropertyMapper(MemberExpression expr)
@@ -469,7 +469,7 @@ namespace Maple.Core.Data.Conditions
             if (propertyMapper == null)
                 propertyMapper = this._entityInfo.PKeyProperties.FirstOrDefault(f => f.Code == code);
             if (propertyMapper == null)
-                throw new Exception(string.Format("对象{0}中字段{1}未查找到数据库映射的字段！", this._entityInfo.TableName, code));
+                throw new MapleException(string.Format("对象{0}中字段{1}未查找到数据库映射的字段！", this._entityInfo.TableName, code));
             else
                 return propertyMapper;
 

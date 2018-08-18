@@ -26,11 +26,8 @@ namespace Maple.Core
         /// <returns>Returns True if added, returns False if not.</returns>
         public static bool AddIfNotContains<T>(this ICollection<T> source, T item)
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException("source");
-            }
-
+            Check.NotNull(source, nameof(source));
+             
             if (source.Contains(item))
             {
                 return false;

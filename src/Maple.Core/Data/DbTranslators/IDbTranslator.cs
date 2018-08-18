@@ -11,6 +11,7 @@ namespace Maple.Core.Data.DbTranslators
     /// </summary>
     public interface IDbTranslator
     {
+        DataSouceType DataSouceType { get; }
         /// <summary>
         /// 提供程序的固定名称
         /// </summary>

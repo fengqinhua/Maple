@@ -24,11 +24,8 @@ namespace Maple.Core
         /// </summary>
         public static string EnsureEndsWith(this string str, char c, StringComparison comparisonType)
         {
-            if (str == null)
-            {
-                throw new ArgumentNullException(nameof(str));
-            }
-
+            Check.NotNull(str, nameof(str));
+ 
             if (str.EndsWith(c.ToString(), comparisonType))
             {
                 return str;
@@ -50,10 +47,7 @@ namespace Maple.Core
         /// </summary>
         public static string EnsureStartsWith(this string str, char c, StringComparison comparisonType)
         {
-            if (str == null)
-            {
-                throw new ArgumentNullException(nameof(str));
-            }
+            Check.NotNull(str, nameof(str));
 
             if (str.StartsWith(c.ToString(), comparisonType))
             {
@@ -86,10 +80,7 @@ namespace Maple.Core
         /// <exception cref="ArgumentException">Thrown if <paramref name="len"/> is bigger that string's length</exception>
         public static string Left(this string str, int len)
         {
-            if (str == null)
-            {
-                throw new ArgumentNullException("str");
-            }
+            Check.NotNull(str, nameof(str));
 
             if (str.Length < len)
             {
@@ -115,10 +106,7 @@ namespace Maple.Core
         /// <param name="n">Count of the occurence</param>
         public static int NthIndexOf(this string str, char c, int n)
         {
-            if (str == null)
-            {
-                throw new ArgumentNullException(nameof(str));
-            }
+            Check.NotNull(str, nameof(str));
 
             var count = 0;
             for (var i = 0; i < str.Length; i++)
@@ -214,10 +202,7 @@ namespace Maple.Core
         /// <exception cref="ArgumentException">Thrown if <paramref name="len"/> is bigger that string's length</exception>
         public static string Right(this string str, int len)
         {
-            if (str == null)
-            {
-                throw new ArgumentNullException("str");
-            }
+            Check.NotNull(str, nameof(str));
 
             if (str.Length < len)
             {
@@ -350,10 +335,7 @@ namespace Maple.Core
         public static T ToEnum<T>(this string value)
             where T : struct
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            Check.NotNull(value, nameof(value));
 
             return (T)Enum.Parse(typeof(T), value);
         }
@@ -368,10 +350,7 @@ namespace Maple.Core
         public static T ToEnum<T>(this string value, bool ignoreCase)
             where T : struct
         {
-            if (value == null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            Check.NotNull(value, nameof(value));
 
             return (T)Enum.Parse(typeof(T), value, ignoreCase);
         }

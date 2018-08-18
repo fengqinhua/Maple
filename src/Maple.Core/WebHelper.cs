@@ -242,7 +242,7 @@ namespace Maple.Core
                     //获取当前站点上下文信息
                     var currentTenant = EngineContext.Current.Resolve<ITenantContext>().CurrentTenant;
                     if (currentTenant == null)
-                        throw new Exception("Current tenant cannot be loaded");
+                        throw new MapleException("Current tenant cannot be loaded");
                     result = currentTenant.Url;
                 }
             }

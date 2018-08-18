@@ -359,7 +359,7 @@ namespace Maple.Core
 
             if (fi == null)
             {
-                throw new Exception($"Field '{fieldName}' not found in type hierarchy.");
+                throw new MapleException($"Field '{fieldName}' not found in type hierarchy.");
             }
 
             return fi.GetValue(target);
@@ -371,9 +371,7 @@ namespace Maple.Core
         /// <param name="path">Directory path</param>
         public static void DeleteDirectory(string path)
         {
-            if (string.IsNullOrEmpty(path))
-                throw new ArgumentNullException(path);
-
+            Check.NotNullOrEmpty(path, nameof(path));
             //find more info about directory deletion
             //and why we use this approach at https://stackoverflow.com/questions/329355/cannot-delete-directory-with-directory-deletepath-true
 

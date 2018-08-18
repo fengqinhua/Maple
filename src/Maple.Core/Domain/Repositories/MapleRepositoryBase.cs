@@ -56,8 +56,6 @@ namespace Maple.Core.Domain.Repositories
                 return Update(entity);
             else
                 return Insert(entity);
-
-            throw new Exception();
         }
         public virtual bool Delete(TEntity entity)
         {

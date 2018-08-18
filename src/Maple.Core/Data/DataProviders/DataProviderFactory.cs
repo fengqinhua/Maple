@@ -50,7 +50,7 @@ namespace Maple.Core.Data.DataProviders
 
 
             if (!_dataProviders.ContainsKey(dataSettingName))
-                throw new Exception(string.Format("未知的数据源“{0}”", dataSettingName));
+                throw new MapleException(string.Format("未知的数据源“{0}”", dataSettingName));
             else
                 return _dataProviders[dataSettingName];
         }
@@ -80,7 +80,7 @@ namespace Maple.Core.Data.DataProviders
                     dbTranslator = new SqliteTranslator();
                     break;
                 default:
-                    throw new Exception(string.Format("未知的数据源类型“{0}”。请核实数据源类型配置是否正确。", dataSetting.DataSouceType));
+                    throw new MapleException(string.Format("未知的数据源类型“{0}”。请核实数据源类型配置是否正确。", dataSetting.DataSouceType));
             }
 
             return dbTranslator;

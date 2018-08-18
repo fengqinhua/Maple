@@ -16,17 +16,19 @@ namespace Maple.Core.Data.DbMappers
         /// <param name="propertyInfo"></param>
         public PropertyMapper(PropertyInfo propertyInfo)
         {
+            this.PropertyInfo = propertyInfo;
+            this.DataObjectPropertyInfo = null;
+
             this.Code = propertyInfo.Name;
             this.ColumnName = propertyInfo.Name;
             this.IsPrimaryKey = propertyInfo.Name.Equals("Id", StringComparison.InvariantCultureIgnoreCase);
-            this.AllowsNulls = propertyInfo.IsIncludingNullable();
+            this.AllowsNulls = this.IsPrimaryKey ? false : propertyInfo.IsIncludingNullable();
             this.DbType = PropertyTypeToDbTypeTranslator.Translation(propertyInfo.PropertyType);
             //设置缺省长度
             if (this.DbType == System.Data.DbType.String)
                 this.Size = 200;
             else
                 this.Size = 0;
-            this.IsDataObjectProperty = false;
 
             this.getter = DynamicMethodFactory.CreatePropertyGetter(propertyInfo);
             this.setter = DynamicMethodFactory.CreatePropertySetter(propertyInfo);
@@ -39,6 +41,9 @@ namespace Maple.Core.Data.DbMappers
         /// <param name="propertyInfo"></param>
         public PropertyMapper(PropertyInfo valueObjectInfo, PropertyInfo propertyInfo)
         {
+            this.PropertyInfo = propertyInfo;
+            this.DataObjectPropertyInfo = valueObjectInfo;
+
             this.Code = valueObjectInfo.Name + "_" + propertyInfo.Name;
             this.ColumnName = this.Code;
             this.IsPrimaryKey = false;
@@ -49,12 +54,20 @@ namespace Maple.Core.Data.DbMappers
                 this.Size = 200;
             else
                 this.Size = 0;
-            this.IsDataObjectProperty = true;
 
             this.getter = DynamicMethodFactory.CreatePropertyGetter(valueObjectInfo, propertyInfo);
-            this.setter = (target,  arg) => { throw new Exception("valueObject enable edit"); };
+            this.setter = (target,  arg) => { throw new MapleException("valueObject enable edit"); };
         }
-
+        /// <summary>
+        /// 获取属性信息
+        /// </summary>
+        /// <returns></returns>
+        public PropertyInfo PropertyInfo { get; private set; }
+        /// <summary>
+        /// 获取DataObject属性信息
+        /// </summary>
+        /// <returns></returns>
+        public PropertyInfo DataObjectPropertyInfo { get; private set; }
         /// <summary>
         /// IPropertyMapper标识
         /// </summary>
@@ -82,7 +95,7 @@ namespace Maple.Core.Data.DbMappers
         /// <summary>
         /// 是否为值对象中的属性
         /// </summary>
-        public bool IsDataObjectProperty { get; private set; }
+        public bool IsDataObjectProperty { get { return DataObjectPropertyInfo != null; } }
         /// <summary>
         /// 读取属性值
         /// </summary>

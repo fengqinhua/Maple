@@ -37,14 +37,14 @@ namespace Maple.Core.Data
                 return DbType.Int32;
             else if (t == typeof(long) || t == typeof(Nullable<long>))
                 return DbType.Int64;
-            else if (t == typeof(sbyte) || t == typeof(Nullable<sbyte>))
-                return DbType.SByte;
-            else if (t == typeof(uint) || t == typeof(Nullable<uint>))
-                return DbType.UInt32;
-            else if (t == typeof(ulong) || t == typeof(Nullable<ulong>))
-                return DbType.UInt64;
-            else if (t == typeof(ushort) || t == typeof(Nullable<ushort>))
-                return DbType.UInt16;
+            //else if (t == typeof(sbyte) || t == typeof(Nullable<sbyte>))
+            //    return DbType.SByte;
+            //else if (t == typeof(uint) || t == typeof(Nullable<uint>))
+            //    return DbType.UInt32;
+            //else if (t == typeof(ulong) || t == typeof(Nullable<ulong>))
+            //    return DbType.UInt64;
+            //else if (t == typeof(ushort) || t == typeof(Nullable<ushort>))
+            //    return DbType.UInt16;
             else if (t == typeof(Guid) || t == typeof(Nullable<Guid>))
                 return DbType.Guid;
             else

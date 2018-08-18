@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Maple.Core.Domain.Entities;
+using Maple.Core.Reflection;
 
 namespace Maple.Core.Data.DbMappers
 {
@@ -34,5 +35,11 @@ namespace Maple.Core.Data.DbMappers
         /// 实体类的类型
         /// </summary>
         Type EntityType { get; }
+        /// <summary>
+        /// 获取IDataReader转Entity委托方法
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        DataReaderDeserializer GetDataReaderDeserializer(System.Data.IDataReader reader);
     }
 }

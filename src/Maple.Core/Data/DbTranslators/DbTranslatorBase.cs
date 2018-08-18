@@ -11,6 +11,7 @@ namespace Maple.Core.Data.DbTranslators
     {
         private DbProviderFactory dbProviderFactory = null;
 
+        public abstract DataSouceType DataSouceType { get; }
         public abstract string ProviderInvariantName { get; }
         public abstract char Connector { get; }
         public virtual string OpenQuote { get { return string.Empty; } }

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Reflection.Emit;
 using System.Reflection;
+using System.Data;
+using Maple.Core.Data.DbMappers;
+using System.Collections.Generic;
 
 namespace Maple.Core.Reflection
 {
@@ -12,12 +15,14 @@ namespace Maple.Core.Reflection
 
     public delegate void SetValueDelegate(object target, object arg);
 
+    
+
     public static class DynamicMethodFactory
     {
         public static CtorDelegate CreateConstructor(ConstructorInfo constructor)
         {
-            if (constructor == null)
-                throw new ArgumentNullException("constructor");
+            Check.NotNull(constructor, nameof(constructor));
+
             if (constructor.GetParameters().Length > 0)
                 throw new NotSupportedException("不支持有参数的构造函数。");
 
@@ -103,8 +108,7 @@ namespace Maple.Core.Reflection
 
         public static GetValueDelegate CreatePropertyGetter(PropertyInfo property)
         {
-            if (property == null)
-                throw new ArgumentNullException("property");
+            Check.NotNull(property, nameof(property));
 
             if (!property.CanRead)
                 return null;
@@ -135,8 +139,8 @@ namespace Maple.Core.Reflection
 
         public static GetValueDelegate CreatePropertyGetter(PropertyInfo vo,PropertyInfo property)
         {
-            if (vo == null || property == null)
-                throw new ArgumentNullException("vo_property");
+            Check.NotNull(vo, nameof(vo));
+            Check.NotNull(property, nameof(property));
 
             if (!vo.CanRead || !property.CanRead)
                 return null; 
@@ -216,8 +220,7 @@ namespace Maple.Core.Reflection
          
         public static SetValueDelegate CreatePropertySetter(PropertyInfo property)
         {
-            if (property == null)
-                throw new ArgumentNullException("property");
+            Check.NotNull(property, nameof(property));
 
             if (!property.CanWrite)
                 return null;
@@ -251,8 +254,8 @@ namespace Maple.Core.Reflection
 
         public static SetValueDelegate CreatePropertySetter(PropertyInfo vo, PropertyInfo property)
         {
-            if (vo == null || property == null)
-                throw new ArgumentNullException("vo_property");
+            Check.NotNull(vo, nameof(vo));
+            Check.NotNull(property, nameof(property));
 
             if (!vo.CanWrite || !property.CanWrite)
                 return null;
@@ -327,8 +330,7 @@ namespace Maple.Core.Reflection
 
         public static GetValueDelegate CreateFieldGetter(FieldInfo field)
         {
-            if (field == null)
-                throw new ArgumentNullException("field");
+            Check.NotNull(field, nameof(field));
 
             DynamicMethod dm = new DynamicMethod("FieldGetter" + Guid.NewGuid().ToString(), typeof(object),
                 new Type[] { typeof(object) },
@@ -357,8 +359,7 @@ namespace Maple.Core.Reflection
 
         public static SetValueDelegate CreateFieldSetter(FieldInfo field)
         {
-            if (field == null)
-                throw new ArgumentNullException("field");
+            Check.NotNull(field, nameof(field));
 
             DynamicMethod dm = new DynamicMethod("FieldSetter" + Guid.NewGuid().ToString(), null,
                 new Type[] { typeof(object), typeof(object) },
@@ -383,6 +384,7 @@ namespace Maple.Core.Reflection
             return (SetValueDelegate)dm.CreateDelegate(typeof(SetValueDelegate));
         }
 
+ 
         private static void EmitCastToReference(ILGenerator il, Type type)
         {
             if (type.IsValueType)

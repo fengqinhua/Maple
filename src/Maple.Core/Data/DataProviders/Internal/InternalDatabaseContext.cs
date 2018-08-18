@@ -42,7 +42,7 @@ namespace Maple.Core.Data.DataProviders.Internal
         public virtual void EnsureConnection()
         {
             if (this._disposed)
-                throw new Exception("IDatabaseContext is Disposed!");
+                throw new MapleException("IDatabaseContext is Disposed!");
 
             if (this._dbConnection == null)
                 this._dbConnection = creatConnection();
@@ -67,7 +67,7 @@ namespace Maple.Core.Data.DataProviders.Internal
         public virtual void ReleaseConnection(bool releaseConnection = true)
         {
             if (this._disposed)
-                throw new Exception("IDatabaseContext is Disposed!");
+                throw new MapleException("IDatabaseContext is Disposed!");
 
             if (this._openedConnection)
             {
@@ -93,7 +93,7 @@ namespace Maple.Core.Data.DataProviders.Internal
         public virtual IDbCommand GetDbCommand(CommandType commandType,string commandText, DataParameterCollection dps, int sqlTimeOut = 10, bool needLog=false)
         {
             if (this._disposed)
-                throw new Exception("IDatabaseContext is Disposed!");
+                throw new MapleException("IDatabaseContext is Disposed!");
 
             IDbCommand command = this.DbTranslator.GetDbProviderFactory().CreateCommand();
             command.CommandType = commandType;
@@ -117,7 +117,7 @@ namespace Maple.Core.Data.DataProviders.Internal
         public virtual IDbDataAdapter GetDbAdapter(IDbCommand command)
         {
             if (this._disposed)
-                throw new Exception("IDatabaseContext is Disposed!");
+                throw new MapleException("IDatabaseContext is Disposed!");
 
             IDbDataAdapter d = this.DbTranslator.GetDbProviderFactory().CreateDataAdapter();
             d.SelectCommand = command;

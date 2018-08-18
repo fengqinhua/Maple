@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maple.Core;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -35,10 +36,10 @@ namespace System.Data.Common
                             }
                         }
                     }
-                    throw new Exception($"The registered .Net Framework Data Provider's DbProviderFactory implementation type '{assemblyQualifiedName}' couldn't be loaded.");
+                    throw new MapleException($"The registered .Net Framework Data Provider's DbProviderFactory implementation type '{assemblyQualifiedName}' couldn't be loaded.");
                 }
             }
-            throw new Exception("The missing .Net Framework Data Provider's assembly qualified name is required.");
+            throw new MapleException("The missing .Net Framework Data Provider's assembly qualified name is required.");
         }
 
         public static void SetFactory<TFactory>(string name = "")

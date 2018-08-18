@@ -88,7 +88,7 @@ namespace Maple.Core.Plugins
         {
             //检查文件是否存在
             if (!File.Exists(filePath))
-                throw new Exception("文件 " + filePath + " 不存在.");
+                throw new MapleException("文件 " + filePath + " 不存在.");
             var text = File.ReadAllText(filePath);
 
             IList<string> result = null;
@@ -141,7 +141,7 @@ namespace Maple.Core.Plugins
             {
                 var fileNameWithoutExt = Path.GetFileNameWithoutExtension(fileInfo.FullName);
                 if (string.IsNullOrEmpty(fileNameWithoutExt))
-                    throw new Exception($"无法获取文件的后缀名 -- {fileInfo.Name}");
+                    throw new MapleException($"无法获取文件的后缀名 -- {fileInfo.Name}");
 
                 foreach (var a in AppDomain.CurrentDomain.GetAssemblies())
                 {
@@ -369,9 +369,9 @@ namespace Maple.Core.Plugins
 
                         //信息验证
                         if (string.IsNullOrWhiteSpace(pluginDescriptor.SystemName))
-                            throw new Exception($"未设置插件 '{descriptionFile.FullName}' 名称. 请给插件定义唯一的名称再重新编译.");
+                            throw new MapleException($"未设置插件 '{descriptionFile.FullName}' 名称. 请给插件定义唯一的名称再重新编译.");
                         if (referencedPlugins.Contains(pluginDescriptor))
-                            throw new Exception($"插件 '{pluginDescriptor.SystemName}' 名称已经存在，请给插件定义唯一的名称再重新编译");
+                            throw new MapleException($"插件 '{pluginDescriptor.SystemName}' 名称已经存在，请给插件定义唯一的名称再重新编译");
 
                         //判断插件是否已经被安装
                         pluginDescriptor.Installed = installedPluginSystemNames
@@ -380,7 +380,7 @@ namespace Maple.Core.Plugins
                         try
                         {
                             if (descriptionFile.Directory == null)
-                                throw new Exception($"Directory cannot be resolved for '{descriptionFile.Name}' description file");
+                                throw new MapleException($"Directory cannot be resolved for '{descriptionFile.Name}' description file");
 
                             //确保插件所需的DLL在 plugins/bin 目录中存在，如果不存在则拷贝过去
                             var pluginFiles = descriptionFile.Directory.GetFiles("*.dll", SearchOption.AllDirectories)
@@ -572,11 +572,11 @@ namespace Maple.Core.Plugins
 
             //get the description file path
             if (pluginDescriptor.OriginalAssemblyFile == null)
-                throw new Exception($"无法获取 {pluginDescriptor.SystemName} 插件对应的主文件（程序集）.");
+                throw new MapleException($"无法获取 {pluginDescriptor.SystemName} 插件对应的主文件（程序集）.");
 
             var filePath = Path.Combine(pluginDescriptor.OriginalAssemblyFile.Directory.FullName, PluginDescriptionFileName);
             if (!File.Exists(filePath))
-                throw new Exception($"插件 {pluginDescriptor.SystemName} 的描述性文件不存在. {filePath}");
+                throw new MapleException($"插件 {pluginDescriptor.SystemName} 的描述性文件不存在. {filePath}");
 
             //save the file
             var text = JsonConvert.SerializeObject(pluginDescriptor, Formatting.Indented);

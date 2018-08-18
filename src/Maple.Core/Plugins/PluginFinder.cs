@@ -55,8 +55,8 @@ namespace Maple.Core.Plugins
                 case LoadPluginsMode.NotInstalledOnly:
                     return !pluginDescriptor.Installed;
                 default:
-                    throw new Exception("Not supported LoadPluginsMode");
-            }
+                    throw new MapleException("Not supported LoadPluginsMode");
+            } 
         }
 
         /// <summary>

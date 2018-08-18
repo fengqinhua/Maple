@@ -6,6 +6,7 @@ namespace Maple.Core.Data.DbTranslators
 {
     public class SqliteTranslator : DbTranslatorBase
     {
+        public override DataSouceType DataSouceType { get { return DataSouceType.Sqlite; } }
         public override string ProviderInvariantName { get { return "System.Data.SQLite"; } }
 
         public override char Connector => '@';

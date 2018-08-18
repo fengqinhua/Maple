@@ -2,6 +2,7 @@
 using Maple.Core.Data.DataProviders;
 using Maple.Core.Data.DbMappers;
 using Maple.Core.Domain.Entities;
+using Maple.Core.Reflection;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -163,18 +164,13 @@ namespace Maple.Core.Data.DataQuery
         public TEntity FirstOrDefault()
         {
             TEntity obj = null;
-            SqlStatement sqlStatement = DbSqlFactories.BuildSelectSqlStatement(this.dataProvider.DatabaseContext.DbTranslator,
-                            this.entityInfo, whereExpr, order);
+            SqlStatement sqlStatement = DbSqlFactories.BuildSelectSqlStatement(this.dataProvider.DatabaseContext.DbTranslator, this.entityInfo, whereExpr, order);
             dataProvider.ExecuteReader(sqlStatement, delegate (IDataReader dr)
             {
                 while (dr.Read())
                 {
-                    //obj = this.EntityInfo.CreateNewObject();
-                    //foreach (var m in this.EntityInfo.Members)
-                    //{
-                    //    //Index存储元素在集合中的位置 ,这里集合List在做Foreach遍历时能够保持元素的顺序，故可用index记录元素在集合中的位置
-                    //    m.Value.SetValue(obj, dr.GetValue(m.Value.Index));
-                    //}
+                    DataReaderDeserializer deserializer = entityInfo.GetDataReaderDeserializer(dr);
+                    obj = (TEntity)deserializer(dr);
                     break;
                 }
             });
@@ -190,13 +186,12 @@ namespace Maple.Core.Data.DataQuery
             {
                 while (dr.Read())
                 {
-                    //object obj = this.EntityInfo.CreateNewObject();
-                    //foreach (var m in this.EntityInfo.Members)
-                    //{
-                    //    //Index存储元素在集合中的位置 ,这里集合List在做Foreach遍历时能够保持元素的顺序，故可用index记录元素在集合中的位置
-                    //    m.Value.SetValue(obj, dr.GetValue(m.Value.Index));
-                    //}
-                    //list.Add(obj);
+                    DataReaderDeserializer deserializer = entityInfo.GetDataReaderDeserializer(dr);
+                    do
+                    {
+                        ret.Add((TEntity)deserializer(dr));
+                    }
+                    while (dr.Read());
                 }
             });
             return ret;
