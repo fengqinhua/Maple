@@ -180,8 +180,8 @@ namespace Maple.Core.Data.DataProviders.Internal
         {
             if (dotNetValue == null)
                 return DBNull.Value;
-            if (dotNetValue.GetType().IsEnum)
-                return (int)dotNetValue;
+            //if (dotNetValue.GetType().IsEnum)
+            //    return (int)dotNetValue;
             return dotNetValue;
         }
 

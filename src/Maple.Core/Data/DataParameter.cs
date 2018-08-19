@@ -17,14 +17,7 @@ namespace Maple.Core.Data
         /// </summary>
         public object Value { get; set; }
 
-        public object NullableValue
-        {
-            get
-            {
-                return Value ?? DBNull.Value;
-            }
-        }
-
+ 
         /// <summary>
         /// 如果该项为字符型，则一定要指定Size大小。
         /// 如果未指定大小对性能会有影响
