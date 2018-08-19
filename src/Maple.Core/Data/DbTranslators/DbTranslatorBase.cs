@@ -20,7 +20,7 @@ namespace Maple.Core.Data.DbTranslators
         public virtual DbProviderFactory GetDbProviderFactory()
         {
             if(dbProviderFactory == null)
-                dbProviderFactory = DbProviderFactories.GetFactory(this.ProviderInvariantName);
+                dbProviderFactory = DbDriveFactories.GetFactory(this.ProviderInvariantName);
             return dbProviderFactory;
         }
     }
