@@ -25,7 +25,7 @@ namespace Maple.Core.Tests.Data
 
 
             string name = new Sql2000Translator().ProviderInvariantName;
-            DbProviderFactory factory = DbProviderFactories.GetFactory(name);
+            DbProviderFactory factory = DbDriveFactories.GetFactory(name);
 
             Assert.NotEqual(factory, null);
         }
@@ -34,7 +34,7 @@ namespace Maple.Core.Tests.Data
         public void GetDbProviderFactory_MYSQL()
         {
             string name = new MySQLTranslator().ProviderInvariantName;
-            DbProviderFactory factory = DbProviderFactories.GetFactory(name);
+            DbProviderFactory factory = DbDriveFactories.GetFactory(name);
 
             Assert.NotEqual(factory, null);
         }
@@ -43,7 +43,7 @@ namespace Maple.Core.Tests.Data
         public void GetDbProviderFactory_SQLITE()
         {
             string name = new SqliteTranslator().ProviderInvariantName;
-            DbProviderFactory factory = DbProviderFactories.GetFactory(name);
+            DbProviderFactory factory = DbDriveFactories.GetFactory(name);
 
             Assert.NotEqual(factory, null);
         }

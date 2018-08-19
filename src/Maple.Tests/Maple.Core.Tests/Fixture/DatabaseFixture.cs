@@ -16,9 +16,9 @@ namespace Maple.Core.Tests.Fixture
 
         public DatabaseFixture()
         {
-            DbProviderFactories.SetFactory<System.Data.SqlClient.SqlClientFactory>(new Sql2000Translator().ProviderInvariantName);
-            DbProviderFactories.SetFactory<MySql.Data.MySqlClient.MySqlClientFactory>(new MySQLTranslator().ProviderInvariantName);
-            DbProviderFactories.SetFactory<System.Data.SQLite.SQLiteFactory>(new SqliteTranslator().ProviderInvariantName);
+            DbDriveFactories.SetFactory<System.Data.SqlClient.SqlClientFactory>(new Sql2000Translator().ProviderInvariantName);
+            DbDriveFactories.SetFactory<MySql.Data.MySqlClient.MySqlClientFactory>(new MySQLTranslator().ProviderInvariantName);
+            DbDriveFactories.SetFactory<System.Data.SQLite.SQLiteFactory>(new SqliteTranslator().ProviderInvariantName);
 
             DataProviderFactory = new DataProviderFactory();
             DataProviderFactory.AddDataSettings(getDefaultDataSetting());
