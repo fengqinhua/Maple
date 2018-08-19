@@ -28,16 +28,22 @@ namespace Maple.Core.Reflection
 
         #endregion
 
-
         public static DataReaderDeserializer CreateDataReaderDeserializer(IEntityMapper entityInfo, IDataReader dataReader)
         {
             Check.NotNull(entityInfo, nameof(entityInfo));
             Check.NotNull(dataReader, nameof(dataReader));
 
-            ConstructorInfo entityConstructor = entityInfo.EntityType.GetConstructor(Type.EmptyTypes);
-
-            DynamicMethod dm = new DynamicMethod("DataReaderDeserializer" + Guid.NewGuid().ToString(), typeof(object), new Type[] { typeof(IDataReader) }, entityInfo.EntityType, true);
+            DynamicMethod dm = new DynamicMethod("DR_Deserializer_" + Guid.NewGuid().ToString(), entityInfo.EntityType, new Type[] { typeof(IDataReader) });
             ILGenerator il = dm.GetILGenerator();
+
+            BuildFunction(entityInfo, dataReader, il);
+
+            return (DataReaderDeserializer)dm.CreateDelegate(typeof(DataReaderDeserializer));
+        }
+
+        public static void BuildFunction(IEntityMapper entityInfo, IDataReader dataReader, ILGenerator il)
+        {
+            ConstructorInfo entityConstructor = entityInfo.EntityType.GetConstructor(Type.EmptyTypes);
             //定义变量，存储Entity对象
             LocalBuilder local0 = il.DeclareLocal(entityInfo.EntityType);
 
@@ -52,7 +58,7 @@ namespace Maple.Core.Reflection
             //********************
             foreach (IDataObjectMapper item in entityInfo.DataObjectProperties)
             {
-                if(item.PropertyInfo != null)
+                if (item.PropertyInfo != null)
                 {
                     ConstructorInfo dataObjectConstructor = item.PropertyInfo.PropertyType.GetConstructor(Type.EmptyTypes);
                     il.Emit(OpCodes.Ldloc_0);
@@ -74,19 +80,18 @@ namespace Maple.Core.Reflection
                 int index = dataReader.GetOrdinal(item.ColumnName);
                 ReadValue(il, item, index);
             }
+
             //********************
             //返回结果
             //********************
             il.Emit(OpCodes.Ldloc_0);
             il.Emit(OpCodes.Ret);
-
-            return (DataReaderDeserializer)dm.CreateDelegate(typeof(DataReaderDeserializer));
         }
 
         private static void ReadValue(ILGenerator il, IPropertyMapper item, int index)
         {
             MethodInfo propertyMethodInfo = item.PropertyInfo.GetSetMethod(true);
-            MethodInfo dataObjectPropertyMethodInfo = item.DataObjectPropertyInfo == null ? null : item.DataObjectPropertyInfo.GetSetMethod(true);
+            MethodInfo dataObjectPropertyMethodInfo = item.DataObjectPropertyInfo == null ? null : item.DataObjectPropertyInfo.GetGetMethod(true);
             switch (item.DbType)
             {
                 case DbType.Binary:
@@ -149,10 +154,11 @@ namespace Maple.Core.Reflection
                         ReadCommonValue(il, index, typeof(Int64), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetInt64);
                     break;
                 case DbType.String:
-                    if (item.AllowsNulls)
-                        ReadCommonNullableValue(il, index, typeof(string), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetString);
-                    else
-                        ReadCommonValue(il, index, typeof(string), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetString);
+                    ReadCommonNullableValue(il, index, typeof(string), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetString);
+                    //if (item.AllowsNulls)
+                    //    ReadCommonNullableValue(il, index, typeof(string), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetString);
+                    //else
+                    //    ReadCommonValue(il, index, typeof(string), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetString);
                     break;
                 default:
                     break;
@@ -167,7 +173,7 @@ namespace Maple.Core.Reflection
             if (dataObjectGetMethod != null)
                 il.Emit(OpCodes.Callvirt, dataObjectGetMethod);
             //将索引为 1 的参数（IDataread）加载到计算堆栈上
-            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldarg_0);
             ldc_num(il, i);
             il.Emit(OpCodes.Callvirt, dataReadGetValueMethod);
             il.EmitCall(OpCodes.Callvirt, propertySetMethod, null);
@@ -178,7 +184,7 @@ namespace Maple.Core.Reflection
             Label isNull = il.DefineLabel();
 
             //将索引为 1 的参数（IDataread）加载到计算堆栈上
-            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldarg_0);
             ldc_num(il, i);
             il.Emit(OpCodes.Callvirt, DataRecord_IsDBNull);
             //如果 value 为 true、非空或非零，则将控制转移到目标指令（短格式）
@@ -190,7 +196,7 @@ namespace Maple.Core.Reflection
             if (dataObjectGetMethod != null)
                 il.Emit(OpCodes.Callvirt, dataObjectGetMethod);
             //将索引为 1 的参数（IDataread）加载到计算堆栈上
-            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldarg_0);
             ldc_num(il, i);
             il.Emit(OpCodes.Callvirt, dataReadGetValueMethod);
             il.EmitCall(OpCodes.Callvirt, propertySetMethod, null);
@@ -207,7 +213,7 @@ namespace Maple.Core.Reflection
             if (dataObjectGetMethod != null)
                 il.Emit(OpCodes.Callvirt, dataObjectGetMethod);
             //将索引为 1 的参数（IDataread）加载到计算堆栈上
-            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldarg_0);
             ldc_num(il, i);
             il.Emit(OpCodes.Callvirt, DataRecord_GetValue);
             il.Emit(OpCodes.Castclass, type);
@@ -236,7 +242,7 @@ namespace Maple.Core.Reflection
             if (dataObjectGetMethod != null)
                 il.Emit(OpCodes.Callvirt, dataObjectGetMethod);
             //将索引为 1 的参数（IDataread）加载到计算堆栈上
-            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldarg_0);
             ldc_num(il, i);
             il.Emit(OpCodes.Callvirt, DataRecord_GetInt16);
             il.Emit(OpCodes.Brfalse_S, IL_01c6);
@@ -277,7 +283,7 @@ namespace Maple.Core.Reflection
             Label isNull = il.DefineLabel();
 
             //将索引为 1 的参数（IDataread）加载到计算堆栈上
-            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldarg_0);
             ldc_num(il, i);
             il.Emit(OpCodes.Callvirt, DataRecord_IsDBNull);
             //如果 value 为 true、非空或非零，则将控制转移到目标指令（短格式）
@@ -290,7 +296,7 @@ namespace Maple.Core.Reflection
             if (dataObjectGetMethod != null)
                 il.Emit(OpCodes.Callvirt, dataObjectGetMethod);
             //将索引为 1 的参数（IDataread）加载到计算堆栈上
-            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Ldarg_0);
             ldc_num(il, i);
             il.Emit(OpCodes.Callvirt, DataRecord_GetInt16);
             il.Emit(OpCodes.Brfalse_S, IL_01c6);
