@@ -1,4 +1,5 @@
-﻿using Maple.Core.Data.DataProviders;
+﻿using Maple.Core.Data;
+using Maple.Core.Data.DataProviders;
 using Maple.Core.Data.DataSettings;
 using Maple.Core.Data.DbMappers;
 using Maple.Core.Data.DbTranslators;
@@ -24,6 +25,8 @@ namespace Maple.Data.PerformanceTests
 
         public MapleDataTest()
         {
+            //DatabaseCommon.DbSqlNeedLog = true;
+
             DbDriveFactories.SetFactory<MySql.Data.MySqlClient.MySqlClientFactory>(new MySQLTranslator().ProviderInvariantName);
             EntityConfigurationFactory.SetConfiguration(typeof(User), typeof(UserEntityConfiguration));
 
