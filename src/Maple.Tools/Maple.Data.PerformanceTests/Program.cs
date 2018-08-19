@@ -14,43 +14,43 @@ namespace Maple.Data.PerformanceTests
             MapleDataTest mapleDataTest = new MapleDataTest();
             DapperDataTest dapperDataTest = new DapperDataTest();
             var worker = new IdWorker(0);
-            int cycle =10, count = 10000;
+            int cycle =10, count = 100;
 
 
 
-            //#region 测试插入操作
+            #region 测试插入操作
 
-            //mapleDataTest.DeleteAll();
+            mapleDataTest.DeleteAll();
 
-            //Exce("Maple 执行插入操作", cycle, count, () =>
-            //{
-            //    User user = creatNewUser(worker.NextId());
-            //    mapleDataTest.Insert(user);
-            //});
+            Exce("Maple 执行插入操作", cycle, count, () =>
+            {
+                User user = creatNewUser(worker.NextId());
+                mapleDataTest.Insert(user);
+            });
 
-            //dapperDataTest.DeleteAll();
+            dapperDataTest.DeleteAll();
 
-            //Exce("Dapper 执行插入操作", cycle, count, () =>
-            //{
-            //    User user = creatNewUser(worker.NextId());
-            //    dapperDataTest.Insert(user);
-            //});
+            Exce("Dapper 执行插入操作", cycle, count, () =>
+            {
+                User user = creatNewUser(worker.NextId());
+                dapperDataTest.Insert(user);
+            });
 
-            //#endregion
+            #endregion
 
-            //#region 测试查询1000条记录操作
+            #region 测试查询1000条记录操作
 
-            //Exce("Maple 执行查询1000条记录操作", cycle, count, () =>
-            //{
-            //    mapleDataTest.SelectAll();
-            //});
+            Exce("Maple 执行查询1000条记录操作", cycle, count, () =>
+            {
+                mapleDataTest.SelectAll();
+            });
 
-            //Exce("Dapper 执行查询1000条记录操作", cycle, count, () =>
-            //{
-            //    dapperDataTest.SelectAll();
-            //});
+            Exce("Dapper 执行查询1000条记录操作", cycle, count, () =>
+            {
+                dapperDataTest.SelectAll();
+            });
 
-            //#endregion
+            #endregion
 
             #region 测试基于ID查询
 

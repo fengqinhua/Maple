@@ -101,7 +101,7 @@ namespace Maple.Core.Domain.Repositories
         }
         public virtual IEnumerable<TEntity> GetAllList()
         {
-            return GetAll().OrderBy(f=>f.Id).Select();
+            return GetAll().Select();
         }
         public virtual IMapleQueryable<TEntity, TPrimaryKey> GetAll()
         {
