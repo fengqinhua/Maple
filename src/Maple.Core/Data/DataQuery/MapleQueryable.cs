@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Maple.Core.Data.DataQuery
 {
-    public class MapleQueryable<TEntity, TPrimaryKey> : IMapperQuery<TEntity, TPrimaryKey> where TEntity : class, IEntity<TPrimaryKey>
+    public class MapleQueryable<TEntity, TPrimaryKey> : IMapleQueryable<TEntity, TPrimaryKey> where TEntity : class, IEntity<TPrimaryKey>
     {
         private Range range = null;
         private Expression whereExpr = null;
@@ -20,6 +20,25 @@ namespace Maple.Core.Data.DataQuery
         private IExpressionParser expressionParser = null;
         private IDataProvider dataProvider = null;
         private IEntityMapper entityInfo = null;
+
+        public MapleQueryable(IDataProvider dataProvider)
+        {
+            Check.NotNull(dataProvider, nameof(dataProvider));
+
+            this.dataProvider = dataProvider;
+            this.entityInfo = EntityMapperFactory.Instance.GetEntityMapper(typeof(TEntity));
+            this.expressionParser = new ExpressionParser(entityInfo);
+        }
+
+        internal MapleQueryable(IDataProvider dataProvider, IEntityMapper entityInfo)
+        {
+            Check.NotNull(dataProvider, nameof(dataProvider));
+            Check.NotNull(entityInfo, nameof(entityInfo));
+
+            this.dataProvider = dataProvider;
+            this.entityInfo = entityInfo;
+            this.expressionParser = new ExpressionParser(entityInfo);
+        }
 
         #region IMapleQueryable
 

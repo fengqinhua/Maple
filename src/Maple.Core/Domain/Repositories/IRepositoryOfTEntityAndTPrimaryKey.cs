@@ -29,7 +29,7 @@ namespace Maple.Core.Domain.Repositories
         TEntity Single(TPrimaryKey id);
         IEnumerable<TEntity> GetAllList();
 
-        IMapperQuery<TEntity, TPrimaryKey> GetAll();
+        IMapleQueryable<TEntity, TPrimaryKey> GetAll();
     }
 
 }

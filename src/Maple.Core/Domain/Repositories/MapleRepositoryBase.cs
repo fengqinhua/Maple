@@ -16,11 +16,11 @@ namespace Maple.Core.Domain.Repositories
     public abstract class MapleRepositoryBase<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>, IUnitOfWorkRepository where TEntity : class, IEntity<TPrimaryKey>, IAggregateRoot
     {
         protected IDataProvider _dataProvider = null;
-        protected DataProviderFactory _dataProviderFactory = null;
+        protected IDataProviderFactory _dataProviderFactory = null;
 
         public IEntityMapper EntityInfo { get; protected set; }
 
-        public MapleRepositoryBase(DataProviderFactory dataProviderFactory)
+        public MapleRepositoryBase(IDataProviderFactory dataProviderFactory)
         {
             this._dataProviderFactory = dataProviderFactory;
             this.EntityInfo = EntityMapperFactory.Instance.GetEntityMapper(typeof(TEntity));
@@ -103,9 +103,9 @@ namespace Maple.Core.Domain.Repositories
         {
             return GetAll().OrderBy(f=>f.Id).Select();
         }
-        public virtual IMapperQuery<TEntity, TPrimaryKey> GetAll()
+        public virtual IMapleQueryable<TEntity, TPrimaryKey> GetAll()
         {
-            return new MapleQueryable<TEntity, TPrimaryKey>();
+            return new MapleQueryable<TEntity, TPrimaryKey>(this._dataProvider, this.EntityInfo);
         }
 
         #endregion

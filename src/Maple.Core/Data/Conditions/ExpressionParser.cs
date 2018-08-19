@@ -33,7 +33,15 @@ namespace Maple.Core.Data.Conditions
                 dpc = new DataParameterCollection();
 
             StringBuilder sBuilder = new StringBuilder();
-            this.parse(expr, dbTranslator, sBuilder, dpc);
+            if (expr is LambdaExpression)
+            {
+                LambdaExpression lamb = expr as LambdaExpression;
+                this.parse(lamb.Body, dbTranslator, sBuilder, dpc);
+            }
+            else
+                this.parse(expr, dbTranslator, sBuilder, dpc);
+
+
             return sBuilder.ToString();
         }
 
@@ -412,7 +420,7 @@ namespace Maple.Core.Data.Conditions
                 }
 
                 //添加查询参数
-                dpc.Add(new DataParameter(propertyMapper.ColumnName, value, propertyMapper.DbType, propertyMapper.Size, ParameterDirection.Input));
+                dpc.Add(new DataParameter(strKey, value, propertyMapper.DbType, propertyMapper.Size, ParameterDirection.Input));
             }
 
         }

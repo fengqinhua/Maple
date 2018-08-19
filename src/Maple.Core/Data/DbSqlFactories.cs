@@ -186,7 +186,7 @@ namespace Maple.Core.Data
                                             functionText,
                                             dbTranslator.Quote(entityInfo.TableName),
                                             strWhere);
-            return null;
+            return new SqlStatement(System.Data.CommandType.Text, sqlString, dpc);
         }
 
         /// <summary>

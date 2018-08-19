@@ -131,7 +131,8 @@ namespace Maple.Core.Data.DataProviders.Internal
             {
                 //IDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
                 //using (IDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection))
-                using (IDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                //using (IDataReader rdr = cmd.ExecuteReader(CommandBehavior.CloseConnection))
+                using (IDataReader rdr = cmd.ExecuteReader())
                 {
                     callback(rdr);
                 }
