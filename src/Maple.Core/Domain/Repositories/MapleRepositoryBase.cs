@@ -105,7 +105,8 @@ namespace Maple.Core.Domain.Repositories
         }
         public virtual IMapleQueryable<TEntity, TPrimaryKey> GetAll()
         {
-            return new MapleQueryable<TEntity, TPrimaryKey>(this._dataProvider, this.EntityInfo);
+            IDataProvider dataProvider = getDataProvider();
+            return new MapleQueryable<TEntity, TPrimaryKey>(dataProvider, this.EntityInfo);
         }
 
         #endregion

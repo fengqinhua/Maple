@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace System.Data.Common
 {
-    public static class DbProviderFactories
+    public static class DbDriveFactories
     {
         private const string Instance = "Instance";
         private static Dictionary<string, string> _providers = new Dictionary<string, string>();

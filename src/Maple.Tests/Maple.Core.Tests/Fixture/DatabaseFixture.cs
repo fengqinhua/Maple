@@ -1,4 +1,5 @@
-﻿using Maple.Core.Data.DataProviders;
+﻿using Maple.Core.Data;
+using Maple.Core.Data.DataProviders;
 using Maple.Core.Data.DataSettings;
 using Maple.Core.Data.DbTranslators;
 using System;
@@ -16,6 +17,9 @@ namespace Maple.Core.Tests.Fixture
 
         public DatabaseFixture()
         {
+            DatabaseCommon.DbSqlNeedLog = true;
+
+
             DbDriveFactories.SetFactory<System.Data.SqlClient.SqlClientFactory>(new Sql2000Translator().ProviderInvariantName);
             DbDriveFactories.SetFactory<MySql.Data.MySqlClient.MySqlClientFactory>(new MySQLTranslator().ProviderInvariantName);
             DbDriveFactories.SetFactory<System.Data.SQLite.SQLiteFactory>(new SqliteTranslator().ProviderInvariantName);

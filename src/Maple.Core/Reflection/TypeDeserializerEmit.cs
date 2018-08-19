@@ -99,62 +99,62 @@ namespace Maple.Core.Reflection
                     break;
                 case DbType.Boolean:
                     if (item.AllowsNulls)
-                        ReadNullableBoolean(il, index, propertyMethodInfo, dataObjectPropertyMethodInfo);
+                        ReadNullableBoolean(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo);
                     else
-                        ReadBoolean(il, index, propertyMethodInfo, dataObjectPropertyMethodInfo);
+                        ReadBoolean(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo);
                     break;
                 case DbType.Byte:
                     if (item.AllowsNulls)
-                        ReadCommonNullableValue(il, index, typeof(byte), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetByte);
+                        ReadCommonNullableValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetByte);
                     else
-                        ReadCommonValue(il, index, typeof(byte), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetByte);
+                        ReadCommonValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetByte);
                     break;
                 case DbType.Date:
                 case DbType.DateTime:
                 case DbType.DateTime2:
                     if (item.AllowsNulls)
-                        ReadCommonNullableValue(il, index, typeof(DateTime), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetDateTime);
+                        ReadCommonNullableValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetDateTime);
                     else
-                        ReadCommonValue(il, index, typeof(DateTime), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetDateTime);
+                        ReadCommonValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetDateTime);
                     break;
                 case DbType.Decimal:
                     if (item.AllowsNulls)
-                        ReadCommonNullableValue(il, index, typeof(decimal), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetDecimal);
+                        ReadCommonNullableValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetDecimal);
                     else
-                        ReadCommonValue(il, index, typeof(decimal), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetDecimal);
+                        ReadCommonValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetDecimal);
                     break;
                 case DbType.Double:
                     if (item.AllowsNulls)
-                        ReadCommonNullableValue(il, index, typeof(double), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetDouble);
+                        ReadCommonNullableValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetDouble);
                     else
-                        ReadCommonValue(il, index, typeof(double), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetDouble);
+                        ReadCommonValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetDouble);
                     break;
                 case DbType.Guid:
                     if (item.AllowsNulls)
-                        ReadCommonNullableValue(il, index, typeof(Guid), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetGuid);
+                        ReadCommonNullableValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetGuid);
                     else
-                        ReadCommonValue(il, index, typeof(Guid), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetGuid);
+                        ReadCommonValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetGuid);
                     break;
                 case DbType.Int16:
                     if (item.AllowsNulls)
-                        ReadCommonNullableValue(il, index, typeof(Int16), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetInt16);
+                        ReadCommonNullableValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetInt16);
                     else
-                        ReadCommonValue(il, index, typeof(Int16), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetInt16);
+                        ReadCommonValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetInt16);
                     break;
                 case DbType.Int32:
                     if (item.AllowsNulls)
-                        ReadCommonNullableValue(il, index, typeof(Int32), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetInt32);
+                        ReadCommonNullableValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetInt32);
                     else
-                        ReadCommonValue(il, index, typeof(Int32), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetInt32);
+                        ReadCommonValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetInt32);
                     break;
                 case DbType.Int64:
                     if (item.AllowsNulls)
-                        ReadCommonNullableValue(il, index, typeof(Int64), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetInt64);
+                        ReadCommonNullableValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetInt64);
                     else
-                        ReadCommonValue(il, index, typeof(Int64), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetInt64);
+                        ReadCommonValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetInt64);
                     break;
                 case DbType.String:
-                    ReadCommonNullableValue(il, index, typeof(string), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetString);
+                    ReadCommonNullableValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetString);
                     //if (item.AllowsNulls)
                     //    ReadCommonNullableValue(il, index, typeof(string), propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetString);
                     //else
@@ -166,7 +166,6 @@ namespace Maple.Core.Reflection
         }
         private static void ReadCommonValue(ILGenerator il, int i, Type propertyType, MethodInfo propertySetMethod, MethodInfo dataObjectGetMethod, MethodInfo dataReadGetValueMethod)
         {
-            var local = il.DeclareLocal(propertyType);
             //将索引 0 处的局部变量 ( Entity ) 加载到计算堆栈上。
             il.Emit(OpCodes.Ldloc_0);
             //判断是否为DataObject赋值
@@ -176,11 +175,19 @@ namespace Maple.Core.Reflection
             il.Emit(OpCodes.Ldarg_0);
             ldc_num(il, i);
             il.Emit(OpCodes.Callvirt, dataReadGetValueMethod);
+
+            //如果是可空类型，那么要实例化
+            if (propertyType.IsIncludingNullable())
+            {
+                var nullUnderlyingType = Nullable.GetUnderlyingType(propertyType);
+                ConstructorInfo nullableConstructor = propertyType.GetConstructor(new[] { nullUnderlyingType });
+                il.Emit(OpCodes.Newobj, nullableConstructor);
+            }
+
             il.EmitCall(OpCodes.Callvirt, propertySetMethod, null);
         }
         private static void ReadCommonNullableValue(ILGenerator il, int i, Type propertyType, MethodInfo propertySetMethod, MethodInfo dataObjectGetMethod, MethodInfo dataReadGetValueMethod)
         {
-            var local = il.DeclareLocal(propertyType);
             Label isNull = il.DefineLabel();
 
             //将索引为 1 的参数（IDataread）加载到计算堆栈上
@@ -199,10 +206,19 @@ namespace Maple.Core.Reflection
             il.Emit(OpCodes.Ldarg_0);
             ldc_num(il, i);
             il.Emit(OpCodes.Callvirt, dataReadGetValueMethod);
+
+            //如果是可空类型，那么要实例化
+            if (propertyType.IsIncludingNullable())
+            {
+                Type nullUnderlyingType = Nullable.GetUnderlyingType(propertyType);
+                ConstructorInfo nullableConstructor = propertyType.GetConstructor(new[] { nullUnderlyingType });
+                il.Emit(OpCodes.Newobj, nullableConstructor);
+            }
             il.EmitCall(OpCodes.Callvirt, propertySetMethod, null);
 
             il.MarkLabel(isNull);
         }
+
         private static void ReadBinary(ILGenerator il, int i, MethodInfo propertySetMethod, MethodInfo dataObjectGetMethod)
         {
             var type = typeof(byte[]);
@@ -228,11 +244,8 @@ namespace Maple.Core.Reflection
             //IL_01af: callvirt instance void ILTEST.User::set_Picture(uint8[])
 
         }
-        private static void ReadBoolean(ILGenerator il, int i, MethodInfo propertySetMethod, MethodInfo dataObjectGetMethod)
+        private static void ReadBoolean(ILGenerator il, int i, Type propertyType, MethodInfo propertySetMethod, MethodInfo dataObjectGetMethod)
         {
-            var type = typeof(bool);
-            var local = il.DeclareLocal(type);
-
             Label IL_01c6 = il.DefineLabel();
             Label IL_01c7 = il.DefineLabel();
 
@@ -255,6 +268,14 @@ namespace Maple.Core.Reflection
             il.Emit(OpCodes.Ldc_I4_0);
 
             il.MarkLabel(IL_01c7);
+
+            //如果是可空类型，那么要实例化
+            if (propertyType.IsIncludingNullable())
+            {
+                var nullUnderlyingType = Nullable.GetUnderlyingType(propertyType);
+                ConstructorInfo nullableConstructor = propertyType.GetConstructor(new[] { nullUnderlyingType });
+                il.Emit(OpCodes.Newobj, nullableConstructor);
+            }
             il.EmitCall(OpCodes.Callvirt, propertySetMethod, null);
 
             //IL_01b4: nop
@@ -273,11 +294,8 @@ namespace Maple.Core.Reflection
             //IL_01c8: callvirt instance void ILTEST.User::set_IsDeleted(bool)
 
         }
-        private static void ReadNullableBoolean(ILGenerator il, int i, MethodInfo propertySetMethod, MethodInfo dataObjectGetMethod)
+        private static void ReadNullableBoolean(ILGenerator il, int i, Type propertyType, MethodInfo propertySetMethod, MethodInfo dataObjectGetMethod)
         {
-            var type = typeof(bool);
-            var local = il.DeclareLocal(type);
-
             Label IL_01c6 = il.DefineLabel();
             Label IL_01c7 = il.DefineLabel();
             Label isNull = il.DefineLabel();
@@ -309,6 +327,14 @@ namespace Maple.Core.Reflection
             il.Emit(OpCodes.Ldc_I4_0);
 
             il.MarkLabel(IL_01c7);
+
+            //如果是可空类型，那么要实例化
+            if (propertyType.IsIncludingNullable())
+            {
+                var nullUnderlyingType = Nullable.GetUnderlyingType(propertyType);
+                ConstructorInfo nullableConstructor = propertyType.GetConstructor(new[] { nullUnderlyingType });
+                il.Emit(OpCodes.Newobj, nullableConstructor);
+            }
             il.EmitCall(OpCodes.Callvirt, propertySetMethod, null);
 
             il.MarkLabel(isNull);

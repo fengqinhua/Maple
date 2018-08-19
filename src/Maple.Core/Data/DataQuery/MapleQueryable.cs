@@ -76,7 +76,7 @@ namespace Maple.Core.Data.DataQuery
 
         public IMapleSelectable<TEntity, TPrimaryKey> Range(long startIndex, long endIndex)
         {
-            return Range(new Range(startIndex, endIndex));
+            return Range(new Range(startIndex + 1, endIndex));
         }
 
         public IMapleSelectable<TEntity, TPrimaryKey> Range(Range range)

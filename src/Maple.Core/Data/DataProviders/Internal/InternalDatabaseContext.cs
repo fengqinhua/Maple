@@ -101,8 +101,8 @@ namespace Maple.Core.Data.DataProviders.Internal
             command.Connection = this._dbConnection;
             //if (this.IsInTransaction)
             //    command.Transaction = conn.Transaction;
-            //if (sql.NeedLog)
-            //    Logger.Instance.Info(sql.ToString());
+            if (needLog)
+                Console.WriteLine(commandText);
             //设置超时时间
             this.setCommandTimeOut(command, sqlTimeOut);
             //设置参数

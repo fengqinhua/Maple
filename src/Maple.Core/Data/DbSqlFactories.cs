@@ -505,16 +505,16 @@ namespace Maple.Core.Data
             switch (function)
             {
                 case FieldFunction.Average:
-                    fileInfo = string.Format("AVG({0}{1}) AS MP", fieldName, dbTranslator.Quote(fieldName));
+                    fileInfo = string.Format("AVG({0}) AS MP",  dbTranslator.Quote(fieldName));
                     break;
                 case FieldFunction.Sum:
-                    fileInfo = string.Format("SUM({0}{1}) AS MP", fieldName, dbTranslator.Quote(fieldName));
+                    fileInfo = string.Format("SUM({0}) AS MP",  dbTranslator.Quote(fieldName));
                     break;
                 case FieldFunction.Max:
-                    fileInfo = string.Format("MAX({0}{1}) AS MP", fieldName, dbTranslator.Quote(fieldName));
+                    fileInfo = string.Format("MAX({0}) AS MP", dbTranslator.Quote(fieldName));
                     break;
                 case FieldFunction.Min:
-                    fileInfo = string.Format("MIN({0}{1}) AS MP", fieldName, dbTranslator.Quote(fieldName));
+                    fileInfo = string.Format("MIN({0}) AS MP",  dbTranslator.Quote(fieldName));
                     break;
                 case FieldFunction.Count:
                     fileInfo = "COUNT(1) AS MP";
@@ -566,9 +566,9 @@ namespace Maple.Core.Data
                 foreach (var item in order)
                 {
                     if (reversion)
-                        sBuilder.Append(string.Format("{0}{1} {2}", aliases, dbTranslator.Quote(item.Key), item.Value == FieldSearchOrder.Ascending ? "ASC" : "DESC"));
-                    else
                         sBuilder.Append(string.Format("{0}{1} {2}", aliases, dbTranslator.Quote(item.Key), item.Value == FieldSearchOrder.Ascending ? "DESC" : "ASC"));
+                    else
+                        sBuilder.Append(string.Format("{0}{1} {2}", aliases, dbTranslator.Quote(item.Key), item.Value == FieldSearchOrder.Ascending ? "ASC" : "DESC"));
                     sBuilder.Append(",");
                 }
             }

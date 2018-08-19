@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Maple.Core.Data
 {
-    internal static class DatabaseCommon
+    public static class DatabaseCommon
     {
         /// <summary>
         /// 获取或设置 执行DbCommand超时时间（秒）
