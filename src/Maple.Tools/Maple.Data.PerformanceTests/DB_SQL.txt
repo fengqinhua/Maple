@@ -1,0 +1,29 @@
+﻿drop table if exists TEST_USER;
+
+/*==============================================================*/
+/* Table: TEST_USER                                             */
+/*==============================================================*/
+create table TEST_USER
+(
+   ID                   bigint not null comment '主键ID',
+   USERNAME             varchar(200) comment '名称',
+   AGE                  int comment '年龄',
+   HEIGHT               float comment '身高',
+   SIX                  tinyint comment '性别',
+   ADDRESS_CITYID       varchar(200) comment '城市标识',
+   ADDRESS_STREET       varchar(200) comment '所在街道',
+   ADDRESS_NUM          int comment '门牌号',
+   EXTENSIONDATA        text comment '扩展数据',
+   CREATIONTIME         datetime comment '创建时间',
+   CREATORUSERID        bigint comment '创建用户标识',
+   LASTMODIFICATIONTIME datetime comment '最后一次修改时间',
+   LASTMODIFIERUSERID   bigint comment '最后修改用户标识',
+   ISDELETED            tinyint comment '是否已经被软删除',
+   DELETIONTIME         datetime comment '删除时间',
+   DELETERUSERID        bigint comment '删除用户标识',
+   TENANTID             bigint comment '站点标识',
+   ORGID                bigint comment '组织标识',
+   primary key (ID)
+);
+
+alter table TEST_USER comment '测试用户信息';
