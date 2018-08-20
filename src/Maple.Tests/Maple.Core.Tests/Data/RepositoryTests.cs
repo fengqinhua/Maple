@@ -30,6 +30,8 @@ namespace Maple.Core.Tests.Data
             this.mapleQueryable = new UserRepository(this.fixture.DataProviderFactory, this.fixture.DataSettingName);
         }
 
+
+
         [Fact]
         public void Repository_CURD()
         {
@@ -81,6 +83,12 @@ namespace Maple.Core.Tests.Data
             Assert.Equal(mapleQueryable.Delete(id), true);
 
 
+        }
+
+        [Fact]
+        public void Repository_GetAll()
+        {
+            Assert.NotEqual(mapleQueryable.GetAllList(), null);
         }
 
         [Fact]
