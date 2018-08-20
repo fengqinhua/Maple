@@ -88,7 +88,8 @@ namespace Maple.Core.Tests.Data
         [Fact]
         public void Repository_GetAll()
         {
-            Assert.NotEqual(mapleQueryable.GetAllList(), null);
+            var data = mapleQueryable.GetAllList();
+            Assert.NotEqual(data, null);
         }
 
         [Fact]
