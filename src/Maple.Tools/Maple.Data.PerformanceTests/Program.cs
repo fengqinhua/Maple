@@ -13,10 +13,10 @@ namespace Maple.Data.PerformanceTests
 
             MapleDataTest mapleDataTest = new MapleDataTest();
             DapperDataTest dapperDataTest = new DapperDataTest();
+            EFDataTest efDataTest = new EFDataTest();
+
             var worker = new IdWorker(0);
             int cycle =10, count = 100;
-
-
 
             #region 测试插入操作
 
@@ -36,6 +36,14 @@ namespace Maple.Data.PerformanceTests
                 dapperDataTest.Insert(user);
             });
 
+            efDataTest.DeleteAll();
+
+            Exce("EF CORE 执行插入操作", cycle, count, () =>
+            {
+                User user = creatNewUser(worker.NextId());
+                efDataTest.Insert(user);
+            });
+
             #endregion
 
             #region 测试查询1000条记录操作
@@ -49,6 +57,12 @@ namespace Maple.Data.PerformanceTests
             {
                 dapperDataTest.SelectAll();
             });
+
+            Exce("EF CORE 执行查询1000条记录操作", cycle, count, () =>
+            {
+                efDataTest.SelectAll();
+            });
+
 
             #endregion
 
@@ -66,11 +80,16 @@ namespace Maple.Data.PerformanceTests
                 dapperDataTest.Single(x.Id);
             });
 
+            Exce("EF CORE 执行基于ID查询", cycle, count, () =>
+            {
+                efDataTest.Single(x.Id);
+            });
+
             #endregion
 
 
-            
-           
+
+
 
 
 

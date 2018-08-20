@@ -16,10 +16,11 @@ namespace Maple.Core.Tests.Data
     [Collection("Database collection")]
     public class RepositoryTests
     {
-        private IdWorker worker = null;
+        private IdWorker worker = new IdWorker(0);
         private IRepository<User, long> mapleQueryable = null;
         private IDataProvider dataProvider = null;
         private DatabaseFixture fixture;
+
         public RepositoryTests(Fixture.DatabaseFixture fixture)
         {
             EntityConfigurationFactory.SetConfiguration(typeof(User), typeof(UserEntityConfiguration));
@@ -27,7 +28,6 @@ namespace Maple.Core.Tests.Data
             this.fixture = fixture;
             this.dataProvider = this.fixture.DataProviderFactory.CreateProvider(this.fixture.DataSettingName);
             this.mapleQueryable = new UserRepository(this.fixture.DataProviderFactory, this.fixture.DataSettingName);
-            this.worker = new IdWorker(0);
         }
 
         [Fact]
