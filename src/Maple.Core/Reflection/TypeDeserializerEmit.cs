@@ -130,10 +130,7 @@ namespace Maple.Core.Reflection
                         ReadCommonValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetDouble);
                     break;
                 case DbType.Guid:
-                    if (item.AllowsNulls)
-                        ReadCommonNullableValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetGuid);
-                    else
-                        ReadCommonValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetGuid);
+                    ReadCommonNullableValue(il, index, item.PropertyInfo.PropertyType, propertyMethodInfo, dataObjectPropertyMethodInfo, DataRecord_GetGuid);
                     break;
                 case DbType.Int16:
                     if (item.AllowsNulls)
