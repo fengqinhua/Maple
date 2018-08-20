@@ -34,9 +34,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Maple.Themes", "Maple.Theme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Foundation.Themes", "Maple.Themes\Maple.Foundation.Themes\Maple.Foundation.Themes.csproj", "{B2202D7B-ED4F-4D95-9F29-390742F39832}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maple.Data.PerformanceTests", "Maple.Tools\Maple.Data.PerformanceTests\Maple.Data.PerformanceTests.csproj", "{A8C4BF5E-857F-4F05-9BFA-88194375805B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Maple.Data.PerformanceTests", "Maple.Tools\Maple.Data.PerformanceTests\Maple.Data.PerformanceTests.csproj", "{A8C4BF5E-857F-4F05-9BFA-88194375805B}"
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -96,5 +99,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D724DE37-FE91-4FBF-BE3C-1A11480AC63C}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
