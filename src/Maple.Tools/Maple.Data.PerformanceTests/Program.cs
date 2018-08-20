@@ -1,4 +1,5 @@
-﻿using Maple.Core;
+﻿using BenchmarkDotNet.Running;
+using Maple.Core;
 using Maple.Data.PerformanceTests.Entities;
 using System;
 using System.Diagnostics;
@@ -11,12 +12,25 @@ namespace Maple.Data.PerformanceTests
         {
             Console.WriteLine("执行测试前的准备工作...");
 
+            BenchmarkRunner.Run<InsertEntityTests>();
+            BenchmarkRunner.Run<SelectEntityTests>();
+            BenchmarkRunner.Run<SingleEntityTests>();
+
+            //old();
+
+            Console.WriteLine();
+            Console.WriteLine("测试完成...");
+            Console.ReadLine();
+        }
+
+        private static void old()
+        {
             MapleDataTest mapleDataTest = new MapleDataTest();
             DapperDataTest dapperDataTest = new DapperDataTest();
             EFDataTest efDataTest = new EFDataTest();
 
             var worker = new IdWorker(0);
-            int cycle =10, count = 100;
+            int cycle = 10, count = 100;
 
             #region 测试插入操作
 
@@ -47,6 +61,10 @@ namespace Maple.Data.PerformanceTests
             #endregion
 
             #region 测试查询1000条记录操作
+
+            mapleDataTest.SelectAll();
+            dapperDataTest.SelectAll();
+            efDataTest.SelectAll();
 
             Exce("Maple 执行查询1000条记录操作", cycle, count, () =>
             {
@@ -86,16 +104,6 @@ namespace Maple.Data.PerformanceTests
             });
 
             #endregion
-
-
-
-
-
-
-
-            Console.WriteLine();
-            Console.WriteLine("测试完成...");
-            Console.ReadLine();
         }
 
         private static void Exce(string name, int cycle, int count, Action action)
