@@ -63,7 +63,7 @@ namespace Maple.Core.Tests.Data
 
             //读取3
             User userRead3 = mapleQueryable.GetAllList().FirstOrDefault(f => f.Id == id);               //不推荐使用
-            Assert.NotEqual(userRead3, null);            //读取值不为空
+            Assert.NotEqual(userRead3, null);                                                           //读取值不为空
             Assert.True(objectIsSame(userRead3, userRead2));
 
             //删除2
@@ -71,6 +71,11 @@ namespace Maple.Core.Tests.Data
 
             //新增或修改
             Assert.Equal(mapleQueryable.InsertOrUpdate(userRead2), true);
+
+            //查询
+            User userRead4 = mapleQueryable.GetAll().Where(f => f.IsDeleted == userRead2.IsDeleted && f.Id == userRead2.Id).FirstOrDefault();
+            Assert.NotEqual(userRead4, null);                                                           //读取值不为空
+
 
             //删除3
             Assert.Equal(mapleQueryable.Delete(id), true);
