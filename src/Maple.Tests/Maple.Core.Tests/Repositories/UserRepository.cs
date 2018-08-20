@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Maple.Core.Tests.Repositories
 {
-    public class UserRepository : MapleRepositoryBase<User, long>
+    public class UserRepository : MapleRepositoryBase<User, long>, IRepository<User>
     {
         private string database = "";
         public UserRepository(IDataProviderFactory dataProviderFactory,string db) : base(dataProviderFactory)

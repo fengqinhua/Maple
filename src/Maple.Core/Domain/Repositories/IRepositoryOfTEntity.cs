@@ -9,5 +9,5 @@ namespace Maple.Core.Domain.Repositories
     /// 仓储接口
     /// <para>协调领域和数据映射层，利用类似于集合的接口来访问领域对象</para>
     /// </summary>
-    public interface IRepository<TEntity> : IRepository<TEntity, long> where TEntity : class, IEntity<long>, IAggregateRoot { }
+    public interface IRepository<TEntity> : IRepository<TEntity, long>, IUnitOfWorkRepository where TEntity : class, IEntity<long>, IAggregateRoot { }
 }

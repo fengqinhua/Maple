@@ -19,7 +19,7 @@ namespace Maple.Core.Tests.Data
     public class UnitOfWorkTest
     {
         private IdWorker worker = new IdWorker(0);
-        private MapleRepositoryBase<User, long> mapleQueryable = null;
+        private IRepository<User> mapleQueryable = null;
         private IRepositoryContext repositoryContext = null; 
         private DatabaseFixture fixture;
 
@@ -38,7 +38,7 @@ namespace Maple.Core.Tests.Data
         public void Repository_Commit_Success()
         {
             long key = worker.NextId();
-
+ 
             repositoryContext.RegisterNew(creatNewUser(key, false), this.mapleQueryable);
             repositoryContext.RegisterNew(creatNewUser(worker.NextId(), false), this.mapleQueryable);
             repositoryContext.RegisterNew(creatNewUser(worker.NextId(), false), this.mapleQueryable);
