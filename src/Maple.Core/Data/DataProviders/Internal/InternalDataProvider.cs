@@ -9,7 +9,7 @@ namespace Maple.Core.Data.DataProviders.Internal
     internal class InternalDataProvider : IDataProvider
     {
         private volatile bool _disposed = false;
-
+        //private readonly InternalDatabaseContext _DatabaseContext = null;
 
         public InternalDataProvider(IDatabaseContext databaseContext)
         {

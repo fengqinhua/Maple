@@ -15,7 +15,7 @@ namespace Maple.Core.Data.DataProviders
     {
         private volatile bool _disposed = false;
         private readonly object _sync = new object();
-        private readonly Dictionary<string, IDataProvider> _dataProviders = new Dictionary<string, IDataProvider>();
+        private readonly Dictionary<string, Tuple<DataSetting, IDbTranslator>> _dataProviders = new Dictionary<string, Tuple<DataSetting, IDbTranslator>>();
 
         public DataProviderFactory()
         {
@@ -27,18 +27,21 @@ namespace Maple.Core.Data.DataProviders
         {
             if (this.CheckDisposed())
                 throw new ObjectDisposedException("DataProviderFactory");
+            Check.NotNull(dataSetting, nameof(dataSetting));
+            if (string.IsNullOrEmpty(dataSetting.Name))
+                throw new MapleException("未设置DataSetting名称");
 
             object sync = this._sync;
             lock (sync)
             {
+                IDbTranslator dbTranslator = getDbTranslator(dataSetting);
+                var value = Tuple.Create(dataSetting, dbTranslator);
+                 
                 if (!_dataProviders.ContainsKey(dataSetting.Name))
-                {
-                    IDbTranslator dbTranslator = getDbTranslator(dataSetting);
-                    IDatabaseContext databaseContext = new InternalDatabaseContext(dataSetting, dbTranslator);
-                    IDataProvider dataProvider = new InternalDataProvider(databaseContext);
+                    _dataProviders.Add(dataSetting.Name, value);
+                else
 
-                    _dataProviders.Add(dataSetting.Name, dataProvider);
-                }
+                    _dataProviders[dataSetting.Name] = value;
             }
         }
 
@@ -47,14 +50,17 @@ namespace Maple.Core.Data.DataProviders
             if (this.CheckDisposed())
                 throw new ObjectDisposedException("DataProviderFactory");
 
-
-
             if (!_dataProviders.ContainsKey(dataSettingName))
                 throw new MapleException(string.Format("未知的数据源“{0}”", dataSettingName));
             else
-                return _dataProviders[dataSettingName];
-        }
+            {
+                Tuple<DataSetting, IDbTranslator> value = _dataProviders[dataSettingName];
 
+                var databaseContext = new InternalDatabaseContext(value.Item1, value.Item2);
+                return new InternalDataProvider(databaseContext);
+            }
+
+        }
 
         private IDbTranslator getDbTranslator(DataSetting dataSetting)
         {
@@ -91,10 +97,10 @@ namespace Maple.Core.Data.DataProviders
             if (this._disposed)
             {
                 this._disposed = true;
-                foreach(var item in this._dataProviders)
-                {
-                    item.Value.Dispose();
-                }
+                //foreach(var item in this._dataProviders)
+                //{
+                //    item.Value.Dispose();
+                //}
                 this._dataProviders.Clear();
             }
         }

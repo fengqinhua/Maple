@@ -1,5 +1,6 @@
 ﻿using Maple.Core.Data.Conditions;
 using Maple.Core.Data.DataProviders;
+using Maple.Core.Data.DataSettings;
 using Maple.Core.Data.DbMappers;
 using Maple.Core.Domain.Entities;
 using Maple.Core.Reflection;
@@ -17,27 +18,38 @@ namespace Maple.Core.Data.DataQuery
         private Expression whereExpr = null;
         private Dictionary<string, FieldSearchOrder> order = null;
 
-        private IExpressionParser expressionParser = null;
-        private IDataProvider dataProvider = null;
-        private IEntityMapper entityInfo = null;
+        protected IExpressionParser expressionParser = null;
+        protected IEntityMapper entityInfo = null;
+        protected IDataProviderFactory dataProviderFactory = null;
+        protected string datasetingName = "";
 
-        public MapleQueryable(IDataProvider dataProvider)
+        public MapleQueryable(IDataProviderFactory dataProviderFactory, string datasetingName = "")
         {
-            Check.NotNull(dataProvider, nameof(dataProvider));
+            Check.NotNull(dataProviderFactory, nameof(dataProviderFactory));
 
-            this.dataProvider = dataProvider;
+            this.dataProviderFactory = dataProviderFactory;
             this.entityInfo = EntityMapperFactory.Instance.GetEntityMapper(typeof(TEntity));
             this.expressionParser = new ExpressionParser(entityInfo);
+
+            if (string.IsNullOrEmpty(datasetingName))
+                this.datasetingName = DataSetting.DefalutDataSettingName; 
+            else
+                this.datasetingName = datasetingName;
         }
 
-        internal MapleQueryable(IDataProvider dataProvider, IEntityMapper entityInfo)
+        internal MapleQueryable(IDataProviderFactory dataProviderFactory, IEntityMapper entityInfo, string datasetingName = "")
         {
-            Check.NotNull(dataProvider, nameof(dataProvider));
+            Check.NotNull(dataProviderFactory, nameof(dataProviderFactory));
             Check.NotNull(entityInfo, nameof(entityInfo));
 
-            this.dataProvider = dataProvider;
+            this.dataProviderFactory = dataProviderFactory;
             this.entityInfo = entityInfo;
             this.expressionParser = new ExpressionParser(entityInfo);
+
+            if (string.IsNullOrEmpty(datasetingName))
+                this.datasetingName = DataSetting.DefalutDataSettingName;
+            else
+                this.datasetingName = datasetingName;
         }
 
         #region IMapleQueryable
@@ -100,120 +112,148 @@ namespace Maple.Core.Data.DataQuery
 
         #endregion
 
-
         #region IMapleSelectable
 
         public double? Average<TKey>(Expression<Func<TEntity, TKey>> expr)
         {
-            string columnName = GetColumnName<TKey>(expr);
-            SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(this.dataProvider.DatabaseContext.DbTranslator,
-                this.entityInfo, whereExpr, columnName, FieldFunction.Average);
+            using (IDataProvider dataProvider = getDataProvider())
+            {
+                string columnName = GetColumnName<TKey>(expr);
+                SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(dataProvider.DatabaseContext.DbTranslator,
+                    this.entityInfo, whereExpr, columnName, FieldFunction.Average);
 
-            object obj = dataProvider.ExecuteScalar(sqlStatement);
-            if (obj == null) { return null; }
-            return Convert.ToDouble(obj);
+                object obj = dataProvider.ExecuteScalar(sqlStatement);
+                if (obj == null) { return null; }
+                return Convert.ToDouble(obj);
+            }
         }
         public int Count()
         {
-            SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(this.dataProvider.DatabaseContext.DbTranslator,
-                this.entityInfo, whereExpr, "", FieldFunction.Count);
-            object obj = dataProvider.ExecuteScalar(sqlStatement);
-            if (obj == null) { return 0; }
-            return Convert.ToInt32(obj);
+            using (IDataProvider dataProvider = getDataProvider())
+            {
+                SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(dataProvider.DatabaseContext.DbTranslator,this.entityInfo, whereExpr, "", FieldFunction.Count);
+                object obj = dataProvider.ExecuteScalar(sqlStatement);
+                if (obj == null) { return 0; }
+                return Convert.ToInt32(obj);
+            }
+
         }
         public long LongCount()
         {
-            SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(this.dataProvider.DatabaseContext.DbTranslator,
-                this.entityInfo, whereExpr, "", FieldFunction.Count);
-            object obj = dataProvider.ExecuteScalar(sqlStatement);
-            if (obj == null) { return 0; }
-            return Convert.ToInt64(obj);
+            using (IDataProvider dataProvider = getDataProvider())
+            {
+                SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(dataProvider.DatabaseContext.DbTranslator,
+   this.entityInfo, whereExpr, "", FieldFunction.Count);
+                object obj = dataProvider.ExecuteScalar(sqlStatement);
+                if (obj == null) { return 0; }
+                return Convert.ToInt64(obj);
+            }
         }
         public double? Max<TKey>(Expression<Func<TEntity, TKey>> expr)
         {
-            string columnName = GetColumnName<TKey>(expr);
-            SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(this.dataProvider.DatabaseContext.DbTranslator,
-                this.entityInfo, whereExpr, columnName, FieldFunction.Max);
+            using (IDataProvider dataProvider = getDataProvider())
+            {
+                string columnName = GetColumnName<TKey>(expr);
+                SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(dataProvider.DatabaseContext.DbTranslator,
+                    this.entityInfo, whereExpr, columnName, FieldFunction.Max);
 
-            object obj = dataProvider.ExecuteScalar(sqlStatement);
-            if (obj == null) { return null; }
-            return Convert.ToDouble(obj);
+                object obj = dataProvider.ExecuteScalar(sqlStatement);
+                if (obj == null) { return null; }
+                return Convert.ToDouble(obj);
+            }
         }
         public DateTime? MaxDate<TKey>(Expression<Func<TEntity, TKey>> expr)
         {
-            string columnName = GetColumnName<TKey>(expr);
-            SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(this.dataProvider.DatabaseContext.DbTranslator,
-                this.entityInfo, whereExpr, columnName, FieldFunction.Max);
+            using (IDataProvider dataProvider = getDataProvider())
+            {
+                string columnName = GetColumnName<TKey>(expr);
+                SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(dataProvider.DatabaseContext.DbTranslator,
+                    this.entityInfo, whereExpr, columnName, FieldFunction.Max);
 
-            object obj = dataProvider.ExecuteScalar(sqlStatement);
-            if (obj == null) { return null; }
-            return Convert.ToDateTime(obj);
+                object obj = dataProvider.ExecuteScalar(sqlStatement);
+                if (obj == null) { return null; }
+                return Convert.ToDateTime(obj);
+            }
         }
         public double? Min<TKey>(Expression<Func<TEntity, TKey>> expr)
         {
-            string columnName = GetColumnName<TKey>(expr);
-            SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(this.dataProvider.DatabaseContext.DbTranslator,
-                this.entityInfo, whereExpr, columnName, FieldFunction.Min);
+            using (IDataProvider dataProvider = getDataProvider())
+            {
+                string columnName = GetColumnName<TKey>(expr);
+                SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(dataProvider.DatabaseContext.DbTranslator,
+                    this.entityInfo, whereExpr, columnName, FieldFunction.Min);
 
-            object obj = dataProvider.ExecuteScalar(sqlStatement);
-            if (obj == null) { return null; }
-            return Convert.ToDouble(obj);
+                object obj = dataProvider.ExecuteScalar(sqlStatement);
+                if (obj == null) { return null; }
+                return Convert.ToDouble(obj);
+            }
         }
         public DateTime? MinDate<TKey>(Expression<Func<TEntity, TKey>> expr)
         {
-            string columnName = GetColumnName<TKey>(expr);
-            SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(this.dataProvider.DatabaseContext.DbTranslator,
-                this.entityInfo, whereExpr, columnName, FieldFunction.Min);
+            using (IDataProvider dataProvider = getDataProvider())
+            {
+                string columnName = GetColumnName<TKey>(expr);
+                SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(dataProvider.DatabaseContext.DbTranslator,
+                    this.entityInfo, whereExpr, columnName, FieldFunction.Min);
 
-            object obj = dataProvider.ExecuteScalar(sqlStatement);
-            if (obj == null) { return null; }
-            return Convert.ToDateTime(obj);
+                object obj = dataProvider.ExecuteScalar(sqlStatement);
+                if (obj == null) { return null; }
+                return Convert.ToDateTime(obj);
+            }
         }
         public double? Sum<TKey>(Expression<Func<TEntity, TKey>> expr)
         {
-            string columnName = GetColumnName<TKey>(expr);
-            SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(this.dataProvider.DatabaseContext.DbTranslator,
-                this.entityInfo, whereExpr, columnName, FieldFunction.Sum);
+            using (IDataProvider dataProvider = getDataProvider())
+            {
+                string columnName = GetColumnName<TKey>(expr);
+                SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(dataProvider.DatabaseContext.DbTranslator,
+                    this.entityInfo, whereExpr, columnName, FieldFunction.Sum);
 
-            object obj = dataProvider.ExecuteScalar(sqlStatement);
-            if (obj == null) { return null; }
-            return Convert.ToDouble(obj);
+                object obj = dataProvider.ExecuteScalar(sqlStatement);
+                if (obj == null) { return null; }
+                return Convert.ToDouble(obj);
+            }
         }
 
         public TEntity FirstOrDefault()
         {
-            TEntity obj = null;
-            SqlStatement sqlStatement = DbSqlFactories.BuildSelectSqlStatement(this.dataProvider.DatabaseContext.DbTranslator, this.entityInfo, whereExpr, order);
-            dataProvider.ExecuteReader(sqlStatement, delegate (IDataReader dr)
+            using (IDataProvider dataProvider = getDataProvider())
             {
-                while (dr.Read())
+                TEntity obj = null;
+                SqlStatement sqlStatement = DbSqlFactories.BuildSelectSqlStatement(dataProvider.DatabaseContext.DbTranslator, this.entityInfo, whereExpr, order);
+                dataProvider.ExecuteReader(sqlStatement, delegate (IDataReader dr)
                 {
-                    DataReaderDeserializer deserializer = entityInfo.GetDataReaderDeserializer(dr);
-                    obj = (TEntity)deserializer(dr);
-                    break;
-                }
-            });
-
-            return obj;
+                    while (dr.Read())
+                    {
+                        DataReaderDeserializer deserializer = entityInfo.GetDataReaderDeserializer(dr);
+                        obj = (TEntity)deserializer(dr);
+                        break;
+                    }
+                });
+                return obj;
+            }
         }
         public IList<TEntity> Select()
         {
-            var ret = new System.ComponentModel.BindingList<TEntity>();
-            SqlStatement sqlStatement = DbSqlFactories.BuildSelectSqlStatement(this.dataProvider.DatabaseContext.DbTranslator,
-                            this.entityInfo, whereExpr, range, order);
-            dataProvider.ExecuteReader(sqlStatement, delegate (IDataReader dr)
+            using (IDataProvider dataProvider = getDataProvider())
             {
-                while (dr.Read())
+                var ret = new System.ComponentModel.BindingList<TEntity>();
+                SqlStatement sqlStatement = DbSqlFactories.BuildSelectSqlStatement(dataProvider.DatabaseContext.DbTranslator,
+                                this.entityInfo, whereExpr, range, order);
+                dataProvider.ExecuteReader(sqlStatement, delegate (IDataReader dr)
                 {
-                    DataReaderDeserializer deserializer = entityInfo.GetDataReaderDeserializer(dr);
-                    do
+                    while (dr.Read())
                     {
-                        ret.Add((TEntity)deserializer(dr));
+                        DataReaderDeserializer deserializer = entityInfo.GetDataReaderDeserializer(dr);
+                        do
+                        {
+                            ret.Add((TEntity)deserializer(dr));
+                        }
+                        while (dr.Read());
                     }
-                    while (dr.Read());
-                }
-            });
-            return ret;
+                });
+                return ret;
+            }
         }
 
         #endregion
@@ -235,5 +275,16 @@ namespace Maple.Core.Data.DataQuery
             return propertyMapper.ColumnName;
         }
 
+        /// <summary>
+        /// 获取缺省的数据库连接驱动
+        /// </summary>
+        /// <returns></returns>
+        protected virtual IDataProvider getDataProvider()
+        {
+            return this.dataProviderFactory.CreateProvider(this.datasetingName);
+            //if (this._dataProvider == null)
+            //    this._dataProvider = _dataProviderFactory.CreateProvider(DataSetting.DefalutDataSettingName);
+            //return this._dataProvider;
+        }
     }
 }

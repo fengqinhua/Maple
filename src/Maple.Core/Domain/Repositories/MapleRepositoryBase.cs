@@ -15,9 +15,7 @@ namespace Maple.Core.Domain.Repositories
 {
     public abstract class MapleRepositoryBase<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>, IUnitOfWorkRepository where TEntity : class, IEntity<TPrimaryKey>, IAggregateRoot
     {
-        protected IDataProvider _dataProvider = null;
         protected IDataProviderFactory _dataProviderFactory = null;
-
         public IEntityMapper EntityInfo { get; protected set; }
 
         public MapleRepositoryBase(IDataProviderFactory dataProviderFactory)
@@ -33,18 +31,22 @@ namespace Maple.Core.Domain.Repositories
             if (entity == null)
                 return false;
 
-            IDataProvider dataProvider = getDataProvider();
-            SqlStatement sqlStatement = DbSqlFactories.BuildInsertSqlStatement(dataProvider.DatabaseContext.DbTranslator, this.EntityInfo, entity);
-            return dataProvider.ExecuteNonQuery(sqlStatement) > 0;
+            using (IDataProvider dataProvider = getDataProvider())
+            {
+                SqlStatement sqlStatement = DbSqlFactories.BuildInsertSqlStatement(dataProvider.DatabaseContext.DbTranslator, this.EntityInfo, entity);
+                return dataProvider.ExecuteNonQuery(sqlStatement) > 0;
+            }
         }
         public virtual bool Update(TEntity entity)
         {
             if (entity == null)
                 return false;
 
-            IDataProvider dataProvider = getDataProvider();
-            SqlStatement sqlStatement = DbSqlFactories.BuildUpdateSqlStatement(dataProvider.DatabaseContext.DbTranslator, this.EntityInfo, entity);
-            return dataProvider.ExecuteNonQuery(sqlStatement) > 0;
+            using (IDataProvider dataProvider = getDataProvider())
+            {
+                SqlStatement sqlStatement = DbSqlFactories.BuildUpdateSqlStatement(dataProvider.DatabaseContext.DbTranslator, this.EntityInfo, entity);
+                return dataProvider.ExecuteNonQuery(sqlStatement) > 0;
+            }
         }
         public virtual bool InsertOrUpdate(TEntity entity)
         {
@@ -62,9 +64,11 @@ namespace Maple.Core.Domain.Repositories
             if (entity == null)
                 return false;
 
-            IDataProvider dataProvider = getDataProvider();
-            SqlStatement sqlStatement = DbSqlFactories.BuildDeleteSqlStatement(dataProvider.DatabaseContext.DbTranslator, this.EntityInfo, entity);
-            return dataProvider.ExecuteNonQuery(sqlStatement) > 0;
+            using (IDataProvider dataProvider = getDataProvider())
+            {
+                SqlStatement sqlStatement = DbSqlFactories.BuildDeleteSqlStatement(dataProvider.DatabaseContext.DbTranslator, this.EntityInfo, entity);
+                return dataProvider.ExecuteNonQuery(sqlStatement) > 0;
+            }
         }
         public virtual bool Delete(TPrimaryKey id)
         {
@@ -76,9 +80,11 @@ namespace Maple.Core.Domain.Repositories
             if (predicate == null)
                 return 0;
 
-            IDataProvider dataProvider = getDataProvider();
-            SqlStatement sqlStatement = DbSqlFactories.BuildDeleteSqlStatement(dataProvider.DatabaseContext.DbTranslator, this.EntityInfo, predicate);
-            return dataProvider.ExecuteNonQuery(sqlStatement);
+            using (IDataProvider dataProvider = getDataProvider())
+            {
+                SqlStatement sqlStatement = DbSqlFactories.BuildDeleteSqlStatement(dataProvider.DatabaseContext.DbTranslator, this.EntityInfo, predicate);
+                return dataProvider.ExecuteNonQuery(sqlStatement);
+            }
         }
         public virtual long Count()
         {
@@ -86,13 +92,13 @@ namespace Maple.Core.Domain.Repositories
         }
         public virtual long Count(Expression<Func<TEntity, bool>> predicate)
         {
-            IDataProvider dataProvider = getDataProvider();
-            SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(dataProvider.DatabaseContext.DbTranslator,
-                this.EntityInfo, predicate, "", FieldFunction.Count);
-
-            object obj = dataProvider.ExecuteScalar(sqlStatement);
-            if (obj == null) { return 0; }
-            return Convert.ToInt64(obj);
+            using (IDataProvider dataProvider = getDataProvider())
+            {
+                SqlStatement sqlStatement = DbSqlFactories.BuildFunctionSqlStatement(dataProvider.DatabaseContext.DbTranslator, this.EntityInfo, predicate, "", FieldFunction.Count);
+                object obj = dataProvider.ExecuteScalar(sqlStatement);
+                if (obj == null) { return 0; }
+                return Convert.ToInt64(obj);
+            }
         }
         public virtual TEntity Single(TPrimaryKey id)
         {
@@ -105,8 +111,7 @@ namespace Maple.Core.Domain.Repositories
         }
         public virtual IMapleQueryable<TEntity, TPrimaryKey> GetAll()
         {
-            IDataProvider dataProvider = getDataProvider();
-            return new MapleQueryable<TEntity, TPrimaryKey>(dataProvider, this.EntityInfo);
+            return new MapleQueryable<TEntity, TPrimaryKey>(this._dataProviderFactory, this.EntityInfo, this.getDatasettingName());
         }
 
         #endregion
@@ -147,10 +152,17 @@ namespace Maple.Core.Domain.Repositories
         /// <returns></returns>
         protected virtual IDataProvider getDataProvider()
         {
-            if (this._dataProvider == null)
-                this._dataProvider = _dataProviderFactory.CreateProvider(DataSetting.DefalutDataSettingName);
-            return this._dataProvider;
+            return _dataProviderFactory.CreateProvider(this.getDatasettingName());
+            //if (this._dataProvider == null)
+            //    this._dataProvider = _dataProviderFactory.CreateProvider(DataSetting.DefalutDataSettingName);
+            //return this._dataProvider;
         }
+
+        protected virtual string getDatasettingName()
+        {
+            return DataSetting.DefalutDataSettingName;
+        }
+
         /// <summary>
         /// 创建基于主键ID查询的Lambda Expression
         /// </summary>

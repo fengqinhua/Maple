@@ -21,6 +21,11 @@ namespace Maple.Core.Data.DataProviders.Internal
         private volatile int _connectionRequestCount;
         //数据库连接
         private IDbConnection _dbConnection;
+        //数据库事务
+        private IDbTransaction m_Transaction = null;
+        //数据库事务启动次数
+        private int m_TransactionCount = 0;
+
         /// <summary>
         /// 数据库上线文构造函数
         /// </summary>
@@ -36,6 +41,92 @@ namespace Maple.Core.Data.DataProviders.Internal
         /// 数据库信息翻译器
         /// </summary>
         public IDbTranslator DbTranslator { get; private set; }
+        /// <summary>
+        /// 数据库连接
+        /// </summary>
+        public IDbConnection Connection
+        {
+            get { return this._dbConnection; }
+        }
+        /// <summary>
+        /// 数据库事务
+        /// </summary>
+        public IDbTransaction Transaction
+        {
+            get { return this.m_Transaction; }
+        }
+        /// <summary>
+        /// 是否处于事务中
+        /// </summary>
+        public bool IsInTransaction
+        {
+            get { return this.m_Transaction != null; }
+        }
+
+        /// <summary>
+        ///  开启数据库事务
+        /// </summary>
+        public void BeginTransaction()
+        {
+            this.EnsureConnection();
+            if (this.m_Transaction == null)
+            {
+                this.m_Transaction = this._dbConnection.BeginTransaction();
+            }
+            this.m_TransactionCount++;
+        }
+        /// <summary>
+        /// 提交数据库事务
+        /// </summary>
+        public void Commit()
+        {
+            if (this.m_Transaction != null)
+            {
+                this.m_TransactionCount = this.m_TransactionCount - 1;
+                if (this.m_TransactionCount == 0)
+                {
+                    this.m_Transaction.Commit(); 
+                    this._dbConnection.Close();
+
+                    this.m_Transaction.Dispose();
+                    this.m_Transaction = null;
+                }
+            }
+        }
+        /// <summary>
+        /// 回滚数据库事务
+        /// </summary>
+        public void Rollback()
+        {
+            Rollback(null);
+        }
+        /// <summary>
+        /// 回滚数据库事务
+        /// </summary>
+        /// <param name="RollBackException">异常信息</param>
+        public void Rollback(Exception RollBackException)
+        {
+            if (this.m_Transaction != null)
+            {
+                this.m_TransactionCount = this.m_TransactionCount - 1;
+                if (this.m_TransactionCount != 0)
+                {
+                    if (RollBackException == null)
+                        RollBackException = new Exception("数据库访问错误,原因未知!");
+                    throw RollBackException;
+                }
+                else
+                {
+                    this.m_Transaction.Rollback();
+                    if (this._dbConnection.State != ConnectionState.Closed)
+                        this._dbConnection.Close();
+
+                    this.m_Transaction.Dispose();
+                    this.m_Transaction = null;
+                }
+            }
+        }
+
         /// <summary>
         /// 确保数据库连接被打开
         /// </summary>
@@ -175,7 +266,11 @@ namespace Maple.Core.Data.DataProviders.Internal
                 odp.Size = dp.Size;
             return odp;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dotNetValue"></param>
+        /// <returns></returns>
         protected virtual object getDbValue(object dotNetValue)
         {
             if (dotNetValue == null)
@@ -199,13 +294,21 @@ namespace Maple.Core.Data.DataProviders.Internal
                 this._disposed = true;
                 if (disposing)
                 {
+                    if (this.m_Transaction != null)
+                    {
+                        this.m_Transaction.Rollback();
+                        this.m_Transaction.Dispose();
+                    }
+
                     if (this._dbConnection != null)
                     {
                         if (this._dbConnection.State != ConnectionState.Closed)
                             this._dbConnection.Close();
                         this._dbConnection.Dispose();
                     }
+
                     this._dbConnection = null;
+                    this.m_Transaction = null;
                 }
             }
         }

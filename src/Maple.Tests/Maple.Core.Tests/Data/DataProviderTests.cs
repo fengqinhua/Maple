@@ -41,9 +41,7 @@ namespace Maple.Core.Tests.Data
         public void CreateProvider_MapleQueryable()
         {
             EntityConfigurationFactory.SetConfiguration(typeof(User), typeof(UserEntityConfiguration));
-            IDataProvider dataProvider = this.fixture.DataProviderFactory.CreateProvider(this.fixture.DataSettingName);
-
-            IMapleQueryable<User, long> mapleQueryable = new MapleQueryable<User, long>(dataProvider);
+            IMapleQueryable<User, long> mapleQueryable = new MapleQueryable<User, long>(this.fixture.DataProviderFactory, this.fixture.DataSettingName);
             mapleQueryable.Count();
 
             Assert.Equal(0, 1);

@@ -15,13 +15,10 @@ namespace Maple.Data.PerformanceTests
             this.database = db;
         }
 
-
-
-        protected override IDataProvider getDataProvider()
+        protected override string getDatasettingName()
         {
-            if (this._dataProvider == null)
-                this._dataProvider = _dataProviderFactory.CreateProvider(this.database);
-            return this._dataProvider;
+            return this.database;
         }
+
     }
 }

@@ -11,11 +11,11 @@ namespace Maple.Core.Data.DataProviders
     /// </summary>
     public interface IDatabaseContext : IDisposable
     {
+
         /// <summary>
         /// 数据库信息翻译器
         /// </summary>
         IDbTranslator DbTranslator { get; }
-
         /// <summary>
         /// 获取数据库连接并保证数据库连接已经打开
         /// </summary>
@@ -25,6 +25,24 @@ namespace Maple.Core.Data.DataProviders
         /// </summary>
         /// <param name="releaseConnection"></param>
         void ReleaseConnection(bool releaseConnection = true);
+
+        /// <summary>
+        ///  开启数据库事务
+        /// </summary>
+        void BeginTransaction();
+        /// <summary>
+        /// 提交数据库事务
+        /// </summary>
+        void Commit();
+        /// <summary>
+        /// 回滚数据库事务
+        /// </summary>
+        void Rollback();
+        /// <summary>
+        /// 回滚数据库事务
+        /// </summary>
+        /// <param name="RollBackException">异常信息</param>
+        void Rollback(Exception RollBackException);
         /// <summary>
         /// 获取IDbCommand 接口
         /// </summary>
