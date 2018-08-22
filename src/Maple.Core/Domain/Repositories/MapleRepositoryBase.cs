@@ -37,6 +37,7 @@ namespace Maple.Core.Domain.Repositories
                 return dataProvider.ExecuteNonQuery(sqlStatement) > 0;
             }
         }
+
         public virtual bool Update(TEntity entity)
         {
             if (entity == null)
@@ -86,6 +87,7 @@ namespace Maple.Core.Domain.Repositories
                 return dataProvider.ExecuteNonQuery(sqlStatement);
             }
         }
+
         public virtual long Count()
         {
             return Count(null);
@@ -111,7 +113,7 @@ namespace Maple.Core.Domain.Repositories
         }
         public virtual IMapleQueryable<TEntity, TPrimaryKey> GetAll()
         {
-            return new MapleQueryable<TEntity, TPrimaryKey>(this._dataProviderFactory, this.EntityInfo, this.getDatasettingName());
+            return new MapleQueryable<TEntity, TPrimaryKey>(this._dataProviderFactory, this.EntityInfo,);
         }
 
         #endregion
