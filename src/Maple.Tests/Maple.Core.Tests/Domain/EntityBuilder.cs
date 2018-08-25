@@ -8,7 +8,31 @@ namespace Maple.Core.Tests.Domain
     {
         public static IdWorker worker = new IdWorker(0);
 
+        public static Role CreatNewRole(long id = -1, bool withValue = true)
+        {
+            Role role = new Role();
+            if (id == -1)
+                role.Id = worker.NextId();
+            else
+                role.Id = id;
 
+            role.CreatorUserId = 9527;
+            role.DeleterUserId = 9527;
+            role.LastModifierUserId = 9527;
+            role.DeletionTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+            role.LastModificationTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+            role.CreationTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+
+            if (withValue)
+            {
+                role.IsDeleted = true;
+                role.Name = "Maple";
+                role.OrgId = 307;
+                role.TenantId = 3306;
+            }
+
+            return role;
+        }
 
         public static User CreatNewUser(long id = -1, bool withValue = true)
         {
