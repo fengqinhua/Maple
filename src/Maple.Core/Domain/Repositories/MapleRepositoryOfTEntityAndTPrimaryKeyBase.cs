@@ -15,7 +15,7 @@ using System.Text;
 
 namespace Maple.Core.Domain.Repositories
 {
-    public abstract class MapleRepositoryBase<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey> where TEntity : class, IEntity<TPrimaryKey>, IAggregateRoot
+    public  class MapleRepositoryBase<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey> where TEntity : class, IEntity<TPrimaryKey>, IAggregateRoot
     { 
         protected IDataProviderFactory _dataProviderFactory = null;
         public IEntityMapper EntityInfo { get; protected set; }
