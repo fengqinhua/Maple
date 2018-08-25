@@ -29,7 +29,7 @@ namespace Maple.Core.Data.DataProviders
         /// <summary>
         ///  开启数据库事务
         /// </summary>
-        void BeginTransaction();
+        void BeginTransaction(IsolationLevel? isolationLevel = null);
         /// <summary>
         /// 提交数据库事务
         /// </summary>

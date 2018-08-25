@@ -8,12 +8,12 @@ using System.Linq;
 using Maple.Core.Data.Conditions;
 
 namespace Maple.Core.Data.ModelConfiguration
-{
+{ 
     /// <summary>
     /// 实体映射配置
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
-    public abstract class EntityConfiguration<TEntity> : IEntityConfiguration where TEntity : class, IEntity
+    public abstract class EntityConfiguration<TEntity, TPrimaryKey> : IEntityConfiguration where TEntity : class, IEntity<TPrimaryKey>
     {
         private IEntityMapper entityMapper = null;
         private IExpressionParser expressionParser = null;
@@ -35,12 +35,12 @@ namespace Maple.Core.Data.ModelConfiguration
         /// </summary>
         public abstract void Configuration();
 
-        public EntityConfiguration<TEntity> ToTable(string tableName)
+        public EntityConfiguration<TEntity, TPrimaryKey> ToTable(string tableName)
         {
             return ToTable(tableName, "");
         }
 
-        public EntityConfiguration<TEntity> ToTable(string tableName, string schemaName)
+        public EntityConfiguration<TEntity, TPrimaryKey> ToTable(string tableName, string schemaName)
         {
             if (!string.IsNullOrEmpty(tableName))
             {
@@ -61,6 +61,14 @@ namespace Maple.Core.Data.ModelConfiguration
 
             return new PropertyConfiguration() { PropertyMapper = propertyMapper as PropertyMapper };
         }
+
+    }
+    /// <summary>
+    /// 实体映射配置
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    public abstract class EntityConfiguration<TEntity> : EntityConfiguration<TEntity, long>, IEntityConfiguration where TEntity : class, IEntity<long>
+    {
 
     }
 }

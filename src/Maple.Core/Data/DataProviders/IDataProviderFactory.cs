@@ -1,5 +1,4 @@
-﻿using Maple.Core.Data.DataSettings;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,18 +7,19 @@ namespace Maple.Core.Data.DataProviders
     /// <summary>
     /// IDataProvider 数据库访问驱动工厂
     /// </summary>
-    public interface IDataProviderFactory : IDisposable
+    /// <typeparam name="TDbContext"></typeparam>
+    public interface IDataProviderFactory
     {
         /// <summary>
-        /// 添加数据库配置信息
+        /// 获得数据库访问驱动
         /// </summary>
-        /// <param name="driver"></param>
-        void AddDataSettings(DataSetting driver);
+        /// <returns></returns>
+        IDataProvider GetDataProvider();
         /// <summary>
-        /// 创建数据库访问驱动
+        /// 获得数据库访问驱动
         /// </summary>
         /// <param name="dataSettingName"></param>
         /// <returns></returns>
-        IDataProvider CreateProvider(string dataSettingName);
+        IDataProvider GetDataProvider(string dataSettingName);
     }
 }

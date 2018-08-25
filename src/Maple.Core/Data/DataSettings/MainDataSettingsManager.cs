@@ -36,32 +36,32 @@ namespace Maple.Core.Data.DataSettings
         /// <param name="filePath"></param>
         /// <param name="reloadSettings"></param>
         /// <returns></returns>
-        public virtual DataSetting LoadSettings(string filePath = null, bool reloadSettings = false)
+        public virtual IDataSetting LoadSettings(string filePath = null, bool reloadSettings = false)
         {
-            if (!reloadSettings && Singleton<DataSetting>.Instance != null)
-                return Singleton<DataSetting>.Instance;
+            if (!reloadSettings && Singleton<IDataSetting>.Instance != null)
+                return Singleton<IDataSetting>.Instance;
 
             filePath = filePath ?? CommonHelper.MapPath(DataSettingsFilePath);
 
             //检查文件是否存在，如果不存在，则返回空
             if (!File.Exists(filePath))
-                return new DataSetting();
+                return null;
             //读取配置信息文本内容
             var text = File.ReadAllText(filePath);
             if (string.IsNullOrEmpty(text))
-                return new DataSetting();
+                return null;
             //获取配置信息对象实例
-            Singleton<DataSetting>.Instance = JsonConvert.DeserializeObject<DataSetting>(text);
-            return Singleton<DataSetting>.Instance;
+            Singleton<IDataSetting>.Instance = JsonConvert.DeserializeObject<DataSetting>(text);
+            return Singleton<IDataSetting>.Instance;
         }
 
         /// <summary>
         /// 保持配置信息
         /// </summary>
         /// <param name="settings">Data settings</param>
-        public virtual void SaveSettings(DataSetting settings)
+        public virtual void SaveSettings(IDataSetting settings)
         {
-            Singleton<DataSetting>.Instance = settings ?? throw new ArgumentNullException(nameof(settings));
+            Singleton<IDataSetting>.Instance = settings ?? throw new ArgumentNullException(nameof(settings));
 
             var filePath = CommonHelper.MapPath(DataSettingsFilePath);
 

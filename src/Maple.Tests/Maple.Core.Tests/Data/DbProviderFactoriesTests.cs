@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Maple.Core.Tests.Data
 {
-    [Collection("Database collection")]
+    [Collection("Database connection")]
     public class DbProviderFactoriesTests 
     {
         private Fixture.DatabaseFixture fixture;
@@ -18,17 +18,7 @@ namespace Maple.Core.Tests.Data
             this.fixture = fixture;
         }
 
-        [Fact]
-        public void GetDbProviderFactory_SQL()
-        {
-            var mapleConfig = EngineContext.Current.Resolve<MapleConfig>();
 
-
-            string name = new Sql2000Translator().ProviderInvariantName;
-            DbProviderFactory factory = DbDriveFactories.GetFactory(name);
-
-            Assert.NotEqual(factory, null);
-        }
 
         [Fact]
         public void GetDbProviderFactory_MYSQL()

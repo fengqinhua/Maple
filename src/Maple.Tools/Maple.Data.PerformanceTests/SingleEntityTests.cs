@@ -1,6 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using Maple.Core;
-using Maple.Data.PerformanceTests.Entities;
+using Maple.Core.Tests.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +13,7 @@ namespace Maple.Data.PerformanceTests
     public class SingleEntityTests
     {
         protected MapleDataTest mapleDataTest = null;
+        protected MapleRepositoryDataTest mapleRepositoryDataTest = null;
         protected DapperDataTest dapperDataTest = null;
         protected EFDataTest efDataTest = null;
         protected IdWorker idWorker = null;
@@ -26,29 +27,37 @@ namespace Maple.Data.PerformanceTests
             this.efDataTest = new EFDataTest();
             this.idWorker = new IdWorker(0);
 
+            this.mapleRepositoryDataTest = new MapleRepositoryDataTest();
             this.x = creatNewUser(idWorker.NextId());
             mapleDataTest.Insert(this.x);
 
             mapleDataTest.Single(this.x.Id);
             dapperDataTest.Single(this.x.Id);
             efDataTest.Single(this.x.Id);
+            this.mapleRepositoryDataTest.Single(this.x.Id);
         }
 
 
         [Benchmark]
-        public void MapleSelect()
+        public void MapleSingle()
         {
             mapleDataTest.Single(x.Id);
         }
 
         [Benchmark]
-        public void DapperSelect()
+        public void MapleRepositorySingle()
+        {
+            mapleRepositoryDataTest.Single(x.Id);
+        }
+
+        [Benchmark]
+        public void DapperSingle()
         {
             dapperDataTest.Single(x.Id);
         }
 
         [Benchmark]
-        public void EfSelect()
+        public void EfSingle()
         {
             efDataTest.Single(x.Id);
         }

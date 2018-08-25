@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Maple.Data.PerformanceTests.Entities
+namespace Maple.Core.Tests.Domain
 {
     public class UserEntityConfiguration : EntityConfiguration<User>
     {
@@ -12,12 +12,20 @@ namespace Maple.Data.PerformanceTests.Entities
             this.ToTable("TEST_USER");
 
             this.Property(f => f.Name)
-                .ToAllowsNulls(false)
+                .ToAllowsNulls(true)
                 .ToColumnName("USERNAME")
                 .ToDbSize(500);
+#if PERFORMANCE
 
-            //this.Property(f => f.Address.Number)
-            //    .ToColumnName("ADDRESS_NUM");
+#else
+            this.Property(f => f.Address.Number)
+                .ToAllowsNulls(true)
+                .ToColumnName("ADDRESS_NUM");
+#endif
+
         }
     }
+
+
+
 }

@@ -1,11 +1,11 @@
 ﻿using Maple.Core.Domain.Entities;
 using Maple.Core.Domain.Entities.Auditing;
-using Maple.Core.Domain.Values;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Maple.Data.PerformanceTests.Entities
+namespace Maple.Core.Tests.Domain
 {
     public class User : FullAuditedEntity, IAggregateRoot, IMustHaveOrg, IMustHaveTenant, IExtendableObject
     {
@@ -18,14 +18,15 @@ namespace Maple.Data.PerformanceTests.Entities
         public long OrgId { get; set; }
         public long TenantId { get; set; }
 
-        //public Address Address { get; set; }
-    }
+#if PERFORMANCE
+        [NotMapped]
+        public Address Address { get; set; }
+#else
+        public Address Address { get; set; }
+#endif
 
-    public class Address : ValueObject<Address>
-    {
-        public Guid CityId { get; set; }
-        public string Street { get; set; }
-        public int Number { get; set; }
+
+        //public IList<User_Role> Roles { get; set; }
     }
 
     public enum Six

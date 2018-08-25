@@ -1,6 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
 using Maple.Core;
-using Maple.Data.PerformanceTests.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,6 +12,7 @@ namespace Maple.Data.PerformanceTests
     public class SelectEntityTests 
     {
         protected MapleDataTest mapleDataTest = null;
+        protected MapleRepositoryDataTest mapleRepositoryDataTest = null;
         protected DapperDataTest dapperDataTest = null;
         protected EFDataTest efDataTest = null;
         protected IdWorker idWorker = null;
@@ -24,10 +24,13 @@ namespace Maple.Data.PerformanceTests
             this.dapperDataTest = new DapperDataTest();
             this.efDataTest = new EFDataTest();
             this.idWorker = new IdWorker(0);
+            this.mapleRepositoryDataTest = new MapleRepositoryDataTest();
+
 
             this.mapleDataTest.SelectAll();
             this.dapperDataTest.SelectAll();
             this.efDataTest.SelectAll();
+            this.mapleRepositoryDataTest.SelectAll();
         }
 
 
@@ -37,7 +40,11 @@ namespace Maple.Data.PerformanceTests
         {
             this.mapleDataTest.SelectAll();
         }
-
+        [Benchmark]
+        public void MapleRepositorySelect()
+        {
+            this.mapleRepositoryDataTest.SelectAll();
+        }
         [Benchmark]
         public void DapperSelect()
         {

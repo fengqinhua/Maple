@@ -1,10 +1,10 @@
-﻿using Maple.Data.PerformanceTests.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Linq;
+using Maple.Core.Tests.Domain;
 
 namespace Maple.Data.PerformanceTests
 {
@@ -52,6 +52,8 @@ namespace Maple.Data.PerformanceTests
             base.OnModelCreating(modelBuilder);
             var etPerson = modelBuilder.Entity<User>().ToTable("TEST_USER");
             etPerson.Property(e => e.Name).IsRequired().HasColumnName("USERNAME").HasMaxLength(500);
+            etPerson.Ignore(e => e.Address);
+
         }
     }
 }

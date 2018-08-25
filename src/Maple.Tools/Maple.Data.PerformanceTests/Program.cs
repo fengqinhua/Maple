@@ -1,15 +1,18 @@
-﻿using BenchmarkDotNet.Running;
+﻿#define PERFORMANCE
+using BenchmarkDotNet.Running;
 using Maple.Core;
-using Maple.Data.PerformanceTests.Entities;
+using Maple.Core.Tests.Domain;
 using System;
 using System.Diagnostics;
 
 namespace Maple.Data.PerformanceTests
 {
+
     class Program
     {
         static void Main(string[] args)
         {
+
             Console.WriteLine("执行测试前的准备工作...");
 
             BenchmarkRunner.Run<InsertEntityTests>();

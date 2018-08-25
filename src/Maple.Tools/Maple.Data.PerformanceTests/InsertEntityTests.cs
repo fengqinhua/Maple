@@ -1,6 +1,6 @@
 ﻿using BenchmarkDotNet.Attributes;
 using Maple.Core;
-using Maple.Data.PerformanceTests.Entities;
+using Maple.Core.Tests.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,9 +10,10 @@ namespace Maple.Data.PerformanceTests
     //[ClrJob(true), CoreJob, MonoJob, CoreRtJob]
     [CoreJob]
     [RPlotExporter, RankColumn]
-    public class InsertEntityTests 
+    public class InsertEntityTests
     {
         protected MapleDataTest mapleDataTest = null;
+        protected MapleRepositoryDataTest mapleRepositoryDataTest = null;
         protected DapperDataTest dapperDataTest = null;
         protected EFDataTest efDataTest = null;
         protected IdWorker idWorker = null;
@@ -24,7 +25,7 @@ namespace Maple.Data.PerformanceTests
             this.dapperDataTest = new DapperDataTest();
             this.efDataTest = new EFDataTest();
             this.idWorker = new IdWorker(0);
-
+            this.mapleRepositoryDataTest = new MapleRepositoryDataTest();
         }
 
         [Benchmark]
@@ -32,6 +33,13 @@ namespace Maple.Data.PerformanceTests
         {
             User user = this.creatNewUser(this.idWorker.NextId());
             this.mapleDataTest.Insert(user);
+        }
+
+        [Benchmark]
+        public void MapleRepositoryInsert()
+        {
+            User user = this.creatNewUser(this.idWorker.NextId());
+            this.mapleRepositoryDataTest.Insert(user);
         }
 
         [Benchmark]

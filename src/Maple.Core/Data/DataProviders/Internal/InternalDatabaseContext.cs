@@ -12,7 +12,7 @@ namespace Maple.Core.Data.DataProviders.Internal
     /// </summary>
     internal class InternalDatabaseContext : IDatabaseContext
     {
-        private readonly DataSetting _dataSetting;
+        private readonly IDataSetting _dataSetting;
         //是否已经disposed
         private volatile bool _disposed;
         //标识数据库连接是否打开
@@ -31,7 +31,7 @@ namespace Maple.Core.Data.DataProviders.Internal
         /// </summary>
         /// <param name="dataSetting"></param>
         /// <param name="dbTranslator"></param>
-        public InternalDatabaseContext(DataSetting dataSetting, IDbTranslator dbTranslator)
+        public InternalDatabaseContext(IDataSetting dataSetting, IDbTranslator dbTranslator)
         {
             this._dataSetting = dataSetting;
             this.DbTranslator = dbTranslator;
@@ -62,19 +62,22 @@ namespace Maple.Core.Data.DataProviders.Internal
         {
             get { return this.m_Transaction != null; }
         }
-
         /// <summary>
         ///  开启数据库事务
         /// </summary>
-        public void BeginTransaction()
+        public void BeginTransaction(IsolationLevel? isolationLevel = null)
         {
             this.EnsureConnection();
             if (this.m_Transaction == null)
             {
-                this.m_Transaction = this._dbConnection.BeginTransaction();
+                if (isolationLevel == null)
+                    this.m_Transaction = this._dbConnection.BeginTransaction();
+                else
+                    this.m_Transaction = this._dbConnection.BeginTransaction(isolationLevel.Value);
             }
             this.m_TransactionCount++;
         }
+
         /// <summary>
         /// 提交数据库事务
         /// </summary>
@@ -190,8 +193,8 @@ namespace Maple.Core.Data.DataProviders.Internal
             command.CommandType = commandType;
             command.CommandText = commandText;
             command.Connection = this._dbConnection;
-            //if (this.IsInTransaction)
-            //    command.Transaction = conn.Transaction;
+            if (this.IsInTransaction)
+                command.Transaction = this.Transaction;
             if (needLog)
                 Console.WriteLine(commandText);
             //设置超时时间

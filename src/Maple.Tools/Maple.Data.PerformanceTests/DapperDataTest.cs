@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Maple.Data.PerformanceTests.Entities;
+using Maple.Core.Tests.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data;

@@ -12,40 +12,9 @@ namespace Maple.Core.Tests.Data
 {
     public class DbMappersTests
     {
-        ///// <summary>
-        ///// 深度查找基类是否派生自某个泛型类
-        ///// </summary>
-        ///// <param name="typeToCheck"></param>
-        ///// <param name="genericType"></param>
-        ///// <returns></returns>
-        //private Type typeDerivedFromGenericType(Type typeToCheck, Type genericType)
-        //{
-        //    if (typeToCheck == typeof(object))
-        //        return null;
-        //    else if (typeToCheck == null)
-        //        return null;
-        //    else if (typeToCheck.IsGenericType && typeToCheck.GetGenericTypeDefinition() == genericType)
-        //    {
-        //        Type[] genericArguments = typeToCheck.GetGenericArguments();
-        //        if (genericArguments.Length == 1)
-        //            return genericArguments[0];
-        //        else
-        //            return null;
-        //    }
-        //    else
-        //        return typeDerivedFromGenericType(typeToCheck.BaseType, genericType);
-        //}
-
         [Fact]
         public void EntityMapperFactory_GetEntityMapper_Configuration()
         {
-            //var entityType = typeof(IEntity);
-            //var entityConfiguration = typeof(EntityConfiguration<>);
-            //var item = typeof(UserEntityConfiguration);
-            //Type entity = typeDerivedFromGenericType(item, entityConfiguration);
-            //if (entity != null)
-            //    EntityConfigurationFactory.SetConfiguration(entity, item);
-
             EntityConfigurationFactory.SetConfiguration(typeof(User), typeof(UserEntityConfiguration));
 
             IEntityMapper entityMapper = EntityMapperFactory.Instance.GetEntityMapper(typeof(User));
