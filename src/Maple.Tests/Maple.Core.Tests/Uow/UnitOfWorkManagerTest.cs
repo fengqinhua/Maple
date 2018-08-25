@@ -17,14 +17,10 @@ namespace Maple.Core.Tests.Uow
         {
             this.fixture = fixture;
         }
-        [Fact]
-        public void UnitOfWorkManager_Rollback22()
-        {
-
-        }
+ 
 
         [Fact]
-        public void UnitOfWorkManager_Rollback()
+        public void UnitOfWorkManager_Complete()
         {
             var repositoryUser = EngineContext.Current.Resolve<IRepository<User>>();
             var repositoryRole = EngineContext.Current.Resolve<IRepository<Role>>();
@@ -38,10 +34,9 @@ namespace Maple.Core.Tests.Uow
 
                 using (var two = unitOfWorkManager.Begin())
                 {
+                    repositoryRole.Delete(f => 1 == 1);
                     repositoryRole.Insert(EntityBuilder.CreatNewRole());
                     repositoryRole.Insert(EntityBuilder.CreatNewRole());
-                    repositoryRole.Insert(null);
-
                     two.Complete();
                 }
                 one.Complete();
