@@ -32,7 +32,7 @@ namespace Maple.Core.Tests.Data
             var factory = new SimpleDataProviderFactory(EngineContext.Current.Resolve<IDataSettingContainer>());
             IDataProvider dataProvider = factory.GetDataProvider(DataSetting.DefalutDataSettingName);
             object obj = dataProvider.ExecuteScalar(getDefaultSqlStatement());
-            Assert.Equal(string.Format("{0}", obj), "1");
+            Assert.True(string.Format("{0}", obj)=="1");
         }
 
         private SqlStatement getDefaultSqlStatement()

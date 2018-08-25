@@ -16,7 +16,7 @@ namespace Maple.Core.Tests.Infrastructure
 
             var type = finder.FindClassesOfType<ISomeInterface>();
 
-            Assert.Equal(type.Count(), 1);
+            Assert.True(type.Count() == 1);
             Assert.True(typeof(ISomeInterface).IsAssignableFrom(type.FirstOrDefault()));
         }
 

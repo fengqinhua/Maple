@@ -2,14 +2,12 @@
 using Autofac.Extensions.DependencyInjection;
 using Maple.Core.Infrastructure;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Maple.Core.Tests
+namespace Maple.Core.Tests.Domain
 {
     public class OnlyIocEngine : IEngine
     {

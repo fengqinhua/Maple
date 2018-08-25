@@ -5,3 +5,4 @@ using System.Reflection;
 //https://www.cnblogs.com/zyl910/p/dotnet_standard_cs0579_duplicate_attribute.html
 
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Maple.Core.Tests")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Maple.Data.PerformanceTests")]

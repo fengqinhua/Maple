@@ -14,6 +14,8 @@ namespace Maple.Data.PerformanceTests
         {
 
             Console.WriteLine("执行测试前的准备工作...");
+            FM.A();
+
 
             BenchmarkRunner.Run<InsertEntityTests>();
             BenchmarkRunner.Run<SelectEntityTests>();

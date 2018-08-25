@@ -26,7 +26,7 @@ namespace Maple.Core.Tests.Data
             string name = new MySQLTranslator().ProviderInvariantName;
             DbProviderFactory factory = DbDriveFactories.GetFactory(name);
 
-            Assert.NotEqual(factory, null);
+            Assert.True(factory != null);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace Maple.Core.Tests.Data
             string name = new SqliteTranslator().ProviderInvariantName;
             DbProviderFactory factory = DbDriveFactories.GetFactory(name);
 
-            Assert.NotEqual(factory, null);
+            Assert.True(factory != null);
         }
     }
 }

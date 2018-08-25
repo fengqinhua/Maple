@@ -51,7 +51,7 @@ namespace Maple.Core.Tests.Reflection
             if (setValueDelegate != null)
                 setValueDelegate(user, value);
       
-            Assert.NotEqual(user.Address, null);
+            Assert.True(user.Address != null);
             Assert.Equal(user.Address.Street, value);
 
         }
@@ -68,7 +68,7 @@ namespace Maple.Core.Tests.Reflection
             if (setValueDelegate != null)
                 setValueDelegate(user, value);
 
-            Assert.NotEqual(user.Address, null);
+            Assert.True(user.Address != null);
             Assert.Equal(user.Address.Number, value);
 
         }

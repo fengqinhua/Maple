@@ -18,9 +18,9 @@ namespace Maple.Core.Tests.Data
             EntityConfigurationFactory.SetConfiguration(typeof(User), typeof(UserEntityConfiguration));
 
             IEntityMapper entityMapper = EntityMapperFactory.Instance.GetEntityMapper(typeof(User));
-            Assert.Equal(entityMapper.TableName, "TEST_USER");
-            Assert.Equal(entityMapper.OtherProperties.First(f => f.Code == "Name").ColumnName, "USERNAME");
-            Assert.Equal(entityMapper.OtherProperties.First(f=>f.Code == "Address_Number").ColumnName, "ADDRESS_NUM");
+            Assert.True(entityMapper.TableName == "TEST_USER");
+            Assert.True(entityMapper.OtherProperties.First(f => f.Code == "Name").ColumnName == "USERNAME");
+            Assert.True(entityMapper.OtherProperties.First(f=>f.Code == "Address_Number").ColumnName == "ADDRESS_NUM");
         }
 
     }

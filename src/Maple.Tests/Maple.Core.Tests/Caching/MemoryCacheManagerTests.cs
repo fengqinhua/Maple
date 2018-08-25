@@ -14,8 +14,8 @@ namespace Maple.Core.Tests.Caching
         {
             var cacheManager = new MemoryCacheManager(new MemoryCache(new MemoryCacheOptions()));
             cacheManager.Set("some_key_1", 3, int.MaxValue);
-
-            Assert.Equal(cacheManager.Get<int>("some_key_1"), 3);
+ 
+            Assert.True(cacheManager.Get<int>("some_key_1") == 3);
         }
 
         [Fact]
@@ -25,8 +25,8 @@ namespace Maple.Core.Tests.Caching
             cacheManager.Set("some_key_1", 3, int.MaxValue);
             cacheManager.Set("some_key_2", 4, int.MaxValue);
 
-            Assert.Equal(cacheManager.IsSet("some_key_1"), true);
-            Assert.Equal(cacheManager.IsSet("some_key_2"), true);
+            Assert.True(cacheManager.IsSet("some_key_1") == true);
+            Assert.True(cacheManager.IsSet("some_key_2")== true);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Maple.Core.Tests.Caching
 
             cacheManager.Clear();
 
-            Assert.Equal(cacheManager.IsSet("some_key_1"), false);
+            Assert.True(cacheManager.IsSet("some_key_1") == false);
         }
     }
 }
