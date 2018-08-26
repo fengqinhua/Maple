@@ -179,11 +179,12 @@ namespace Maple.Core.Plugins
             Assembly shadowCopiedAssembly;
             try
             {
-
+                //shadowCopiedAssembly = Assembly.Load(assemblyName);
                 //shadowCopiedAssembly = Assembly.Load(assemblyName);
                 //shadowCopiedAssembly = Assembly.LoadFrom(shadowCopiedPlug.FullName);
+
                 shadowCopiedAssembly = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(shadowCopiedPlug.FullName);
-                
+                //shadowCopiedAssembly = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyName(assemblyName);    
             }
             catch (FileLoadException)
             {
@@ -437,7 +438,7 @@ namespace Maple.Core.Plugins
                             //插件加载失败，抛出异常
                             var msg = $"Plugin '{pluginDescriptor.FriendlyName}'. {ex.Message}";
 
-                            var fail = new Exception(msg, ex);
+                            var fail = new MapleException(msg, ex);
                             throw fail;
                         }
                     }
@@ -448,7 +449,7 @@ namespace Maple.Core.Plugins
                     for (var e = ex; e != null; e = e.InnerException)
                         msg += e.Message + Environment.NewLine;
 
-                    var fail = new Exception(msg, ex);
+                    var fail = new MapleException(msg, ex);
                     throw fail;
                 }
 
