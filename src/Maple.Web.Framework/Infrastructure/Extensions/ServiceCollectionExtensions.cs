@@ -42,7 +42,7 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
             //获取HostingConfig配置参数并将其以单例形式注入至IServiceCollection
             //HostingConfig = 宿主机的配置信息
             services.ConfigureStartupConfig<HostingConfig>(configuration.GetSection("Hosting"));
-            //注册 HttpContextAccessor 单例 ，用于获取 HttpContext.Current
+            //注册 HttpContextAccessor 单例 ，用于DI时注入IHttpContextAccessor，以获取类似 HttpContext.Current 的效果
             services.AddHttpContextAccessor();
 
             //创建 Maple 引擎
@@ -232,8 +232,11 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
         {
             //add basic MVC feature
             var mvcBuilder = services.AddMvc();
-            //use session temp data provider
+
+            //??? 此处如果是分布式系统可能会存在问题
+            //启用SESSION
             mvcBuilder.AddSessionStateTempDataProvider();
+
             //避免JSON序列化时大小写敏感的问题
             mvcBuilder.AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
             //添加自定义显示元数据提供程序

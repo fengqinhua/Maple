@@ -20,13 +20,13 @@ namespace Maple.Web.Framework.Infrastructure
             //配置数据保护中涉及的密钥
             services.AddMapleDataProtection();
 
-            //配置授权和认证服务
+            //启用授权和认证服务
             services.AddMapleAuthentication();
         }
 
         public void Configure(IApplicationBuilder application)
         {
-            //configure authentication
+            //配置授权和认证服务
             application.UseMapleAuthentication();
 
             //set request culture
