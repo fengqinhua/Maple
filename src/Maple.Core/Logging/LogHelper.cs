@@ -31,7 +31,15 @@ namespace Maple.Core.Logging
 
         public static void LogException(ILogger logger, Exception ex)
         {
-            logger.LogError(500, "Message:{0}\r\nStackTrace:{1}", ex.Message, ex.StackTrace);
+            if (ex == null)
+                logger.LogError(500, "捕获一个NULL空异常");
+            else
+            {
+                string message = ex.Message;
+                string stackTrace = ex.StackTrace;
+
+                logger.LogError(500, "Message:{message}\r\nStackTrace:{stackTrace}", message, stackTrace);
+            }
 
             //var severity = (ex as IHasLogSeverity)?.Severity ?? LogSeverity.Error;
 
