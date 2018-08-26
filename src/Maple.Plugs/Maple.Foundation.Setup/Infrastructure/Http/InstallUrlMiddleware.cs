@@ -1,11 +1,10 @@
-﻿using Maple.Core.Data.DataSettings;
+﻿using Maple.Core;
+using Maple.Core.Data.DataSettings;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Maple.Core.Http
+namespace Maple.Foundation.Setup.Infrastructure.Http
 {
     /// <summary>
     /// 用于检测是否已经初始化系统的中间件，如果未初始化将请求重定向至初始化页面

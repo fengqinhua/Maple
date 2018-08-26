@@ -146,8 +146,6 @@ namespace Maple.Web.Framework.Infrastructure
             //暂时还不知道有什么用途，检测网站是否处于运行状态？
             //check whether requested page is keep alive page
             application.UseKeepAlive();
-            //检查数据库是否已经初始化，如果未初始化则跳转至初始化页面
-            application.UseInstallUrl();
             //启用Session
             application.UseSession();
             //启用多语言

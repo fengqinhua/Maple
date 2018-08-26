@@ -171,15 +171,6 @@ namespace Maple.Web.Framework.Infrastructure.Extensions
         }
 
         /// <summary>
-        /// 配置中间件 检测数据是否已经完成配置
-        /// </summary>
-        /// <param name="application">Builder for configuring an application's request pipeline</param>
-        public static void UseInstallUrl(this IApplicationBuilder application)
-        {
-            application.UseMiddleware<InstallUrlMiddleware>();
-        }
-
-        /// <summary>
         /// 添加身份验证中间件
         /// </summary>
         /// <param name="application">Builder for configuring an application's request pipeline</param>
