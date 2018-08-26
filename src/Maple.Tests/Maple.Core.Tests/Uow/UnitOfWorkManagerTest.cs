@@ -41,10 +41,8 @@ namespace Maple.Core.Tests.Uow
                 }
                 one.Complete();
             }
-
             Assert.True(repositoryUser.Count() != 0);
             Assert.True(repositoryRole.Count() != 0);
-
         }
     }
 }
