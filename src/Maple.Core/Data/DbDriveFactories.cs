@@ -8,6 +8,11 @@ namespace System.Data.Common
 {
     public static class DbDriveFactories
     {
+        public const string SQLiteProviderInvariantName = "System.Data.SQLite";
+        public const string OracleProviderInvariantName = "System.Data.OracleClient";
+        public const string MySqlProviderInvariantName = "MySql.Data.MySqlClient";
+        public const string SqlserverProviderInvariantName = "System.Data.SqlClient";
+
         private const string Instance = "Instance";
         private static Dictionary<string, string> _providers = new Dictionary<string, string>();
         private static object _sync = new object();

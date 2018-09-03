@@ -7,7 +7,7 @@ namespace Maple.Core.Data.DbTranslators
     public class Sql2000Translator : DbTranslatorBase
     {
         public override DataSouceType DataSouceType { get { return DataSouceType.Sql2000; } }
-        public override string ProviderInvariantName { get { return "System.Data.SqlClient"; } }
+        public override string ProviderInvariantName { get { return System.Data.Common.DbDriveFactories.SqlserverProviderInvariantName; } }
 
         public override char Connector => '@'; 
 
