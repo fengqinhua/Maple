@@ -14,23 +14,19 @@ namespace Maple.Core.Data.DbMappers
 
         private EntityMapperFactory() { }
         public static EntityMapperFactory Instance { get { return Nested.instance; } }
+
         /// <summary>
         /// 通过嵌套类实现单利模式
         /// </summary>
         class Nested
         {
-            static Nested()
-            {
-            }
+            static Nested() { }
             internal static readonly EntityMapperFactory instance = new EntityMapperFactory();
         }
 
         public IEntityMapper GetEntityMapper(Type entityType)
         {
-            return this._classMaps.GetOrAdd(entityType, x =>
-                        {
-                            return creatEntityMapper(x);
-                        });
+            return this._classMaps.GetOrAdd(entityType, x => { return creatEntityMapper(x); });
         }
 
         private IEntityMapper creatEntityMapper(Type entityType)
